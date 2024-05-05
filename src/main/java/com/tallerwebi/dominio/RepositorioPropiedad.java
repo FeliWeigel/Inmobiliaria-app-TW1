@@ -4,7 +4,9 @@ import java.util.List;
 
 public interface RepositorioPropiedad {
 
-    Propiedad buscarPropiedad(String nombre);
+    Propiedad buscarPropiedad(Long id);
     void eliminarPropiedad(Long propiedadId);
     List<Propiedad> listarPropiedades();
+    Propiedad agregarPropiedad(Propiedad propiedad);
+    Propiedad editarPropiedad(Propiedad propiedad);
 }

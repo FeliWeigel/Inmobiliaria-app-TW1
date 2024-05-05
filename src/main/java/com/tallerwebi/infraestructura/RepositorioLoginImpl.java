@@ -15,12 +15,12 @@ import java.util.regex.Pattern;
 
 @Service("repositorioLogin")
 @Transactional
-public class ServicioLoginImpl implements RepositorioLogin {
+public class RepositorioLoginImpl implements RepositorioLogin {
 
     private RepositorioUsuario repositorioUsuario;
 
     @Autowired
-    public ServicioLoginImpl(RepositorioUsuario repositorioUsuario){
+    public RepositorioLoginImpl(RepositorioUsuario repositorioUsuario){
         this.repositorioUsuario = repositorioUsuario;
     }
 
