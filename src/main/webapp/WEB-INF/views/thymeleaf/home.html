@@ -1,35 +1,75 @@
-<!DOCTYPE HTML>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <title>Taller Web I</title>
-
-  <!-- Boostrap core css -->
-  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-
-  <!-- custom style -->
-  <link rel="stylesheet" th:href="@{/css/main.css}"/>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <!-- <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" th:href="@{/css/home.css}"/> -->
+    <link rel="stylesheet" href="../../../resources/core/css/header.css">
+    <link rel="stylesheet" href="../../../resources/core/css/footer.css">
+    <link rel="stylesheet" href="../../../resources/core/css/home.css">
 </head>
-
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand" href="#">UNLAM</a>
-</nav>
+    <header>
+        <a class="button-logo" href="#">
+            <img class="logo" src="../../../resources/core/img/logo.png" alt="Logo">
+        </a>
 
-<main role="main" class="container">
-  <div class = "container">
-    <h1>Bienvenidos a Taller Web 1</h1>
+        <nav>
+            <a href="#">
+                <img src="../../../resources/core/img/bx-heart.svg" alt="favoritos">
+            </a>
+            <a href="#">
+                <img src="../../../resources/core/img/bx-bell.svg" alt="notificaciones">
+            </a>
+            <a href="#">
+                <img src="../../../resources/core/img/bx-conversation.svg" alt="mensajes">
+            </a>
+            <a href="#">
+                <img src="../../../resources/core/img/bx-user.svg" alt="perfil">
+            </a>
+        </nav>
 
-    <a href="login.html" class="btn btn-lg btn-primary btn-block">Volver</a>
-  </div>
-</main>
-<!-- /.container -->
+    </header>
 
-<!-- Boostrap core js -->
-<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+    <main>
+        <div class="container">
+            <a class="container-a" href="#">
+                <div class="item">
+                    <img class="prop-img" src="../../../resources/core/img/casa.jpg" alt="propiedad">
+                    <h3 class="prop-title">Casa en mdq</h3>
+                    <div class="prop-desc">
+                        <p>Sup.: 50mt2</p>
+                        <p>Ambientes: 3</p>
+                        <p>Baños: 1</p>
+                        <p>Apto mascotas: si</p>
+                    </div>
+                    <h4 class="prop-price">$30000 por noche</h4>
+                </div>
+            </a>
+
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="social">
+            <a href="https://www.instagram.com">
+                <img src="../../../resources/core/img/bx-instagram.svg" alt="instagram">
+            </a>
+            <a href="https://www.whatsapp.com">
+                <img src="../../../resources/core/img/bx-whatsapp.svg" alt="whatsapp">
+            </a>
+        </div>
+
+    </footer>
+
+    
 </body>
 </html>

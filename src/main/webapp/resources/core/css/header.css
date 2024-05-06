@@ -1,0 +1,25 @@
+body{
+    margin: 0;
+}
+header{
+    background-color: #11698E;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+nav{
+    display: flex;
+    width: auto;
+    gap: 15px;
+}
+.logo{
+    height: 30px;
+}
+.button-logo{
+    cursor: pointer;
+}
+a{
+    text-decoration: none;
+}

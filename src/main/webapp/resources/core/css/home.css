@@ -1,0 +1,46 @@
+.container{
+    padding: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 35px;
+    justify-content: center;
+}
+.container-a{
+    text-decoration: none;
+    color: black;
+}
+
+.item{
+    width: 240px;
+    height: 300px;
+    border: solid 1px gray;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.prop-img{
+    height:50%;
+    object-fit: cover;
+}
+.prop-title{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.prop-desc{
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+}
+.prop-desc p{
+    margin: 5px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
+}
+.prop-price{
+    width: 80%;
+    align-self: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+    margin: 15px;
+}
