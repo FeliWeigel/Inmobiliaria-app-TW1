@@ -19,15 +19,17 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
     @Override
     public Propiedad buscarPropiedad(Long id) {
         final Session session = sessionFactory.getCurrentSession();
+
         return (Propiedad) session.createCriteria(Propiedad.class)
                 .add(Restrictions.eq("id", id))
                 .uniqueResult();
     }
+
     @Override
     public Propiedad agregarPropiedad(Propiedad propiedad) {
         final Session session = sessionFactory.getCurrentSession();
 
-        if(propiedad.getNombre() != null && propiedad.getBaños() != null && propiedad.getHabitaciones() != null
+        if(propiedad.getNombre() != null && propiedad.getBanios() != null && propiedad.getHabitaciones() != null
                 && propiedad.getPisos() != null && propiedad.getPrecio() != null && propiedad.getSuperficie() != null && propiedad.getUbicacion() != null){
             return (Propiedad) session.save(propiedad);
         }
