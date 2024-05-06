@@ -13,11 +13,26 @@ public class Propiedad {
     private Long id;
     private String nombre;
     private Integer pisos;
-    private Integer baños;
+    private Integer banios;
     private Integer habitaciones;
     private Double superficie;
     private Double precio;
     private String ubicacion;
+
+    public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.pisos = pisos;
+        this.banios = banios;
+        this.habitaciones = habitaciones;
+        this.superficie = superficie;
+        this.precio = precio;
+        this.ubicacion = ubicacion;
+    }
+
+    public Propiedad() {
+
+    }
 
     public Long getId() {
         return id;
@@ -43,12 +58,12 @@ public class Propiedad {
         this.pisos = pisos;
     }
 
-    public Integer getBaños() {
-        return baños;
+    public Integer getBanios() {
+        return banios;
     }
 
-    public void setBaños(Integer baños) {
-        this.baños = baños;
+    public void setBanios(Integer baños) {
+        this.banios = baños;
     }
 
     public Integer getHabitaciones() {

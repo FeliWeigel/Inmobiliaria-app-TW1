@@ -4,32 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <!-- <link rel="stylesheet" th:href="@{/css/header.css}"/>
+     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
-    <link rel="stylesheet" th:href="@{/css/home.css}"/> -->
-    <link rel="stylesheet" href="../../../resources/core/css/header.css">
-    <link rel="stylesheet" href="../../../resources/core/css/footer.css">
-    <link rel="stylesheet" href="../../../resources/core/css/home.css">
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <!-- <link rel="stylesheet" href="../../../resources/core/css/header.css">
+        <link rel="stylesheet" href="../../../resources/core/css/footer.css">
+        <link rel="stylesheet" href="../../../resources/core/css/home.css"> -->
 </head>
 <body>
 
     <header>
         <a class="button-logo" href="#">
-            <img class="logo" src="../../../resources/core/img/logo.png" alt="Logo">
+            <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
         </a>
 
         <nav>
             <a href="#">
-                <img src="../../../resources/core/img/bx-heart.svg" alt="favoritos">
+                <img th:src="@{/img/bx-heart.svg}" alt="favoritos">
             </a>
             <a href="#">
-                <img src="../../../resources/core/img/bx-bell.svg" alt="notificaciones">
+                <img th:src="@{/img/bx-bell.svg}" alt="notificaciones">
             </a>
             <a href="#">
-                <img src="../../../resources/core/img/bx-conversation.svg" alt="mensajes">
+                <img th:src="@{/img/bx-conversation.svg}" alt="mensajes">
             </a>
             <a href="#">
-                <img src="../../../resources/core/img/bx-user.svg" alt="perfil">
+                <img th:src="@{/img/bx-user.svg}" alt="perfil">
             </a>
         </nav>
 
@@ -39,7 +39,7 @@
         <div class="container">
             <a class="container-a" href="#">
                 <div class="item">
-                    <img class="prop-img" src="../../../resources/core/img/casa.jpg" alt="propiedad">
+                    <img class="prop-img" th:src="@{/img/Casa.jpg}" alt="propiedad">
                     <h3 class="prop-title">Casa en mdq</h3>
                     <div class="prop-desc">
                         <p>Sup.: 50mt2</p>
@@ -61,10 +61,10 @@
     <footer>
         <div class="social">
             <a href="https://www.instagram.com">
-                <img src="../../../resources/core/img/bx-instagram.svg" alt="instagram">
+                <img th:src="@{/img/bx-instagram.svg}" alt="instagram">
             </a>
             <a href="https://www.whatsapp.com">
-                <img src="../../../resources/core/img/bx-whatsapp.svg" alt="whatsapp">
+                <img th:src="@{/img/bx-whatsapp.svg}" alt="whatsapp">
             </a>
         </div>
 
