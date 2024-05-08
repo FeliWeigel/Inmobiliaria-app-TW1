@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Propiedad;
+import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.ServicioPropiedad;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,40 +25,44 @@ public class ControladorPropiedadTest {
     }
 
     @Test
-    public void queSeMuestreLaVistaDeUnaPropiedadExistenteAlSolicitarla() {
+    public void queAlBuscarUnaPropiedadLleveASuVista() {
 
         Long idMock = 1L;
         Propiedad propiedadMock = mock(Propiedad.class);
+        ModelAndView modelAndView = crearModelAndViewMock("Detalles de la Propiedad.", propiedadMock);
 
-        when(this.servicioPropiedad.buscarPropiedad(idMock)).thenReturn(propiedadMock);
+        when(this.servicioPropiedad.buscarPropiedad(idMock)).thenReturn(modelAndView);
 
         ModelAndView mav = this.controladorPropiedad.verPropiedad(idMock);
-        String message = mav.getModel().get("message").toString();
 
-        assertThat(mav.getViewName(), equalToIgnoringCase("propiedad"));
-        assertThat(message, equalToIgnoringCase("Detalles de la Propiedad."));
+        assertThat(mav.getViewName(), equalTo("propiedad"));
     }
 
     @Test
     public void queSeMuestreUnMensajeDeErrorCuandoSeSolicitaVerUnaPropiedadInexistente() {
 
         Long idInexistente = 12L;
+        ModelAndView modelAndView = crearModelAndViewMock("La Propiedad Buscada no Existe.", null);
+
+        when(this.servicioPropiedad.buscarPropiedad(idInexistente)).thenReturn(modelAndView);
 
         ModelAndView mav = this.controladorPropiedad.verPropiedad(idInexistente);
         String error = mav.getModel().get("message").toString();
 
         assertThat(mav.getViewName(), equalToIgnoringCase("propiedad"));
-        assertThat(error, equalToIgnoringCase("La Propiedad Buscada no Existe."));
+        assertThat(error, equalTo("La Propiedad Buscada no Existe."));
     }
 
+
     @Test
-    public void queLosDatosdeUnaPropiedadExistenteSolicitadaSeMuestrenCorrectamente() {
+    public void queLosDatosDeUnaPropiedadExistenteSolicitadaSeMuestrenCorrectamente() {
 
         Long idMock = 1L;
-        Propiedad propiedadMock = new Propiedad(idMock,"Casa 1",2,3,4,
-                200.0,150000.0,"Ubicacion 1");
+        Propiedad propiedadMock = new Propiedad(idMock, "Casa 1", 2, 3, 4,
+                200.0, 150000.0, "Ubicacion 1");
+        ModelAndView modelAndViewMock = crearModelAndViewMock("Detalles de la Propiedad.", propiedadMock);
 
-        when(this.servicioPropiedad.buscarPropiedad(idMock)).thenReturn(propiedadMock);
+        when(this.servicioPropiedad.buscarPropiedad(idMock)).thenReturn(modelAndViewMock);
 
         ModelAndView mav = this.controladorPropiedad.verPropiedad(idMock);
         Propiedad propiedadDevuelta = (Propiedad) mav.getModel().get("propiedad");
@@ -71,17 +76,33 @@ public class ControladorPropiedadTest {
         assertThat(propiedadDevuelta.getUbicacion(), equalToIgnoringCase("Ubicacion 1"));
     }
 
+
     @Test
     public void queSeMuestreUnMensajeDeErrorEnCasoDeExcepcionNoEsperada() {
 
         Long idPropiedad = 1L;
-        when(this.servicioPropiedad.buscarPropiedad(anyLong())).thenThrow(new RuntimeException("Error inesperado"));
+        Propiedad propiedadMock = mock(Propiedad.class);
+        ModelAndView modelAndView = crearModelAndViewMock("Error al Mostrar la Propiedad.", propiedadMock);
+
+        when(this.servicioPropiedad.buscarPropiedad(idPropiedad)).thenReturn(modelAndView);
 
         ModelAndView mav = this.controladorPropiedad.verPropiedad(idPropiedad);
         String error = mav.getModel().get("message").toString();
 
         assertThat(mav.getViewName(), equalToIgnoringCase("propiedad"));
-        assertThat(error, equalToIgnoringCase("Error al Mostrar la Propiedad."));
+        assertThat(error, equalTo("Error al Mostrar la Propiedad."));
+    }
+
+
+
+    private ModelAndView crearModelAndViewMock(String mensaje, Propiedad propiedadMock) {
+        ModelAndView modelAndView = new ModelAndView("propiedad");
+        modelAndView.addObject("message", mensaje);
+        modelAndView.addObject("propiedad", propiedadMock);
+
+        return modelAndView;
     }
 
 }
+
+
