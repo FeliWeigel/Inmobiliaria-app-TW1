@@ -19,7 +19,7 @@ public class ServicioPropiedadTest {
     @BeforeEach
     public void init() {
         this.repositorioPropiedad = mock(RepositorioPropiedad.class);
-        this.servicioPropiedad = new ServicioPropiedadImpl(this.repositorioPropiedad);
+        this.servicioPropiedad = new ServicioPropiedad(this.repositorioPropiedad);
     }
 
     @Test
@@ -28,8 +28,8 @@ public class ServicioPropiedadTest {
         Long idMock = 1L;
         Propiedad propiedadMock = mock(Propiedad.class);
 
-        when(this.servicioPropiedad.buscarPropiedad(idMock)).thenReturn(propiedadMock);
-        Propiedad propiedadBuscada = this.servicioPropiedad.buscarPropiedad(idMock);
+        when(this.repositorioPropiedad.buscarPropiedad(idMock)).thenReturn(propiedadMock);
+        Propiedad propiedadBuscada = (Propiedad) this.servicioPropiedad.buscarPropiedad(idMock).getModel().get("propiedad");
 
         assertThat(propiedadBuscada, equalTo(propiedadMock));
     }
@@ -42,7 +42,7 @@ public class ServicioPropiedadTest {
         propiedadesMock.add(new Propiedad(2L, "Casa 2", 3, 2, 5, 250.0, 180000.0, "Ubicacion 2"));
         propiedadesMock.add(new Propiedad(3L, "Casa 3", 1, 1, 2, 120.0, 90000.0, "Ubicacion 3"));
 
-        when(this.servicioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
+        when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
         List<Propiedad> propiedadesListadas = this.servicioPropiedad.listarPropiedades();
 
         assertThat(propiedadesListadas, equalTo(propiedadesMock));
