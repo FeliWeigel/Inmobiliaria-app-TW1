@@ -4,6 +4,8 @@ import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.RepositorioLogin;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
+import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
+import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,6 @@ import java.util.regex.Pattern;
 @Service("repositorioLogin")
 @Transactional
 public class RepositorioLoginImpl implements RepositorioLogin {
-
     private RepositorioUsuario repositorioUsuario;
 
     @Autowired
@@ -30,56 +31,52 @@ public class RepositorioLoginImpl implements RepositorioLogin {
     }
 
     @Override
-    public void registrar(Usuario usuario) throws UsuarioExistenteExcepcion {
+    public void registrar(Usuario usuario) throws UsuarioExistenteExcepcion, CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
         if(usuario.getEmail() == null || usuario.getPassword() == null || usuario.getNombre() == null
                 || usuario.getApellido() == null || usuario.getFechaNacimiento() == null){
-            throw new CredencialesInvalidasExcepcion("Error! Debe completar todos los campos.");
+            throw new CredencialesInvalidasExcepcion();
         }
         validarNombreApellido(usuario.getNombre());
         validarNombreApellido(usuario.getApellido());
         validarEdad(usuario.getFechaNacimiento());
+
         if(usuario.getPassword().length() >= 6){
             if(!validarPassword(usuario.getPassword())){
-                throw new CredencialesInvalidasExcepcion(
-                        "Error! La contraseña debe contener al menos: un numero, una mayuscula y un caracter especial."
-                );
+                throw new PasswordInvalidaExcepcion();
             }
         }else {
-            throw new CredencialesInvalidasExcepcion(
-                    "Error! La contraseña debe contener al menos 6 digitos de longitud."
-            );
+            throw new PasswordInvalidaExcepcion();
         }
         if(repositorioUsuario.buscarPorEmail(usuario.getEmail()) != null){
-            throw new UsuarioExistenteExcepcion("El email ingresado ya esta asociado a una cuenta existente.");
+            throw new UsuarioExistenteExcepcion();
         }
 
         repositorioUsuario.guardar(usuario);
     }
 
-    // Valida que el nombre del usuario no contenga numeros
-    private void validarNombreApellido(String nombreUsuario){
+    private void validarNombreApellido(String nombreUsuario) throws CredencialesInvalidasExcepcion {
         char[] nombreArray = nombreUsuario.toCharArray();
         for(char i : nombreArray){
             if(Character.isDigit(i)){
-                throw new CredencialesInvalidasExcepcion("Ingrese su nombre y apellido correctamente!");
+                throw new CredencialesInvalidasExcepcion();
             }
         }
     }
-    // Valida que la edad del usuario sea exactamente mayor a 18 años
-    private void validarEdad(Date edadUsuario){
+
+    private void validarEdad(Date edadUsuario) throws EdadInvalidaExcepcion {
         if((new Date().getYear() - edadUsuario.getYear()) < 18){
-            throw new CredencialesInvalidasExcepcion("Cuidado! Debes ser mayor de 18 años para registrarte.");
+            throw new EdadInvalidaExcepcion();
         }else if((new Date().getYear() - edadUsuario.getYear()) == 18){
             if(new Date().getMonth() < edadUsuario.getMonth()){
-                throw new CredencialesInvalidasExcepcion("Cuidado! Debes ser mayor de 18 años para registrarte.");
+                throw new EdadInvalidaExcepcion();
             }else if(new Date().getMonth() == edadUsuario.getMonth()){
                 if(new Date().getDay() < edadUsuario.getDay()){
-                    throw new CredencialesInvalidasExcepcion("Cuidado! Debes ser mayor de 18 años para registrarte.");
+                    throw new EdadInvalidaExcepcion();
                 }
             }
         }
     }
-    //Valida que la contraseña contenga al menos 6 caracteres, una mayuscula, un numero y un caracter especial
+
     private Boolean validarPassword(String password){
         boolean esMayuscula = false, esNumero = false, esCaracterEspecial = false;
         Pattern listaEspeciales = Pattern.compile ("[?!¡@¿.,´)]");

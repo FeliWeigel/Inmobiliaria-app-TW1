@@ -2,6 +2,9 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.RepositorioLogin;
 import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
+import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
+import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +28,6 @@ public class ControladorLogin {
 
     @RequestMapping("/login")
     public ModelAndView irALogin() {
-
         ModelMap modelo = new ModelMap();
         modelo.put("datosLogin", new DatosLogin());
         return new ModelAndView("login", modelo);
@@ -33,7 +35,6 @@ public class ControladorLogin {
 
     @RequestMapping("/registrarme")
     public ModelAndView irARegistrarme() {
-
         ModelMap modelo = new ModelMap();
         modelo.put("usuario", new Usuario());
         return new ModelAndView("registrarme", modelo);
@@ -59,9 +60,19 @@ public class ControladorLogin {
         try{
             servicioLogin.registrar(usuario);
         } catch (UsuarioExistenteExcepcion e){
-            model.put("error", "El usuario ya existe");
+            model.put("error", "El email ingresado esta asociado a una cuenta existente!");
             return new ModelAndView("nuevo-usuario", model);
-        } catch (Exception e){
+        }catch(CredencialesInvalidasExcepcion e){
+            model.put("error", "Debe completar todos los campos con datos validos!");
+            return new ModelAndView("nuevo-usuario", model);
+        }catch(EdadInvalidaExcepcion e){
+            model.put("error", "Cuidado! Debe ser mayor de 18 años para registrarse.");
+            return new ModelAndView("nuevo-usuario", model);
+        }catch(PasswordInvalidaExcepcion e){
+            model.put("error", "Error! La contraseña debe contener al menos: 6 digitos, una mayuscula, un numero y un caracter especial.");
+            return new ModelAndView("nuevo-usuario", model);
+        }
+        catch (Exception e){
             model.put("error", "Error al registrar el nuevo usuario");
             return new ModelAndView("nuevo-usuario", model);
         }

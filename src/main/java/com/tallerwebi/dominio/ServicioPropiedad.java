@@ -21,7 +21,7 @@ public class ServicioPropiedad {
 
         ModelMap model = new ModelMap();
         try {
-             // Propiedad propiedad = new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1");
+             Propiedad propiedadNueva = new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1");
             Propiedad propiedad = repositorioPropiedad.buscarPropiedad(id);
             if (propiedad != null) {
                 model.put("message", "Detalles de la Propiedad.");
