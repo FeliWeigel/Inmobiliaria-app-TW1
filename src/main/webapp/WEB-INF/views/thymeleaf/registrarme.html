@@ -7,7 +7,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/signup.css}">
+    <!-- <link rel="stylesheet" th:href="@{/css/signup.css}"> -->
+    <link rel="stylesheet" href="../../../resources/core/css/registrarme.css">
     <!--Stylesheet-->
 </head>
 
@@ -16,22 +17,29 @@
         <h3>Registrarse</h3>
         <p class="subtitle">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
 
-
         <label for="username">Elige un nombre de usuario</label>
         <input th:field="*{nombre}" type="text" id="username" class="form-control" required/>
-        <!-- <input type="text" id="username" required> -->
 
         <label for="email">Correo electrónico</label>
         <input th:field="*{email}" type="email" id="email" class="form-control" required/>
-        <!-- <input type="email" id="email" required> -->
 
-        <label for="password">Contraseña</label>
+        <div class="pswLabel">
+            <label for="password">Contraseña</label>
+            <div class="tooltip">
+                <img class="plusIcon" src="../../../resources/core/img/bx-plus.svg" alt="plus">
+                <div class="tooltiptext">
+                    <p>Debe tener al menos:</p>
+                    <p>• 6 caracteres</p>
+                    <p>• Un número</p>
+                    <p>• Una mayúscula</p>
+                    <p>• Un caracter especial</p>
+                </div>   
+            </div>
+        </div>
         <input th:field="*{password}" type="password" id="password" class="form-control" required/>
-        <!-- <input type="password" id="password" required> -->
 
         <label for="password">Repetir contraseña</label>
         <input th:field="*{password}" type="password" id="repeatPassword" class="form-control" required/>
-        <!-- <input type="password" id="repeatPassword" required> -->
 
         <button type="submit">Crear cuenta</button>
         
@@ -41,3 +49,5 @@
     </form>
 </body>
 </html>
+
+<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
