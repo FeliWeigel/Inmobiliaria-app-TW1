@@ -31,6 +31,14 @@ public class ControladorLogin {
         return new ModelAndView("login", modelo);
     }
 
+    @RequestMapping("/registrarme")
+    public ModelAndView irARegistrarme() {
+
+        ModelMap modelo = new ModelMap();
+        modelo.put("usuario", new Usuario());
+        return new ModelAndView("registrarme", modelo);
+    }
+
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
         ModelMap model = new ModelMap();
