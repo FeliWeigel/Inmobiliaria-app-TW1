@@ -61,29 +61,22 @@ public class ControladorLogin {
             servicioLogin.registrar(usuario);
         } catch (UsuarioExistenteExcepcion e){
             model.put("error", "El email ingresado esta asociado a una cuenta existente!");
-            return new ModelAndView("nuevo-usuario", model);
+            return new ModelAndView("registrarme", model);
         }catch(CredencialesInvalidasExcepcion e){
             model.put("error", "Debe completar todos los campos con datos validos!");
-            return new ModelAndView("nuevo-usuario", model);
+            return new ModelAndView("registrarme", model);
         }catch(EdadInvalidaExcepcion e){
             model.put("error", "Cuidado! Debe ser mayor de 18 años para registrarse.");
-            return new ModelAndView("nuevo-usuario", model);
+            return new ModelAndView("registrarme", model);
         }catch(PasswordInvalidaExcepcion e){
             model.put("error", "Error! La contraseña debe contener al menos: 6 digitos, una mayuscula, un numero y un caracter especial.");
-            return new ModelAndView("nuevo-usuario", model);
+            return new ModelAndView("registrarme", model);
         }
         catch (Exception e){
             model.put("error", "Error al registrar el nuevo usuario");
-            return new ModelAndView("nuevo-usuario", model);
+            return new ModelAndView("registrarme", model);
         }
         return new ModelAndView("redirect:/login");
-    }
-
-    @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
-    public ModelAndView nuevoUsuario() {
-        ModelMap model = new ModelMap();
-        model.put("usuario", new Usuario());
-        return new ModelAndView("nuevo-usuario", model);
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)

@@ -34,6 +34,7 @@ public class ControladorLoginTest {
 		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
+		when(requestMock.getSession()).thenReturn(sessionMock);
 		servicioLoginMock = mock(RepositorioLogin.class);
 		controladorLogin = new ControladorLogin(servicioLoginMock);
 	}
@@ -89,8 +90,8 @@ public class ControladorLoginTest {
 		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock);
 
 		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
-		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El usuario ya existe"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("registrarme"));
+		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El email ingresado esta asociado a una cuenta existente!"));
 	}
 
 	@Test
@@ -102,7 +103,7 @@ public class ControladorLoginTest {
 		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock);
 
 		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("registrarme"));
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Error al registrar el nuevo usuario"));
 	}
 }
