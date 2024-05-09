@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,9 +30,19 @@ public class ServicioPropiedadTest {
         Propiedad propiedadMock = mock(Propiedad.class);
 
         when(this.repositorioPropiedad.buscarPropiedad(idMock)).thenReturn(propiedadMock);
-        Propiedad propiedadBuscada = (Propiedad) this.servicioPropiedad.buscarPropiedad(idMock).getModel().get("propiedad");
+        Propiedad propiedadBuscada = this.servicioPropiedad.buscarPropiedad(idMock);
 
         assertThat(propiedadBuscada, equalTo(propiedadMock));
+    }
+
+    @Test
+    public void queSeLanzeUnaExcepcionCuandoLaPropiedadBuscadaNoExiste() {
+
+        Long idInexistente = 1L;
+
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            this.servicioPropiedad.buscarPropiedad(idInexistente);
+        });
     }
 
     @Test
