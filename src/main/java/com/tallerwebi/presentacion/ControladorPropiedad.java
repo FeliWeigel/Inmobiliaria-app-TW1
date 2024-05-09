@@ -23,10 +23,10 @@ public class ControladorPropiedad {
 
         ModelMap model = new ModelMap();
 
-         Propiedad propiedad = new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1");
+         //Propiedad propiedad = new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1");
 
         try {
-            //Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
+            Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
             model.put("message", "Detalles de la Propiedad.");
             model.put("propiedad", propiedad);
             return new ModelAndView("propiedad", model);
