@@ -7,9 +7,6 @@
      <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
     <link rel="stylesheet" th:href="@{/css/home.css}"/>
-    <!-- <link rel="stylesheet" href="../../../resources/core/css/header.css">
-        <link rel="stylesheet" href="../../../resources/core/css/footer.css">
-        <link rel="stylesheet" href="../../../resources/core/css/home.css"> -->
 </head>
 <body>
 
@@ -36,26 +33,24 @@
     </header>
 
     <main>
-        <div class="container">
-            <a class="container-a" href="#">
-                <div class="item">
-                    <img class="prop-img" th:src="@{/img/Casa.jpg}" alt="propiedad">
-                    <p class="prop-ubi">Mar del Plata</p>
-                    <h3 class="prop-title">Casa en mdq</h3>
-                    <div class="prop-desc">
-                        <p>Sup.: 50mt2</p>
-                        <p>Ambientes: 3</p>
-                        <p>Baños: 1</p>
-                        <p>Apto mascotas: si</p>
-                    </div>
-                    <h4 class="prop-price">$30.000 por noche</h4>
-                </div>
-            </a>
+         <div class="container">
+             <div th:each="propiedad : ${propiedades}">
+                 <a class="container-a" th:href="@{/propiedad/{id}(id=${propiedad.id})}">
+                     <div class="item">
+                         <img class="prop-img" th:src="@{/img/Casa.jpg}" alt="propiedad">
+                         <p class="prop-ubi" th:text="${propiedad.nombre}"></p>
+                         <h3 class="prop-title" th:text="${propiedad.ubicacion}"></h3>
+                         <div class="prop-desc">
+                             <p th:text="'Superficie: ' + ${propiedad.superficie} + ' mt2'"></p>
+                             <p th:text="'Ambientes: ' + ${propiedad.habitaciones}"></p>
+                             <p th:text="'Baños: ' + ${propiedad.banios}"></p>
+                             <p th:text="'Pisos: ' + ${propiedad.pisos}"></p>
+                         </div>
+                         <h4 class="prop-price" th:text="'$' + ${propiedad.precio} + ' por noche'"></h4>
+                     </div>
+                 </a>
+             </div>
 
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
         </div>
     </main>
 
