@@ -5,10 +5,7 @@ import com.tallerwebi.dominio.ServicioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -57,6 +54,15 @@ public class ControladorPropiedad {
         }
     }
 
+    @PostMapping("/home")
+    public ModelAndView mostrarPropiedadesFiltradas(@ModelAttribute("datosFiltro") DatosFiltro datosFiltro) {
+
+        ModelMap model = new ModelMap();
+        List<Propiedad> propiedades = servicioPropiedad.filtrarPropiedades(datosFiltro);
+        model.put("propiedades", propiedades);
+
+        return new ModelAndView("home", model);
+    }
 
 }
 

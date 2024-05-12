@@ -1,6 +1,9 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.presentacion.DatosFiltro;
+import com.tallerwebi.presentacion.FiltroPorPrecio;
+import com.tallerwebi.presentacion.TipoDeFiltro;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,16 +40,6 @@ public class ServicioPropiedad {
         return this.repositorioPropiedad.listarPropiedades();
         //return propiedadesFalsas();
     }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -101,4 +94,25 @@ public class ServicioPropiedad {
     }
 
 
+    public List<Propiedad> filtrarPropiedades(DatosFiltro datosFiltro) {
+        List<Propiedad> propiedades = listarPropiedades();
+        List<Propiedad> propiedadesFiltradas = new ArrayList<>();
+
+        switch (datosFiltro.getTipoDeFiltro()){
+            case PRECIO:
+                if (datosFiltro.getFiltroPorPrecio() == FiltroPorPrecio.MINIMO){
+                    propiedades.forEach(prop -> {
+                        if(prop.getPrecio() >= datosFiltro.getPrecio())
+                            propiedadesFiltradas.add(prop);
+                    });
+                } else {
+                    propiedades.forEach(prop -> {
+                        if(prop.getPrecio() <= datosFiltro.getPrecio())
+                            propiedadesFiltradas.add(prop);
+                    });
+                }
+                break;
+        }
+        return propiedadesFiltradas;
+    }
 }
