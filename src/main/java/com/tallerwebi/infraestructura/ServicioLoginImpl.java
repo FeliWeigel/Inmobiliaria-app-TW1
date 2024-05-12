@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.RepositorioLogin;
+import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
@@ -17,11 +17,11 @@ import java.util.regex.Pattern;
 
 @Service("repositorioLogin")
 @Transactional
-public class RepositorioLoginImpl implements RepositorioLogin {
+public class ServicioLoginImpl implements ServicioLogin {
     private RepositorioUsuario repositorioUsuario;
 
     @Autowired
-    public RepositorioLoginImpl(RepositorioUsuario repositorioUsuario){
+    public ServicioLoginImpl(RepositorioUsuario repositorioUsuario){
         this.repositorioUsuario = repositorioUsuario;
     }
 
@@ -33,7 +33,8 @@ public class RepositorioLoginImpl implements RepositorioLogin {
     @Override
     public void registrar(Usuario usuario) throws UsuarioExistenteExcepcion, CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
         if(usuario.getEmail() == null || usuario.getPassword() == null || usuario.getNombre() == null
-                || usuario.getApellido() == null || usuario.getFechaNacimiento() == null){
+                || usuario.getApellido() == null || usuario.getFechaNacimiento() == null
+        ){
             throw new CredencialesInvalidasExcepcion();
         }
         validarNombreApellido(usuario.getNombre());

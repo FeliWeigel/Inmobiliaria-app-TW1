@@ -1,16 +1,17 @@
-<!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Detalles de la Propiedad</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/propiedad.css}"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" th:href="@{/css/favoritos.css}"/>
     <script src="https://kit.fontawesome.com/f3e8220cf2.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
     <header>
         <a class="button-logo" th:href="@{/home}">
             <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
@@ -30,25 +31,9 @@
             </a>
         </nav>
     </header>
-
     <main>
-        <h1 class="message" th:if="${message != null}" th:text="${message}"></h1>
 
-        <div th:if="${propiedad != null}" class="img-container">
-            <img th:src="@{/img/Casa.jpg}" alt="casa-img">
-        </div>
-
-        <div class="propiedad" th:if="${propiedad != null}" >
-            <p><strong>Nombre:</strong> <span th:text="${propiedad.nombre}"></span></p>
-            <p><strong>Pisos:</strong> <span th:text="${propiedad.pisos}"></span></p>
-            <p><strong>Baños:</strong> <span th:text="${propiedad.banios}"></span></p>
-            <p><strong>Habitaciones:</strong> <span th:text="${propiedad.habitaciones}"></span></p>
-            <p><strong>Superficie:</strong> <span th:text="${propiedad.superficie}"></span></p>
-            <p><strong>Precio:</strong> <span th:text="${propiedad.precio}"></span></p>
-            <p><strong>Ubicación:</strong> <span th:text="${propiedad.ubicacion}"></span></p>
-        </div>
     </main>
-
     <footer>
         <div class="social">
             <a href="https://www.instagram.com">
@@ -62,5 +47,3 @@
     </footer>
 </body>
 </html>
-
-

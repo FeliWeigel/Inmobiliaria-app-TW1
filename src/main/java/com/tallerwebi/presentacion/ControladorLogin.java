@@ -1,6 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.RepositorioLogin;
+import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
@@ -19,10 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ControladorLogin {
 
-    private RepositorioLogin servicioLogin;
+    private ServicioLogin servicioLogin;
 
     @Autowired
-    public ControladorLogin(RepositorioLogin servicioLogin){
+    public ControladorLogin(ServicioLogin servicioLogin){
         this.servicioLogin = servicioLogin;
     }
 
