@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de la Propiedad</title>
-    <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/propiedad.css}"/>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
 </head>
 <body>
@@ -29,7 +29,7 @@
     </nav>
 </header>
 
-<main>
+<!--<main>
     <h1 class="message" th:if="${message != null}" th:text="${message}"></h1>
 
     <div th:if="${propiedad != null}" class="img-container">
@@ -45,8 +45,39 @@
         <p><strong>Superficie: </strong><span th:text="${propiedad.superficie}"></span> mt2</p>
         <p><strong>Precio: </strong>$<span th:text="${propiedad.precio}"></span> por noche</p>
     </div>
+</main> -->
 
+<main>
+    <div th:if="${propiedad != null}" class="img-container">
+        <img th:src="@{/img/casa-2.jpg}" class="img-propiedad" alt="casa-img">
+        <button class="nuevo-btn" >
+            <img th:src="@{/img/bx-heart.svg}" class="img-fav">
+        </button>
+        <button class="alquilar-btn">Alquilar</button>
+    </div>
+
+    <div class="propiedad" th:if="${propiedad != null}" >
+        <h1 class="message" th:if="${message != null}" th:text="${message}">Detalles de la Propiedad</h1>
+        <h3 class="nombre" th:text="${propiedad.nombre}">Casa en Mar del plata</h3>
+        <p><strong>Ubicación: </strong><span th:text="${propiedad.ubicacion}"></span></p>
+        <p><strong>Pisos: </strong><span th:text="${propiedad.pisos}"></span></p>
+        <p><strong>Baños: </strong><span th:text="${propiedad.banios}"></span></p>
+        <p><strong>Habitaciones: </strong><span th:text="${propiedad.habitaciones}"></span></p>
+        <p><strong>Superficie: </strong><span th:text="${propiedad.superficie}"></span> mt2</p>
+        <p><strong>Precio: </strong>$<span th:text="${propiedad.precio}"></span> por noche</p>
+    </div>
 </main>
+
+<footer>
+    <div class="social">
+        <a href="https://www.instagram.com">
+            <img th:src="@{/img/bx-instagram.svg}" alt="instagram">
+        </a>
+        <a href="https://www.whatsapp.com">
+            <img th:src="@{/img/bx-whatsapp.svg}" alt="whatsapp">
+        </a>
+    </div>
+</footer>
 
 </body>
 </html>
