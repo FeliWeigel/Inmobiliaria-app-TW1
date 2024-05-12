@@ -33,32 +33,32 @@
     </header>
 
     <main>
-        <div class="container">
-            <a class="container-a" href="#">
-                <div class="item">
-                    <img class="prop-img" th:src="@{/img/Casa.jpg}" alt="propiedad">
-                    <p class="prop-ubi">Mar del Plata</p>
-                    <div>
-                        <h3 class="prop-title">Casa en mdq</h3><form method="POST" th:action="@{/edit(personId=${person.personId})}">
-                            <button type="submit" name="submit" value="value" class="link-button">
-                                <i class="fa-regular fa-heart" style="color: #ff2d2d;"></i>
-                            </button>
-                        </form>
-                    </div>
-                    <div class="prop-desc">
-                        <p>Sup.: 50mt2</p>
-                        <p>Ambientes: 3</p>
-                        <p>Baños: 1</p>
-                        <p>Apto mascotas: si</p>
-                    </div>
-                    <h4 class="prop-price">$30.000 por noche</h4>
-                </div>
-            </a>
 
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
+         <div class="container">
+             <div th:each="propiedad : ${propiedades}">
+                 <a class="container-a" th:href="@{/propiedad/{id}(id=${propiedad.id})}">
+                     <div class="item">
+                         <img class="prop-img" th:src="@{/img/Casa.jpg}" alt="propiedad">
+                         <p class="prop-ubi" th:text="${propiedad.nombre}"></p>
+                         <div>
+                            <h3 class="prop-title" th:text="${propiedad.ubicacion}"></h3>
+                            <form method="POST" th:action="@{/edit(personId=${person.personId})}">
+                                <button type="submit" name="submit" value="value" class="link-button">
+                                    <i class="fa-regular fa-heart" style="color: #ff2d2d;"></i>
+                                </button>
+                            </form>
+                        </div>
+                         <div class="prop-desc">
+                             <p th:text="'Superficie: ' + ${propiedad.superficie} + ' mt2'"></p>
+                             <p th:text="'Ambientes: ' + ${propiedad.habitaciones}"></p>
+                             <p th:text="'Baños: ' + ${propiedad.banios}"></p>
+                             <p th:text="'Pisos: ' + ${propiedad.pisos}"></p>
+                         </div>
+                         <h4 class="prop-price" th:text="'$' + ${propiedad.precio} + ' por noche'"></h4>
+                     </div>
+                 </a>
+             </div>
+
         </div>
     </main>
 

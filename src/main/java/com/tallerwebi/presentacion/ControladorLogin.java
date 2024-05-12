@@ -1,6 +1,9 @@
 package com.tallerwebi.presentacion;
 
+
 import com.tallerwebi.dominio.ServicioLogin;
+import com.tallerwebi.dominio.Propiedad;
+import com.tallerwebi.dominio.RepositorioLogin;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ControladorLogin {
@@ -77,11 +82,6 @@ public class ControladorLogin {
             return new ModelAndView("registrarme", model);
         }
         return new ModelAndView("redirect:/login");
-    }
-
-    @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHome() {
-        return new ModelAndView("home");
     }
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
