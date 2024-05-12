@@ -1,6 +1,9 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.presentacion.DatosFiltro;
+import com.tallerwebi.presentacion.FiltroPorPrecio;
+import com.tallerwebi.presentacion.TipoDeFiltro;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -57,5 +60,41 @@ public class ServicioPropiedadTest {
         List<Propiedad> propiedadesListadas = this.servicioPropiedad.listarPropiedades();
 
         assertThat(propiedadesListadas, equalTo(propiedadesMock));
+    }
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorPrecioMinimo() {
+
+        List<Propiedad> propiedadesMock = new ArrayList<>();
+        propiedadesMock.add(new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1"));
+        propiedadesMock.add(new Propiedad(2L, "Casa 2", 3, 2, 5, 250.0, 180000.0, "Ubicacion 2"));
+        propiedadesMock.add(new Propiedad(3L, "Casa 3", 1, 1, 2, 120.0, 90000.0, "Ubicacion 3"));
+        DatosFiltro datosFiltro = new DatosFiltro(TipoDeFiltro.PRECIO);
+        datosFiltro.setPrecio(120000.0);
+        datosFiltro.setFiltroPorPrecio(FiltroPorPrecio.MINIMO);
+
+        when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
+        List<Propiedad> propiedadesListadas = this.servicioPropiedad.filtrarPropiedades(datosFiltro);
+        Integer propiedadesEsperadas = 2;
+
+        assertThat(propiedadesListadas.size(), equalTo(propiedadesEsperadas));
+    }
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorPrecioMaximo() {
+
+        List<Propiedad> propiedadesMock = new ArrayList<>();
+        propiedadesMock.add(new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1"));
+        propiedadesMock.add(new Propiedad(2L, "Casa 2", 3, 2, 5, 250.0, 180000.0, "Ubicacion 2"));
+        propiedadesMock.add(new Propiedad(3L, "Casa 3", 1, 1, 2, 120.0, 90000.0, "Ubicacion 3"));
+        DatosFiltro datosFiltro = new DatosFiltro(TipoDeFiltro.PRECIO);
+        datosFiltro.setPrecio(120000.0);
+        datosFiltro.setFiltroPorPrecio(FiltroPorPrecio.MAXIMO);
+
+        when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
+        List<Propiedad> propiedadesListadas = this.servicioPropiedad.filtrarPropiedades(datosFiltro);
+        Integer propiedadesEsperadas = 1;
+
+        assertThat(propiedadesListadas.size(), equalTo(propiedadesEsperadas));
     }
 }
