@@ -62,6 +62,7 @@ public class ServicioPropiedadTest {
         assertThat(propiedadesListadas, equalTo(propiedadesMock));
     }
 
+
     @Test
     public void queSeDevuelvanLasPropiedadesFiltradasPorPrecioMinimo() {
 
@@ -79,6 +80,7 @@ public class ServicioPropiedadTest {
 
         assertThat(propiedadesListadas.size(), equalTo(propiedadesEsperadas));
     }
+
 
     @Test
     public void queSeDevuelvanLasPropiedadesFiltradasPorPrecioMaximo() {

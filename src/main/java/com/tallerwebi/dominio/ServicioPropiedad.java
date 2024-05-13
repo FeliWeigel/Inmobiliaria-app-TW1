@@ -42,6 +42,31 @@ public class ServicioPropiedad {
     }
 
 
+    public List<Propiedad> filtrarPropiedades(DatosFiltro datosFiltro) {
+        List<Propiedad> propiedades = listarPropiedades();
+        List<Propiedad> propiedadesFiltradas = new ArrayList<>();
+
+        switch (datosFiltro.getTipoDeFiltro()){
+            case PRECIO:
+                if (datosFiltro.getFiltroPorPrecio() == FiltroPorPrecio.MINIMO){
+                    propiedades.forEach(prop -> {
+                        if(prop.getPrecio() >= datosFiltro.getPrecio())
+                            propiedadesFiltradas.add(prop);
+                    });
+                } else {
+                    propiedades.forEach(prop -> {
+                        if(prop.getPrecio() <= datosFiltro.getPrecio())
+                            propiedadesFiltradas.add(prop);
+                    });
+                }
+                break;
+        }
+        return propiedadesFiltradas;
+    }
+
+
+
+
 
     //                              BORRAR MÁS TARDE:
     // Estos metodos son solo para probar que las vistas anden bien, eliminarlos cuando haya una base de datos ya creada.
@@ -91,28 +116,5 @@ public class ServicioPropiedad {
             }
         }
         return null;
-    }
-
-
-    public List<Propiedad> filtrarPropiedades(DatosFiltro datosFiltro) {
-        List<Propiedad> propiedades = listarPropiedades();
-        List<Propiedad> propiedadesFiltradas = new ArrayList<>();
-
-        switch (datosFiltro.getTipoDeFiltro()){
-            case PRECIO:
-                if (datosFiltro.getFiltroPorPrecio() == FiltroPorPrecio.MINIMO){
-                    propiedades.forEach(prop -> {
-                        if(prop.getPrecio() >= datosFiltro.getPrecio())
-                            propiedadesFiltradas.add(prop);
-                    });
-                } else {
-                    propiedades.forEach(prop -> {
-                        if(prop.getPrecio() <= datosFiltro.getPrecio())
-                            propiedadesFiltradas.add(prop);
-                    });
-                }
-                break;
-        }
-        return propiedadesFiltradas;
     }
 }
