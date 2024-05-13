@@ -1,6 +1,8 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.RepositorioLogin;
+
+import com.tallerwebi.dominio.ServicioLogin;
+import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
@@ -15,14 +17,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ControladorLogin {
 
-    private RepositorioLogin servicioLogin;
+    private ServicioLogin servicioLogin;
 
     @Autowired
-    public ControladorLogin(RepositorioLogin servicioLogin){
+    public ControladorLogin(ServicioLogin servicioLogin){
         this.servicioLogin = servicioLogin;
     }
 
@@ -54,8 +58,8 @@ public class ControladorLogin {
         return new ModelAndView("login", model);
     }
 
-    @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
+    @RequestMapping(path = "/registrarse", method = RequestMethod.POST)
+    public ModelAndView registrarse(@ModelAttribute("usuario") Usuario usuario) {
         ModelMap model = new ModelMap();
         try{
             servicioLogin.registrar(usuario);
@@ -71,17 +75,12 @@ public class ControladorLogin {
         }catch(PasswordInvalidaExcepcion e){
             model.put("error", "Error! La contraseña debe contener al menos: 6 digitos, una mayuscula, un numero y un caracter especial.");
             return new ModelAndView("registrarme", model);
-        }
-        catch (Exception e){
+        } catch (Exception e){
             model.put("error", "Error al registrar el nuevo usuario");
             return new ModelAndView("registrarme", model);
         }
-        return new ModelAndView("redirect:/login");
-    }
 
-    @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHome() {
-        return new ModelAndView("home");
+        return new ModelAndView("redirect:/login");
     }
 
     @RequestMapping(path = "/", method = RequestMethod.GET)

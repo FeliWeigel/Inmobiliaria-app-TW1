@@ -1,12 +1,11 @@
 package com.tallerwebi.dominio;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Date;
+import javax.persistence.*;
+import java.sql.Date;
+import java.util.List;
 
 @Entity
+@Table(name = "usuario")
 public class Usuario {
 
     @Id
@@ -19,6 +18,8 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
+    @OneToMany
+    private List<Propiedad> favoritos;
 
     public Long getId() {
         return id;
@@ -67,18 +68,16 @@ public class Usuario {
     public void setRol(String rol) {
         this.rol = rol;
     }
-    public Boolean getActivo() {
+    public boolean isActivo() {
         return activo;
     }
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public boolean activo() {
-        return activo;
-    }
-
     public void activar() {
         activo = true;
     }
+
+//    public void agregarFavorito(Propiedad propiedad) {
+//        favoritos.add(propiedad);
+//    }
+
+
 }

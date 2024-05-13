@@ -8,6 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
@@ -24,6 +27,41 @@ public class ControladorPropiedadTest {
         this.servicioPropiedad = mock(ServicioPropiedad.class);
         this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad);
     }
+
+
+    @Test
+    public void queSeMuestreElHome(){
+
+        ModelAndView mav = this.controladorPropiedad.irAHome();
+
+        assertThat(mav.getViewName(), equalTo("home"));
+    }
+
+
+    @Test
+    public void queSeDevuelvaUnaExcepcionAlHaberUnErrorInesperado(){
+
+        when(this.servicioPropiedad.listarPropiedades()).thenThrow(RuntimeException.class);
+
+        ModelAndView mav = this.controladorPropiedad.irAHome();
+
+        assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
+    }
+
+
+    @Test
+    public void queSeListenTodasLasPropiedaesExistentes(){
+
+        List<Propiedad> propiedades = crearPropiedades();
+
+        when(servicioPropiedad.listarPropiedades()).thenReturn(propiedades);
+        ModelAndView mav = this.controladorPropiedad.irAHome();
+        List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
+
+        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(propiedaesDevueltas.size(), equalTo(3));
+    }
+
 
     @Test
     public void queAlBuscarUnaPropiedadLleveASuVista() {
@@ -88,6 +126,23 @@ public class ControladorPropiedadTest {
 
         assertThat(mav.getViewName(), equalToIgnoringCase("propiedad"));
         assertThat(error, equalTo("Error al Mostrar la Propiedad."));
+    }
+
+    private List<Propiedad> crearPropiedades() {
+        List<Propiedad> propiedades = new ArrayList<>();
+
+        Propiedad propiedad1 = new Propiedad(1L, "Casa 1", 2, 3, 4,
+                200.0, 150000.0, "Ubicacion 1");
+        Propiedad propiedad2 = new Propiedad(2L, "Casa 2", 2, 3, 4,
+                200.0, 150000.0, "Ubicacion 2");
+        Propiedad propiedad3 = new Propiedad(3L, "Casa 3", 2, 3, 4,
+                200.0, 150000.0, "Ubicacion 3");
+
+        propiedades.add(propiedad1);
+        propiedades.add(propiedad2);
+        propiedades.add(propiedad3);
+
+        return propiedades;
     }
 }
 

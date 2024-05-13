@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <title>Iniciar sesión</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
  
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/login.css}">
-    <!--Stylesheet-->
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+    <!--- <link rel="stylesheet" href="../../../resources/core/css/auth.css"/> -->
 </head>
 
 <body>
-    <form action="#" th:action="@{/validar-login}" method="POST" th:object="${datosLogin}">
+    <form class="login-form" action="#" th:action="@{/validar-login}" method="POST" th:object="${datosLogin}">
         <h3>Iniciar sesión</h3>
         <p class="subtitle">¿No tienes cuenta? <a href="registrarme.html">Regístrate</a></p>
-        
 
         <label for="email">Correo electrónico</label>
         <input th:field="*{email}" id="email" type="email" class="form-control" required/>
-        <!-- <input type="text" id="username" required> -->
 
         <label for="password">Contraseña</label>
         <input th:field="*{password}" type="password" id="password" class="form-control" required/>
 
-        <button type="Submit">Ingresar</button>
-        
-        <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
+        <p
+                class="alert"
+                th:if="${error != null}"
+                th:text="${error}"
+        >
         </p>
-        
+        <button type="Submit">Ingresar</button>
     </form>
 </body>
 </html>

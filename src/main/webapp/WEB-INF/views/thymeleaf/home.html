@@ -4,68 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-     <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
     <link rel="stylesheet" th:href="@{/css/home.css}"/>
-    <!-- <link rel="stylesheet" href="../../../resources/core/css/header.css">
-        <link rel="stylesheet" href="../../../resources/core/css/footer.css">
-        <link rel="stylesheet" href="../../../resources/core/css/home.css"> -->
+    <script th:src="@{/js/home.js}" type="text/javascript"></script>
+    <script src="https://kit.fontawesome.com/f3e8220cf2.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
     <header>
-        <a class="button-logo" href="#">
+        <a class="button-logo" th:href="@{/home}">
             <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
         </a>
-
         <nav>
             <a href="#">
-                <img th:src="@{/img/bx-heart.svg}" alt="favoritos">
+                <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
             </a>
             <a href="#">
-                <img th:src="@{/img/bx-bell.svg}" alt="notificaciones">
+                <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
             </a>
+<!--            <a href="#">-->
+<!--                <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>-->
+<!--            </a>-->
             <a href="#">
-                <img th:src="@{/img/bx-conversation.svg}" alt="mensajes">
-            </a>
-            <a href="#">
-                <img th:src="@{/img/bx-user.svg}" alt="perfil">
+                <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
             </a>
         </nav>
-
     </header>
 
     <main>
-        <div class="container">
-            <a class="container-a" href="#">
-                <div class="item">
-                    <img class="prop-img" th:src="@{/img/Casa.jpg}" alt="propiedad">
-                    <p class="prop-ubi">Mar del Plata</p>
-                    <h3 class="prop-title">Casa en mdq</h3>
-                    <div class="prop-desc">
-                        <p>Sup.: 50mt2</p>
-                        <p>Ambientes: 3</p>
-                        <p>Baños: 1</p>
-                        <p>Apto mascotas: si</p>
-                    </div>
-                    <h4 class="prop-price">$30.000 por noche</h4>
-                </div>
-            </a>
 
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
+         <div class="container">
+             <div th:each="propiedad : ${propiedades}">
+                 <a class="container-a" th:href="@{/propiedad/{id}(id=${propiedad.id})}">
+                     <div class="item">
+                         <img class="prop-img" th:src="@{/img/Casa.jpg}" alt="propiedad">
+                         <p class="prop-ubi" th:text="${propiedad.nombre}"></p>
+                         <div>
+                            <h3 class="prop-title" th:text="${propiedad.ubicacion}"></h3>
+<!--                            <form method="POST" th:action="@{/edit(personId=${person.personId})}">-->
+<!--                                <button type="submit" name="submit" value="value" class="link-button">-->
+<!--                                    <i class="fa-regular fa-heart" style="color: #ff2d2d;"></i>-->
+<!--                                </button>-->
+<!--                            </form>-->
+                        </div>
+                         <div class="prop-desc">
+                             <p th:text="'Superficie: ' + ${propiedad.superficie} + ' mt2'"></p>
+                             <p th:text="'Ambientes: ' + ${propiedad.habitaciones}"></p>
+                             <p th:text="'Baños: ' + ${propiedad.banios}"></p>
+                             <p th:text="'Pisos: ' + ${propiedad.pisos}"></p>
+                         </div>
+                         <h4 class="prop-price" th:text="'$' + ${propiedad.precio} + ' por noche'"></h4>
+                     </div>
+                 </a>
+             </div>
+
         </div>
     </main>
 
     <footer>
         <div class="social">
             <a href="https://www.instagram.com">
-                <img th:src="@{/img/bx-instagram.svg}" alt="instagram">
+                <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>
             </a>
             <a href="https://www.whatsapp.com">
-                <img th:src="@{/img/bx-whatsapp.svg}" alt="whatsapp">
+                <i class="fa-brands fa-whatsapp" style="color: #f8f1f1;"></i>
             </a>
         </div>
 

@@ -1,4 +1,3 @@
-
 *,
 *:before,
 *:after{
@@ -6,7 +5,6 @@
     margin: 0;
     box-sizing: border-box;
 }
-
 
 body {
     font-family: Arial, sans-serif;
@@ -26,40 +24,90 @@ body {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 20px;
-    margin-bottom: 2px;
-}
-
-.propiedad h2 {
-    color: #11698E;
+    padding: 3em;
 }
 
 .propiedad p {
-    margin: 10px 0;
+    margin: 16px 0;
 }
 
 .message {
     text-align: center;
-    background: #11698E;
     border: none;
-    color: #fff;
+    color: #000;
     padding: 10px;
-    margin-bottom: 20px;
+    font-size: 2.6em;
 }
 
-.message.error {
+.nombre {
     text-align: center;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
+    font-size: 2.3em;
+}
+
+p {
+    font-size: 1.2em;
+}
+
+.img-propiedad {
+    width: 100%;
+    height: 100vh;
+}
+
+
+.alquilar-btn:hover, .nuevo-btn:hover {
+    background-color: #1484b1;
+    cursor: pointer;
 }
 
 .img-container {
+    position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1em;
 }
+
+.img-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.nombre {
+    margin-bottom: 40px;
+}
+
+.alquilar-btn {
+    position: absolute;
+    bottom: 22%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #16a2da;
+    color: #fff;
+    padding: 1em 3.4em;
+    font-size: 20px;
+    font-weight: 600;
+    border-radius: 40px;
+    border: 0px;
+    transition: ease .2s;
+    text-align: center;
+}
+
+.nuevo-btn {
+    position: absolute;
+    bottom: 22%;
+    left: calc(50% - 170px);
+    background-color: #16a2da;
+    color: #000;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 100%;
+    padding: 15px;
+    cursor: pointer;
+}
+
 
 
 

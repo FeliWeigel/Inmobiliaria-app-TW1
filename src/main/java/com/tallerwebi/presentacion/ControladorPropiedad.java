@@ -7,7 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ControladorPropiedad {
@@ -18,12 +23,25 @@ public class ControladorPropiedad {
         this.servicioPropiedad = servicioPropiedad;
     }
 
+    @RequestMapping(path = "/home", method = RequestMethod.GET)
+    public ModelAndView irAHome() {
+
+        ModelMap model = new ModelMap();
+
+        try {
+            List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+            model.put("propiedades", propiedades);
+        } catch (Exception e){
+            model.put("message", "Ha Ocurrido un Error Inesperado");
+        }
+
+        return new ModelAndView("home", model);
+    }
+
     @GetMapping("/propiedad/{id}")
     public ModelAndView verPropiedad(@PathVariable Long id) {
 
         ModelMap model = new ModelMap();
-
-         //Propiedad propiedad = new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1");
 
         try {
             Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);

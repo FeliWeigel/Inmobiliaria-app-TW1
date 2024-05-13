@@ -1,25 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <!-- Design by foolishdeveloper.com -->
     <title>Registrarse</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
  
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <!-- <link rel="stylesheet" th:href="@{/css/signup.css}"> -->
-    <link rel="stylesheet" th:href="@{/css/registrarme.css}"/>
-    <!--Stylesheet-->
+    <link rel="stylesheet" th:href="@{/css/auth.css}"/>
+    <link rel="stylesheet" href="../../../resources/core/css/auth.css"/>
 </head>
 
 <body>
-    <form action="#" th:action="@{/registrarme}" method="POST" th:object="${usuario}">
+    <form class="register-form" action="#" th:action="@{/registrarse}" method="POST" th:object="${usuario}">
         <h3>Registrarse</h3>
         <p class="subtitle">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
 
-        <label for="username">Elige un nombre de usuario</label>
-        <input th:field="*{nombre}" type="text" id="username" class="form-control" required/>
-
+        <div class="nombre-completo">
+            <div>
+                <label for="nombre">Nombre</label>
+                <input th:field="*{nombre}" type="text" id="nombre" class="form-control" required/>
+            </div>
+            <div>
+                <label for="apellido">Apellido</label>
+                <input th:field="*{apellido}" type="text" id="apellido" class="form-control" required/>
+            </div>
+        </div>
+        <label for="fecha-nacimiento">Fecha de nacimiento</label>
+        <input th:field="*{fechaNacimiento}" type="date" id="fecha-nacimiento" class="form-control" required/>
         <label for="email">Correo electrónico</label>
         <input th:field="*{email}" type="email" id="email" class="form-control" required/>
 
@@ -29,22 +41,22 @@
                 <img class="plusIcon" th:src="@{/img/bx-plus.svg}" alt="plus">
                 <div class="tooltiptext">
                     <p>Debe tener al menos:</p>
-                    <p>• 6 caracteres</p>
-                    <p>• Un número</p>
-                    <p>• Una mayúscula</p>
-                    <p>• Un caracter especial</p>
+                    <p>6 caracteres</p>
+                    <p>Un número</p>
+                    <p>Una mayúscula</p>
+                    <p>Un caracter especial</p>
                 </div>   
             </div>
         </div>
         <input th:field="*{password}" type="password" id="password" class="form-control" required/>
 
-        <label for="password">Repetir contraseña</label>
-        <input th:field="*{password}" type="password" id="repeatPassword" class="form-control" required/>
-
-        <button type="submit">Crear cuenta</button>
-        
-        <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
+        <p
+          class="alert"
+          th:if="${error != null}"
+          th:text="${error}"
+        >
         </p>
+        <button type="submit">Crear cuenta</button>
 
     </form>
 </body>
