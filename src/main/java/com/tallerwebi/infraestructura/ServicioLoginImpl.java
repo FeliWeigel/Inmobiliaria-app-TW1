@@ -7,6 +7,7 @@ import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
+import com.tallerwebi.dominio.utilidad.ValidarString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,9 +35,13 @@ public class ServicioLoginImpl implements ServicioLogin {
 
     @Override
     public void registrar(Usuario usuario) throws UsuarioExistenteExcepcion, CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
-        validarNombreApellido(usuario.getNombre());
-        validarNombreApellido(usuario.getApellido());
+        ValidarString validarString = new ValidarString();
+
         validarEdad(usuario.getFechaNacimiento());
+
+        if(validarString.tieneNumeros(usuario.getNombre()) || validarString.tieneNumeros(usuario.getApellido())){
+            throw new CredencialesInvalidasExcepcion();
+        }
 
         if(usuario.getPassword().length() >= 6){
             if(!validarPassword(usuario.getPassword())){
@@ -52,15 +57,6 @@ public class ServicioLoginImpl implements ServicioLogin {
 
         usuario.setRol("USER");
         repositorioUsuario.guardar(usuario);
-    }
-
-    private void validarNombreApellido(String nombreUsuario) throws CredencialesInvalidasExcepcion {
-        char[] nombreArray = nombreUsuario.toCharArray();
-        for(char i : nombreArray){
-            if(Character.isDigit(i)){
-                throw new CredencialesInvalidasExcepcion();
-            }
-        }
     }
 
     private void validarEdad(Date fechaUsuario) throws EdadInvalidaExcepcion {
