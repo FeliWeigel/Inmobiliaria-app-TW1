@@ -1,11 +1,11 @@
 package com.tallerwebi.dominio;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "usuario")
 public class Usuario {
 
     @Id

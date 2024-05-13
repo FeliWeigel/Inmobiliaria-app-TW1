@@ -1,8 +1,8 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.ServicioPropiedad;
+import com.tallerwebi.dominio.SubirImagenServicio;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,18 +14,18 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ControladorPropiedadTest {
     private ControladorPropiedad controladorPropiedad;
     private ServicioPropiedad servicioPropiedad;
+    private SubirImagenServicio servicioImagen;
 
     @BeforeEach
     public void init(){
         this.servicioPropiedad = mock(ServicioPropiedad.class);
-        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad);
+        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, servicioImagen);
     }
 
 

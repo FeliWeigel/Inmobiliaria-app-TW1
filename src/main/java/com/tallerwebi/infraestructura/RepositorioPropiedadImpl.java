@@ -38,17 +38,9 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
     }
 
     @Override
-    public Boolean agregarPropiedad(Propiedad propiedad) {
+    public void agregarPropiedad(Propiedad propiedad) {
         final Session session = sessionFactory.getCurrentSession();
-
-        if(propiedad.getNombre() != null && propiedad.getBanios() != null && propiedad.getHabitaciones() != null
-                && propiedad.getPisos() != null && propiedad.getPrecio() != null && propiedad.getSuperficie() != null && propiedad.getUbicacion() != null){
-            session.save(propiedad);
-            return true;
-        } else {
-            throw new CRUDPropiedadExcepcion("Todos los campos deben completarse con datos validos.");
-        }
-
+        session.save(propiedad);
     }
 
     @Override

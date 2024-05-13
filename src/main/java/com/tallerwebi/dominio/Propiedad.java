@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +20,8 @@ public class Propiedad {
     private Double superficie;
     private Double precio;
     private String ubicacion;
+    private EstadoPropiedad estado;
+    private String rutaImagen;
 
     public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
         this.id = id;
@@ -31,7 +35,6 @@ public class Propiedad {
     }
 
     public Propiedad() {
-
     }
 
     public Long getId() {
@@ -41,61 +44,58 @@ public class Propiedad {
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
     public Integer getPisos() {
         return pisos;
     }
-
     public void setPisos(Integer pisos) {
         this.pisos = pisos;
     }
-
     public Integer getBanios() {
         return banios;
     }
-
     public void setBanios(Integer baños) {
         this.banios = baños;
     }
-
     public Integer getHabitaciones() {
         return habitaciones;
     }
-
     public void setHabitaciones(Integer habitaciones) {
         this.habitaciones = habitaciones;
     }
-
     public Double getSuperficie() {
         return superficie;
     }
-
     public void setSuperficie(Double superficie) {
         this.superficie = superficie;
     }
-
     public Double getPrecio() {
         return precio;
     }
-
     public void setPrecio(Double precio) {
         this.precio = precio;
     }
-
     public String getUbicacion() {
         return ubicacion;
     }
-
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
     }
-
+    public EstadoPropiedad getEstado() {
+        return estado;
+    }
+    public void setEstado(EstadoPropiedad estado) {
+        this.estado = estado;
+    }
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
 }

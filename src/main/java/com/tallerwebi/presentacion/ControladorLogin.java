@@ -58,8 +58,8 @@ public class ControladorLogin {
         return new ModelAndView("login", model);
     }
 
-    @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
+    @RequestMapping(path = "/registrarse", method = RequestMethod.POST)
+    public ModelAndView registrarse(@ModelAttribute("usuario") Usuario usuario) {
         ModelMap model = new ModelMap();
         try{
             servicioLogin.registrar(usuario);
@@ -75,11 +75,11 @@ public class ControladorLogin {
         }catch(PasswordInvalidaExcepcion e){
             model.put("error", "Error! La contraseña debe contener al menos: 6 digitos, una mayuscula, un numero y un caracter especial.");
             return new ModelAndView("registrarme", model);
-        }
-        catch (Exception e){
+        } catch (Exception e){
             model.put("error", "Error al registrar el nuevo usuario");
             return new ModelAndView("registrarme", model);
         }
+
         return new ModelAndView("redirect:/login");
     }
 

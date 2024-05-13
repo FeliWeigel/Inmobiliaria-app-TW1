@@ -7,18 +7,21 @@ import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
+import com.tallerwebi.dominio.utilidad.ValidarString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Service("repositorioLogin")
+@Service("servicioLogin")
 @Transactional
 public class ServicioLoginImpl implements ServicioLogin {
-    private RepositorioUsuario repositorioUsuario;
+    private final RepositorioUsuario repositorioUsuario;
 
     @Autowired
     public ServicioLoginImpl(RepositorioUsuario repositorioUsuario){
@@ -32,14 +35,13 @@ public class ServicioLoginImpl implements ServicioLogin {
 
     @Override
     public void registrar(Usuario usuario) throws UsuarioExistenteExcepcion, CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
-        if(usuario.getEmail() == null || usuario.getPassword() == null || usuario.getNombre() == null
-                || usuario.getApellido() == null || usuario.getFechaNacimiento() == null
-        ){
+        ValidarString validarString = new ValidarString();
+
+        validarEdad(usuario.getFechaNacimiento());
+
+        if(validarString.tieneNumeros(usuario.getNombre()) || validarString.tieneNumeros(usuario.getApellido())){
             throw new CredencialesInvalidasExcepcion();
         }
-        validarNombreApellido(usuario.getNombre());
-        validarNombreApellido(usuario.getApellido());
-        validarEdad(usuario.getFechaNacimiento());
 
         if(usuario.getPassword().length() >= 6){
             if(!validarPassword(usuario.getPassword())){
@@ -48,32 +50,26 @@ public class ServicioLoginImpl implements ServicioLogin {
         }else {
             throw new PasswordInvalidaExcepcion();
         }
+
         if(repositorioUsuario.buscarPorEmail(usuario.getEmail()) != null){
             throw new UsuarioExistenteExcepcion();
         }
 
+        usuario.setRol("USER");
         repositorioUsuario.guardar(usuario);
     }
 
-    private void validarNombreApellido(String nombreUsuario) throws CredencialesInvalidasExcepcion {
-        char[] nombreArray = nombreUsuario.toCharArray();
-        for(char i : nombreArray){
-            if(Character.isDigit(i)){
-                throw new CredencialesInvalidasExcepcion();
-            }
-        }
-    }
+    private void validarEdad(Date fechaUsuario) throws EdadInvalidaExcepcion {
+        LocalDate fechaActual = LocalDate.now();
 
-    private void validarEdad(Date edadUsuario) throws EdadInvalidaExcepcion {
-        if((new Date().getYear() - edadUsuario.getYear()) < 18){
+        LocalDate fechaUsuarioLocalDate = fechaUsuario.toLocalDate();
+        Period diferencia = Period.between(fechaUsuarioLocalDate, fechaActual);
+        if(diferencia.getYears() < 18){
             throw new EdadInvalidaExcepcion();
-        }else if((new Date().getYear() - edadUsuario.getYear()) == 18){
-            if(new Date().getMonth() < edadUsuario.getMonth()){
+        }else if(diferencia.getYears() == 18){
+            if(fechaUsuarioLocalDate.plusYears(18).isAfter(fechaActual)
+                    || !fechaUsuarioLocalDate.plusYears(18).isEqual(fechaActual)){
                 throw new EdadInvalidaExcepcion();
-            }else if(new Date().getMonth() == edadUsuario.getMonth()){
-                if(new Date().getDay() < edadUsuario.getDay()){
-                    throw new EdadInvalidaExcepcion();
-                }
             }
         }
     }

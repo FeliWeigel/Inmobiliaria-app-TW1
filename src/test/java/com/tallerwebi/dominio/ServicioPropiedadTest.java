@@ -16,11 +16,12 @@ import static org.mockito.Mockito.when;
 public class ServicioPropiedadTest {
     private RepositorioPropiedad repositorioPropiedad;
     private ServicioPropiedad servicioPropiedad;
+    private SubirImagenServicio imagenServicio;
 
     @BeforeEach
     public void init() {
         this.repositorioPropiedad = mock(RepositorioPropiedad.class);
-        this.servicioPropiedad = new ServicioPropiedad(this.repositorioPropiedad);
+        this.servicioPropiedad = new ServicioPropiedad(this.repositorioPropiedad, imagenServicio);
     }
 
     @Test
