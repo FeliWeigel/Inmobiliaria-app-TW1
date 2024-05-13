@@ -1,5 +1,7 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.Propiedad;
+import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import org.hibernate.Session;
@@ -13,6 +15,16 @@ import org.springframework.stereotype.Service;
 public class ServicioUsuario  {
 
     private RepositorioUsuario repositorioUsuario;
+    public ServicioUsuario(RepositorioUsuario repositorioUsuario) {
+        this.repositorioUsuario = repositorioUsuario;
+    }
 
 
+    public void agregarFavorito(Usuario usuario, Propiedad propiedad) {
+        repositorioUsuario.agregarFavorito(propiedad);
+    }
+
+    public void eliminarFavorito(Usuario usuario, Propiedad propiedad) {
+        repositorioUsuario.eliminarFavorito(propiedad);
+    }
 }

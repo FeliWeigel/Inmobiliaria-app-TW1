@@ -75,9 +75,4 @@ public class Usuario {
         activo = true;
     }
 
-//    public void agregarFavorito(Propiedad propiedad) {
-//        favoritos.add(propiedad);
-//    }
-
-
 }

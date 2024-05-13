@@ -21,8 +21,8 @@ public class ServicioPropiedad {
 
     public Propiedad buscarPropiedad(Long id) {
 
-        Propiedad propiedad = this.repositorioPropiedad.buscarPropiedad(id);
-        //Propiedad propiedad = busquedaFalsa(id, propiedadesFalsas());
+        //Propiedad propiedad = this.repositorioPropiedad.buscarPropiedad(id);
+        Propiedad propiedad = busquedaFalsa(id, propiedadesFalsas());
 
         if (propiedad != null) {
             return propiedad;
@@ -34,8 +34,8 @@ public class ServicioPropiedad {
 
     public List<Propiedad> listarPropiedades() {
 
-        return this.repositorioPropiedad.listarPropiedades();
-        //return propiedadesFalsas();
+        //return this.repositorioPropiedad.listarPropiedades();
+        return propiedadesFalsas();
     }
 
 

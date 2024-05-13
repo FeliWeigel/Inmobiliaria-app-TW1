@@ -17,16 +17,16 @@
     </a>
     <nav>
         <a href="#">
-            <img th:src="@{/img/bx-heart.svg}" alt="favoritos">
+            <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
         </a>
         <a href="#">
-            <img th:src="@{/img/bx-bell.svg}" alt="notificaciones">
+            <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
         </a>
+        <!--            <a href="#">-->
+        <!--                <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>-->
+        <!--            </a>-->
         <a href="#">
-            <img th:src="@{/img/bx-conversation.svg}" alt="mensajes">
-        </a>
-        <a href="#">
-            <img th:src="@{/img/bx-user.svg}" alt="perfil">
+            <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
         </a>
     </nav>
 </header>
@@ -67,7 +67,7 @@
     <div th:if="${propiedad != null}" class="img-container">
         <img th:src="@{/img/casa-2.jpg}" class="img-propiedad" alt="casa-img">
         <button class="nuevo-btn" >
-            <img th:src="@{/img/bx-heart.svg}" class="img-fav">
+            <i class="fa-regular fa-heart img-fav" style="color: #f8f1f1;"></i>
         </button>
         <button class="alquilar-btn">Alquilar</button>
     </div>
@@ -93,6 +93,7 @@
             <i class="fa-brands fa-whatsapp" style="color: #f8f1f1;"></i>
         </a>
     </div>
+
 </footer>
 
 </body>
