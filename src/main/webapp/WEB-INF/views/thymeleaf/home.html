@@ -42,11 +42,11 @@
                          <p class="prop-ubi" th:text="${propiedad.nombre}"></p>
                          <div>
                             <h3 class="prop-title" th:text="${propiedad.ubicacion}"></h3>
-                            <form method="POST" th:action="@{/edit(personId=${person.personId})}">
-                                <button type="submit" name="submit" value="value" class="link-button">
-                                    <i class="fa-regular fa-heart" style="color: #ff2d2d;"></i>
-                                </button>
-                            </form>
+<!--                            <form method="POST" th:action="@{/edit(personId=${person.personId})}">-->
+<!--                                <button type="submit" name="submit" value="value" class="link-button">-->
+<!--                                    <i class="fa-regular fa-heart" style="color: #ff2d2d;"></i>-->
+<!--                                </button>-->
+<!--                            </form>-->
                         </div>
                          <div class="prop-desc">
                              <p th:text="'Superficie: ' + ${propiedad.superficie} + ' mt2'"></p>
