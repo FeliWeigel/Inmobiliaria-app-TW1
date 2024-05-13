@@ -134,6 +134,53 @@ public class ControladorPropiedadTest {
         assertThat(error, equalTo("Error al Mostrar la Propiedad."));
     }
 
+
+    @Test
+    public void queAlFiltrarPorPrecioSeListenLasPropiedadesQueCumplanConElRequisito(){
+
+        // El otro test estaba haciendo algo más parecido a testear el servicio. Este test solo hace un mock de las
+        // propiedades que se supone que se deben devolver y de una instancia de DatosFiltro. No importan sus valores, porque
+        // que se devuelva lo correcto ya fue testeado en ServicioPropiedadTest, por lo que asumimos que las propiedades que
+        // devuelve el metodo filtrarPropiedades(), ya son adecuadas y establecemos que las que tiene que devolver son los mocks)
+
+        DatosFiltro datosFiltroMock = mock(DatosFiltro.class);
+        List<Propiedad> propiedadesMock = crearPropiedades();
+
+        when(this.servicioPropiedad.filtrarPropiedades(datosFiltroMock)).thenReturn(propiedadesMock);
+
+        ModelAndView mav = this.controladorPropiedad.mostrarPropiedadesFiltradas(datosFiltroMock);
+
+        List<Propiedad> propiedadesFiltradas = (List<Propiedad>) mav.getModel().get("propiedades");
+
+        // Lo unico que queremos comprobar es que la cantidad de propiedades correcta esta en el ModelAndView.
+        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(propiedadesFiltradas.size(), equalTo(3));
+        // Dejo el test anterior comentado abajo, si te parece que este esta bien, borra el test comentado.
+    }
+
+
+    /*@Test
+    public void queAlFiltrarPorPrecioMinimoSeListenLasPropiedadesQueCumplanConElRequisito(){
+
+        DatosFiltro datosFiltroMock = new DatosFiltro(TipoDeFiltro.PRECIO);
+        datosFiltroMock.setPrecio(10000.0);
+        datosFiltroMock.setFiltroPorPrecio(FiltroPorPrecio.MINIMO);
+        List<Propiedad> propiedades = crearPropiedades();
+        when(this.servicioPropiedad.filtrarPropiedades(datosFiltroMock)).thenReturn(propiedades);
+
+        // Ejecutar el método que deseas probar
+        ModelAndView mav = this.controladorPropiedad.mostrarPropiedadesFiltradas(datosFiltroMock);
+
+        // Verificar los resultados
+        List<Propiedad> propiedadesFiltradas = (List<Propiedad>) mav.getModel().get("propiedades");
+        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(propiedadesFiltradas.size(), equalTo(3));
+    }*/
+
+
+
+
+
     private List<Propiedad> crearPropiedades() {
         List<Propiedad> propiedades = new ArrayList<>();
 
@@ -149,32 +196,6 @@ public class ControladorPropiedadTest {
         propiedades.add(propiedad3);
 
         return propiedades;
-    }
-
-    @Test
-    public void queAlFiltrarPorPrecioMinimoSeListenLasPropiedadesQueCumplanConElRequisito(){
-        // cuando corre mostrarPropiedadesFiltradas llama al metodo listarPropiedades del
-        // servicioPropiedad. Siempre devuelve 0 porque el servicioPropiedad no tiene ninguna
-        // propiedad cargada. El tema es que no se como simular esa base de datos. Intenté con
-        // hacer este código:
-        // List<Propiedad> propiedades = crearPropiedades();
-        // when(servicioPropiedad.listarPropiedades()).thenReturn(propiedades);
-        // Pero no funciona porque no se llama a listarPropiedades desde este test, sino que
-        // es llamado desde el servicioPropiedad, y siempre devulve 0.
-        // El que me pueda ayudar buenisimo, yo ya me re quemé
-
-
-        DatosFiltro datosFiltroMock = new DatosFiltro(TipoDeFiltro.PRECIO);
-        datosFiltroMock.setPrecio(10000.0);
-        datosFiltroMock.setFiltroPorPrecio(FiltroPorPrecio.MINIMO);
-
-        // Ejecutar el método que deseas probar
-        ModelAndView mav = this.controladorPropiedad.mostrarPropiedadesFiltradas(datosFiltroMock);
-
-        // Verificar los resultados
-        List<Propiedad> propiedadesFiltradas = (List<Propiedad>) mav.getModel().get("propiedades");
-        assertThat(mav.getViewName(), equalTo("home"));
-        assertThat(propiedadesFiltradas.size(), equalTo(3));
     }
 }
 

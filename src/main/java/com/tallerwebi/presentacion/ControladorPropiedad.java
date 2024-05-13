@@ -54,7 +54,7 @@ public class ControladorPropiedad {
         }
     }
 
-    @PostMapping("/home")
+    @RequestMapping("/home")
     public ModelAndView mostrarPropiedadesFiltradas(@ModelAttribute("datosFiltro") DatosFiltro datosFiltro) {
 
         ModelMap model = new ModelMap();
