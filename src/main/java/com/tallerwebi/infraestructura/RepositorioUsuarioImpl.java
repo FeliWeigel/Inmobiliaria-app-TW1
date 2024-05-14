@@ -47,7 +47,8 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     @Override
     public void agregarFavorito(Propiedad propiedad) {
-
+        final Session session = sessionFactory.getCurrentSession();
+        session.save(propiedad);
     }
 
     @Override

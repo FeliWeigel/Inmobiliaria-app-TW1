@@ -8,7 +8,6 @@ public interface RepositorioUsuario {
     void modificar(Usuario usuario);
 
     void agregarFavorito(Propiedad propiedad);
-
     void eliminarFavorito(Propiedad propiedad);
 }
 

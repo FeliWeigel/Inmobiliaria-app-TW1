@@ -9,6 +9,7 @@
     text-decoration: none;
     color: black;
     display: contents;
+    cursor: pointer;
 }
 
 .item{
@@ -24,6 +25,7 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+
 .prop-img{
     height:50%;
     object-fit: cover;
@@ -36,7 +38,20 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    position: relative;
 }
+.fav-container {
+    position: absolute;
+    right: 10px;
+    z-index: 10;
+}
+
+.unfavHeart:hover{
+    font-size: larger;
+}
+.favHeart:hover{
+     font-size: larger;
+ }
 .prop-title{
     margin-top: 0;
 }

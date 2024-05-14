@@ -61,3 +61,8 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
 });
+
+function verPropiedad(url) {
+    window.open(url, '_blank');
+}
+

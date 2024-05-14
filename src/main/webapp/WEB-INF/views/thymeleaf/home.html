@@ -41,20 +41,20 @@
 
          <div class="container">
              <div th:each="propiedad : ${propiedades}">
-                 <div class="container-a" th:href="@{/propiedad/{id}(id=${propiedad.id})}">
+                 <div class="container-a" th:attr="onclick=|verPropiedad('@{/propiedad/{id}(id=${propiedad.id})}')|">
                      <div class="item">
                          <img class="prop-img" th:src="@{/img/Casa.jpg}" alt="propiedad">
                          <p class="prop-ubi" th:text="${propiedad.ubicacion}"></p>
                          <div class="prop-header">
                             <h3 class="prop-title" th:text="${propiedad.nombre}"></h3>
-                             <div>
+                             <div class="fav-container" onclick="event.stopPropagation()">
                                  <a href="#"
                                     class="favHeart"
                                     th:id="'favoriteButton_' + ${propiedad.id}"
                                     th:if="${favorite}"
                                     th:attr="data-favorite='favoriteString'">
 <!--                                     th:attr="data-favorite='${favorite}'">-->
-                                        <i class="fa-regular fa-heart" style="color: black;"></i>
+                                        <i class="fa-regular fa-heart" style="color:#11698E;"></i>
                                 </a>
                                  <a href="#"
                                     class="unfavHeart"
@@ -62,7 +62,7 @@
                                     th:unless="${favorite}"
                                     th:attr="data-favorite='unfavoriteString'">
 <!--                                     th:attr="data-favorite='${favorite}'">-->
-                                        <i class="fa-solid fa-heart" style="color: black;"></i>
+                                        <i class="fa-solid fa-heart" style="color:#11698E;"></i>
                                 </a>
                              </div>
                         </div>
