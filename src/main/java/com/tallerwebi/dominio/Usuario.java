@@ -18,7 +18,12 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "usuario_favoritos",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "propiedad_id")
+    )
     private List<Propiedad> favoritos;
 
     public Long getId() {

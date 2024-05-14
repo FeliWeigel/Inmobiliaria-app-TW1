@@ -27,4 +27,20 @@ public class ServicioUsuario  {
     public void eliminarFavorito(Usuario usuario, Propiedad propiedad) {
         repositorioUsuario.eliminarFavorito(propiedad);
     }
+
+    //Chat GPT dice:
+//    public void agregarAFavoritos(Long usuarioId, Long propiedadId) {
+//        Usuario usuario = repositorioUsuario.findById(usuarioId).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+//        Propiedad propiedad = repositorioPropiedad.findById(propiedadId).orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
+//        usuario.getFavoritos().add(propiedad);
+//        repositorioUsuario.save(usuario);
+//    }
+//
+//    public void eliminarDeFavoritos(Long usuarioId, Long propiedadId) {
+//        Usuario usuario = repositorioUsuario.findById(usuarioId).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+//        Propiedad propiedad = repositorioPropiedad.findById(propiedadId).orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
+//        usuario.getFavoritos().remove(propiedad);
+//        repositorioUsuario.save(usuario);
+//    }
+
 }
