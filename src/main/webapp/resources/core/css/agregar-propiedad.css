@@ -170,6 +170,11 @@ button:hover {
         width: 55px;
     }
 
+    form {
+        height: 82%;
+        width: 55%;
+    }
+
     #precio {
         width:60px;
         padding: 4px;

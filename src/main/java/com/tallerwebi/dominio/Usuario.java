@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "usuario")
 public class Usuario {
 
     @Id
@@ -18,8 +17,8 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
-    @OneToMany
-    private List<Propiedad> favoritos;
+    //@OneToMany
+    //private List<Propiedad> favoritos;
 
     public Long getId() {
         return id;

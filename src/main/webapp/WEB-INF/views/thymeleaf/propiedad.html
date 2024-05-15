@@ -7,93 +7,65 @@
     <link rel="stylesheet" th:href="@{/css/propiedad.css}"/>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
-    <script src="https://kit.fontawesome.com/f3e8220cf2.js" crossorigin="anonymous"></script>
-
+    <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<header>
-    <a class="button-logo" th:href="@{/home}">
-        <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
-    </a>
-    <nav>
-        <a href="#">
-            <img th:src="@{/img/bx-heart.svg}" alt="favoritos">
-        </a>
-        <a href="#">
-            <img th:src="@{/img/bx-bell.svg}" alt="notificaciones">
-        </a>
-        <a href="#">
-            <img th:src="@{/img/bx-conversation.svg}" alt="mensajes">
-        </a>
-        <a href="#">
-            <img th:src="@{/img/bx-user.svg}" alt="perfil">
-        </a>
-    </nav>
-</header>
-
-<!--<main>
-    <h1 class="message" th:if="${message != null}" th:text="${message}"></h1>
-
     <header>
         <a class="button-logo" th:href="@{/home}">
-            <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+           <!-- <img class="logo" th:src="@{/img/logo.png}" alt="Logo"> -->
+            <img class="logo" src="../../../resources/core/img/logo.png" alt="Logo">
         </a>
         <nav>
-            <a href="#">
-                <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
+            <a style="color: #fff; font-size: 1.1rem" href="#">
+                <i class="fa-regular fa-star"></i>
             </a>
-            <a href="#">
-                <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
+            <a style="color: #fff; font-size: 1.1rem" href="#">
+                <i class="fa-regular fa-bell"></i>
+            <a style="color: #fff; font-size: 1.1rem" href="#">
+                <i class="fa-regular fa-comment"></i>
             </a>
-            <a href="#">
-                <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
-            </a>
+            <a style="color: #fff; font-size: 1.1rem" href="#">
+                <i class="fa-solid fa-user"></i>
+             </a>
         </nav>
     </header>
 
-
-    <div class="propiedad" th:if="${propiedad != null}" >
-        <h2 class="nombre" th:text="${propiedad.nombre}"></h2>
-        <p><strong>Ubicación: </strong><span th:text="${propiedad.ubicacion}"></span></p>
-        <p><strong>Pisos: </strong><span th:text="${propiedad.pisos}"></span></p>
-        <p><strong>Baños: </strong><span th:text="${propiedad.banios}"></span></p>
-        <p><strong>Habitaciones: </strong><span th:text="${propiedad.habitaciones}"></span></p>
-        <p><strong>Superficie: </strong><span th:text="${propiedad.superficie}"></span> mt2</p>
-        <p><strong>Precio: </strong>$<span th:text="${propiedad.precio}"></span> por noche</p>
+    <div th:if="${messageError != null}" style="height: 90vh;display: flex;align-items: center;justify-content: center;">
+        <p style="font-size: 2.3rem" th:text="${messageError}"></p>
     </div>
-</main> -->
+    <main th:if="${propiedad != null}" class="detalles-propiedad">
+        <div class="img-container">
+            <img th:src="@{/img/casa-2.jpg}" class="img-propiedad" alt="casa-img">
+            <button class="nuevo-btn" >
+                <img th:src="@{/img/bx-heart.svg}" class="img-fav">
+            </button>
+            <button class="alquilar-btn">Alquilar</button>
+        </div>
 
-<main>
-    <div th:if="${propiedad != null}" class="img-container">
-        <img th:src="@{/img/casa-2.jpg}" class="img-propiedad" alt="casa-img">
-        <button class="nuevo-btn" >
-            <img th:src="@{/img/bx-heart.svg}" class="img-fav">
-        </button>
-        <button class="alquilar-btn">Alquilar</button>
-    </div>
+        <div class="propiedad">
+            <h1 class="message" th:if="${messageSuccess != null}" th:text="${messageSuccess}">Detalles de la Propiedad</h1>
+            <h3 class="nombre" th:text="${propiedad.nombre}"></h3>
+            <p class="propiedad-estado">En <span th:text="${propiedad.estado}"></span></p>
+            <p><i style="margin-right: .5rem" class="fa-solid fa-location-dot"></i>Ubicacion: <span th:text="${propiedad.ubicacion}"></span></p>
+            <p><i style="margin-right: .5rem" class="fa-solid fa-layer-group"></i>Pisos: <span th:text="${propiedad.pisos}"></span></p>
+            <p><i style="margin-right: .5rem" class="fa-solid fa-bath"></i>Baños: <span th:text="${propiedad.banios}"></span></p>
+            <p><i style="margin-right: .5rem" class="fa-solid fa-person-shelter"></i>Habitaciones: <span th:text="${propiedad.habitaciones}"></span></p>
+            <p><i style="margin-right: .5rem" class="fa-brands fa-codepen"></i>Superficie: <span th:text="${propiedad.superficie}"></span> (m2)</p>
+        </div>
+        <h5 class="prop-det-price">$17.800 (por noche)</h5>
+    </main>
 
-    <div class="propiedad" th:if="${propiedad != null}" >
-        <h1 class="message" th:if="${message != null}" th:text="${message}">Detalles de la Propiedad</h1>
-        <h3 class="nombre" th:text="${propiedad.nombre}">Casa en Mar del plata</h3>
-        <p><strong>Ubicación: </strong><span th:text="${propiedad.ubicacion}"></span></p>
-        <p><strong>Pisos: </strong><span th:text="${propiedad.pisos}"></span></p>
-        <p><strong>Baños: </strong><span th:text="${propiedad.banios}"></span></p>
-        <p><strong>Habitaciones: </strong><span th:text="${propiedad.habitaciones}"></span></p>
-        <p><strong>Superficie: </strong><span th:text="${propiedad.superficie}"></span> mt2</p>
-        <p><strong>Precio: </strong>$<span th:text="${propiedad.precio}"></span> por noche</p>
-    </div>
-</main>
 
-<footer>
-    <div class="social">
-        <a href="https://www.instagram.com">
-            <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>
-        </a>
-        <a href="https://www.whatsapp.com">
-            <i class="fa-brands fa-whatsapp" style="color: #f8f1f1;"></i>
-        </a>
-    </div>
-</footer>
+    <footer>
+        <div class="social">
+            <a href="https://www.instagram.com">
+                <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>
+            </a>
+            <a href="https://www.whatsapp.com">
+                <i class="fa-brands fa-whatsapp" style="color: #f8f1f1;"></i>
+            </a>
+        </div>
+    </footer>
 
 </body>
 </html>
