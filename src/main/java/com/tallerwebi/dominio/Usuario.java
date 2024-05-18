@@ -80,4 +80,11 @@ public class Usuario {
         activo = true;
     }
 
+    public List<Propiedad> getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(List<Propiedad> favoritos) {
+        this.favoritos = favoritos;
+    }
 }

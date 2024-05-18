@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.ServicioPropiedad;
 import com.tallerwebi.dominio.SubirImagenServicio;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.infraestructura.ServicioUsuario;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,10 +20,12 @@ public class ControladorPropiedad {
 
     private final ServicioPropiedad servicioPropiedad;
     private final SubirImagenServicio servicioImagen;
+    private final ServicioUsuario servicioUsuario;
 
-    public ControladorPropiedad(ServicioPropiedad servicioPropiedad, SubirImagenServicio servicioImagen) {
+    public ControladorPropiedad(ServicioPropiedad servicioPropiedad, SubirImagenServicio servicioImagen, ServicioUsuario servicioUsuario) {
         this.servicioPropiedad = servicioPropiedad;
         this.servicioImagen = servicioImagen;
+        this.servicioUsuario = servicioUsuario;
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -32,6 +35,7 @@ public class ControladorPropiedad {
 
         try {
             List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+//            List<Integer> favoritos = UsuarioLoggeado.getFavoritos();
             model.put("propiedades", propiedades);
         } catch (Exception e){
             model.put("message", "Ha Ocurrido un Error Inesperado");
