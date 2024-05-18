@@ -5,7 +5,6 @@ import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
 import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,10 +13,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,7 +34,6 @@ public class RepositorioPropiedadTest {
         this.repositorioPropiedad = new RepositorioPropiedadImpl(this.sessionFactory);
     }
 
-
     @Test
     @Transactional
     @Rollback
@@ -48,17 +44,15 @@ public class RepositorioPropiedadTest {
 
         this.repositorioPropiedad.agregarPropiedad(propiedad);
 
-        Propiedad propiedadGuardada = (Propiedad) this.sessionFactory.getCurrentSession()
-                .createQuery("FROM Propiedad where id = 1")
-                .getSingleResult();
+        Propiedad propiedadGuardada = this.repositorioPropiedad.buscarPropiedad(propiedad.getId());
 
         assertThat(propiedadGuardada, equalTo(propiedad));
     }
 
+    /*
+        Este test mas bien deberia correrse en la capa de servicio que es la que va a manejar este tipo de logica de negocio,
+       el repositorio unicamente va a comunicarse con la base de datos para ejecutar las consultas necesarias
 
-    @Test
-    @Transactional
-    @Rollback
     public void queSeLanceUnaExcepcionAlIntentarAgregarUnaPropiedadInvalida(){
 
         Propiedad propiedad = new Propiedad(2L, "Casa 1", null, 3, 4, 200.0,
@@ -70,18 +64,18 @@ public class RepositorioPropiedadTest {
 
     }
 
+     */
 
     @Test
     @Transactional
     @Rollback
     public void queSePuedanBuscarPropiedadesExistentes(){
-
         Long id = 1L;
         Propiedad propiedad = new Propiedad(id, "Casa 1", 2, 3, 4, 200.0,
                 150000.0, "Ubicacion 1");
 
-        this.sessionFactory.getCurrentSession().save(propiedad);
-        Propiedad propiedadBuscada = this.repositorioPropiedad.buscarPropiedad(id);
+        this.repositorioPropiedad.agregarPropiedad(propiedad);
+        Propiedad propiedadBuscada = this.repositorioPropiedad.buscarPropiedad(propiedad.getId());
 
         assertThat(propiedad, equalTo(propiedadBuscada));
     }
@@ -91,9 +85,7 @@ public class RepositorioPropiedadTest {
     @Transactional
     @Rollback
     public void queAlBuscarUnaPropiedadInexistenteLanceUnaExcepcion(){
-
         Long id = 1L;
-
         assertThrows(CRUDPropiedadExcepcion.class, () -> {
             Propiedad propiedadBuscada = this.repositorioPropiedad.buscarPropiedad(id);
         });
@@ -104,20 +96,15 @@ public class RepositorioPropiedadTest {
     @Transactional
     @Rollback
     public void queSePuedaEliminarUnaPropiedadExistente(){
-
         Long id = 1L;
         Propiedad propiedad = new Propiedad(id, "Casa 1", null, 3, 4, 200.0,
                 150000.0, "Ubicacion 1");
 
         this.sessionFactory.getCurrentSession().save(propiedad);
-        this.repositorioPropiedad.eliminarPropiedad(id);
+        this.repositorioPropiedad.eliminarPropiedad(propiedad.getId());
 
+        assertThrows(CRUDPropiedadExcepcion.class, () -> this.repositorioPropiedad.buscarPropiedad(propiedad.getId()));
 
-        assertThrows(NoResultException.class, () -> {
-                this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Propiedad where id = 1")
-                    .getSingleResult();
-        });
     }
 
 
@@ -125,11 +112,9 @@ public class RepositorioPropiedadTest {
     @Transactional
     @Rollback
     public void queSeLanceUnaExcepcionAlIntentarEliminarUnaPropiedadInexistente(){
-
         Long id = 1L;
 
-
-        assertThrows(CRUDPropiedadExcepcion.class, ()-> {
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
             this.repositorioPropiedad.eliminarPropiedad(id);
         });
     }
@@ -151,25 +136,22 @@ public class RepositorioPropiedadTest {
     @Transactional
     @Rollback
     public void queSePuedaEditarUnaPropiedadExistente(){
-
         Long id = 1L;
         Propiedad propiedad = new Propiedad(id, "Casa 1", 2, 3, 4, 200.0,
                 150000.0, "Ubicacion 1");
-        this.sessionFactory.getCurrentSession().save(propiedad);
+        this.repositorioPropiedad.agregarPropiedad(propiedad);
 
         Double precioEditado = 1000.0;
-        Propiedad edicion = new Propiedad(id, "Casa 1", 2, 3, 4, 200.0,
+        Propiedad propiedadEditada = new Propiedad(propiedad.getId(), "Casa 1", 2, 3, 4, 200.0,
                 precioEditado, "Ubicacion 1");
-        this.repositorioPropiedad.editarPropiedad(edicion);
 
-        Propiedad propiedadEditada = (Propiedad) this.sessionFactory.getCurrentSession()
-                .createQuery("FROM Propiedad where id = 1")
-                .getSingleResult();
-
-
-        assertThat(propiedadEditada.getPrecio(), equalTo(precioEditado));
+        this.repositorioPropiedad.editarPropiedad(propiedadEditada);
+        Propiedad propiedadGuardada = this.repositorioPropiedad.buscarPropiedad(propiedad.getId());
+        assertThat(
+                propiedadGuardada.getPrecio(),
+                equalTo(precioEditado)
+        );
     }
-
 
     private void guardarPropiedades(){
 
@@ -180,9 +162,9 @@ public class RepositorioPropiedadTest {
         Propiedad propiedad3 = new Propiedad(3L, "Casa 3", 2, 3, 4, 200.0,
                 150000.0, "Ubicacion 3");
 
-        this.sessionFactory.getCurrentSession().save(propiedad);
-        this.sessionFactory.getCurrentSession().save(propiedad2);
-        this.sessionFactory.getCurrentSession().save(propiedad3);
+        this.repositorioPropiedad.agregarPropiedad(propiedad);
+        this.repositorioPropiedad.agregarPropiedad(propiedad2);
+        this.repositorioPropiedad.agregarPropiedad(propiedad3);
     };
 
 

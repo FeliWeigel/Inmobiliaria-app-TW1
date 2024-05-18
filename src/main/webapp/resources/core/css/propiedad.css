@@ -24,7 +24,7 @@ body {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 3em;
+    padding: 1rem 0rem .5rem 3rem;
 }
 
 .propiedad p {
@@ -108,6 +108,40 @@ p {
     cursor: pointer;
 }
 
+.fa-location-dot {
+    font-size: 22px;
+}
+
+.fa-codepen {
+    font-size: 21px;
+}
+
+.prop-det-price {
+    position: relative;
+    font-size: 1.6rem;
+    color: rgba(0,0,0,.9);
+    padding: .9rem 0rem 0rem 2.5rem;
+}
+
+.prop-det-price:before {
+    content: "";
+    position: absolute;
+    width: 35px;
+    height: 1.5px;
+    background-color: #1484b1;
+    bottom: -.1rem;
+}
+
+.detalles-propiedad {
+    height: auto;
+    min-height: 178vh;
+}
+
+.propiedad-estado {
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
 
 
 

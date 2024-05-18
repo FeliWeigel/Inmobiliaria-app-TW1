@@ -72,21 +72,23 @@ public class ControladorPropiedad {
 
     @GetMapping("/propiedad/{id}")
     public ModelAndView verPropiedad(@PathVariable Long id) {
-
         ModelMap model = new ModelMap();
 
         try {
             Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
-            model.put("message", "Detalles de la Propiedad.");
+            model.put("messageSuccess", "Detalles de la Propiedad.");
             model.put("propiedad", propiedad);
-            return new ModelAndView("propiedad", model);
         } catch (CRUDPropiedadExcepcion e) {
-            model.put("message", e.getMessage());
+            model.put("messageError", e.getMessage());
+            model.put("propiedad", null);
             return new ModelAndView("propiedad", model);
         } catch (Exception e) {
-            model.put("message", "Error al Mostrar la Propiedad.");
+            model.put("messageError", "Error al encontrar la propiedad seleccionada.");
+            model.put("propiedad", null);
             return new ModelAndView("propiedad", model);
         }
+
+        return new ModelAndView("propiedad", model);
     }
 
 }
