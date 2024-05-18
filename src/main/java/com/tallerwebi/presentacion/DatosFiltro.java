@@ -3,7 +3,7 @@ package com.tallerwebi.presentacion;
 public class DatosFiltro {
     private final TipoDeFiltro tipoDeFiltro;
     public Double precio;
-    private FiltroPorPrecio filtroPorPrecio;
+    private FiltrarPorPrecio filtroPorPrecio;
 
     public DatosFiltro(TipoDeFiltro tipoDeFiltro) {
         this.tipoDeFiltro = tipoDeFiltro;
@@ -15,7 +15,7 @@ public class DatosFiltro {
 
     public Double getPrecio(){return this.precio;}
 
-    public void setFiltroPorPrecio(FiltroPorPrecio filtroPorPrecio) {
+    public void setFiltroPorPrecio(FiltrarPorPrecio filtroPorPrecio) {
         this.filtroPorPrecio = filtroPorPrecio;
     }
 
@@ -23,7 +23,7 @@ public class DatosFiltro {
         return tipoDeFiltro;
     }
 
-    public FiltroPorPrecio getFiltroPorPrecio() {
+    public FiltrarPorPrecio getFiltroPorPrecio() {
         return filtroPorPrecio;
     }
 }

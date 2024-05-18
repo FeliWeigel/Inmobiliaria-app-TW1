@@ -3,6 +3,8 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.ServicioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.filtro.FiltroPorPrecio;
+import com.tallerwebi.dominio.filtro.FiltroPropiedad;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +60,10 @@ public class ControladorPropiedad {
     public ModelAndView mostrarPropiedadesFiltradas(@ModelAttribute("datosFiltro") DatosFiltro datosFiltro) {
 
         ModelMap model = new ModelMap();
-        List<Propiedad> propiedades = servicioPropiedad.filtrarPropiedades(datosFiltro);
+        // ESTO ES SOLO PARA QUE PASE UNA PRUEBA, TIENE QUE OBTENER EL FILTRO DE LA PETICION HTTP
+        FiltroPropiedad filtro = new FiltroPorPrecio();
+        ///////////////////////////////////////////////////////////////////////////7
+        List<Propiedad> propiedades = servicioPropiedad.filtrar(filtro, datosFiltro);
         model.put("propiedades", propiedades);
 
         return new ModelAndView("home", model);

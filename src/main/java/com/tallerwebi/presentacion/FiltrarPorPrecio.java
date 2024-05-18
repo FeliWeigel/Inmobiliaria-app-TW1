@@ -1,5 +1,5 @@
 package com.tallerwebi.presentacion;
 
-public enum FiltroPorPrecio {
+public enum FiltrarPorPrecio {
     MINIMO, MAXIMO;
 }

@@ -4,6 +4,8 @@ import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.ServicioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.filtro.FiltroPorPrecio;
+import com.tallerwebi.dominio.filtro.FiltroPropiedad;
 import org.dom4j.rule.Mode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -145,8 +147,9 @@ public class ControladorPropiedadTest {
 
         DatosFiltro datosFiltroMock = mock(DatosFiltro.class);
         List<Propiedad> propiedadesMock = crearPropiedades();
+        FiltroPropiedad filtro = new FiltroPorPrecio();
 
-        when(this.servicioPropiedad.filtrarPropiedades(datosFiltroMock)).thenReturn(propiedadesMock);
+        when(this.servicioPropiedad.filtrar(filtro, datosFiltroMock)).thenReturn(propiedadesMock);
 
         ModelAndView mav = this.controladorPropiedad.mostrarPropiedadesFiltradas(datosFiltroMock);
 
