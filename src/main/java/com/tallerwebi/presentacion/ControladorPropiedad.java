@@ -62,22 +62,28 @@ public class ControladorPropiedad {
     public ModelAndView mostrarPropiedadesFiltradas(@ModelAttribute("datosFiltro") DatosFiltro datosFiltro) {
         FiltroPropiedad filtro = getFiltroPropiedad(datosFiltro);
         ModelMap model = new ModelMap();
-
         List<Propiedad> propiedades = servicioPropiedad.filtrar(filtro, datosFiltro);
         model.put("propiedades", propiedades);
-
         return new ModelAndView("home", model);
     }
 
     private static FiltroPropiedad getFiltroPropiedad(DatosFiltro datosFiltro) {
         FiltroPropiedad filtro;
-        if(datosFiltro.getTipoDeFiltro() == TipoDeFiltro.PRECIO){
+
+        if (datosFiltro.getFiltrarPorPrecio() != null) {
+            datosFiltro.setTipoDeFiltro(TipoDeFiltro.PRECIO);
+        } else {
+            datosFiltro.setPrecio(0.0);
+        }
+
+        if (datosFiltro.getTipoDeFiltro() == TipoDeFiltro.PRECIO) {
             filtro = new FiltroPorPrecio();
         } else {
             filtro = new FiltroPorArea();
         }
         return filtro;
     }
+
 
 }
 

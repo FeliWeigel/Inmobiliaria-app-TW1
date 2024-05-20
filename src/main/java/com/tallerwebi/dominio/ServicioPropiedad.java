@@ -38,9 +38,12 @@ public class ServicioPropiedad {
         return propiedadesFalsas();
     }
 
+
     public List<Propiedad> filtrar(FiltroPropiedad filtro, DatosFiltro datosFiltro) {
         return filtro.filtrar(listarPropiedades(), datosFiltro);
     }
+
+
 
 
     //                              BORRAR MÁS TARDE:
