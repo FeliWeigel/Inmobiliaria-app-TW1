@@ -46,14 +46,17 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public void agregarFavorito(Propiedad propiedad) {
+    public void agregarFavorito(Usuario usuario, Propiedad propiedad) {
         final Session session = sessionFactory.getCurrentSession();
-        session.save(propiedad);
+        usuario.getFavoritos().add(propiedad);
+        session.update(usuario);
     }
 
     @Override
-    public void eliminarFavorito(Propiedad propiedad) {
-
+    public void eliminarFavorito(Usuario usuario, Propiedad propiedad) {
+        final Session session = sessionFactory.getCurrentSession();
+        usuario.getFavoritos().remove(propiedad);
+        session.update(usuario);
     }
 
 }

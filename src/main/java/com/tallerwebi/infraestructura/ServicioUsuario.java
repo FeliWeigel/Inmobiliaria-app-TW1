@@ -21,11 +21,15 @@ public class ServicioUsuario  {
 
 
     public void agregarFavorito(Usuario usuario, Propiedad propiedad) {
-        repositorioUsuario.agregarFavorito(propiedad);
+        repositorioUsuario.agregarFavorito(usuario, propiedad);
     }
 
     public void eliminarFavorito(Usuario usuario, Propiedad propiedad) {
-        repositorioUsuario.eliminarFavorito(propiedad);
+        repositorioUsuario.eliminarFavorito(usuario, propiedad);
+    }
+
+    public Usuario getUsuarioByEmail(String email) {
+        return repositorioUsuario.buscarPorEmail(email);
     }
 
     //Chat GPT dice:

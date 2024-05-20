@@ -51,15 +51,15 @@
                                  <a href="#"
                                     class="favHeart"
                                     th:id="'favoriteButton_' + ${propiedad.id}"
-                                    th:if="${favorite}"
-                                    th:attr="data-favorite='${favorite}'">
+                                    th:if="${propiedad.isFavorite}"
+                                    th:attr="data-favorite='${propiedad}'">
                                         <i class="fa-regular fa-heart" style="color:#11698E;"></i>
                                 </a>
                                  <a href="#"
                                     class="unfavHeart"
                                     th:id="'unfavoriteButton_' + ${propiedad.id}"
-                                    th:unless="${favorite}"
-                                    th:attr="data-favorite='${favorite}'">
+                                    th:unless="${propiedad.isFavorite}"
+                                    th:attr="data-favorite='${propiedad}'">
                                         <i class="fa-solid fa-heart" style="color:#11698E;"></i>
                                 </a>
                              </div>

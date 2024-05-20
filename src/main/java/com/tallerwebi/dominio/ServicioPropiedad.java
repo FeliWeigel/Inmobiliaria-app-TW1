@@ -47,7 +47,7 @@ public class ServicioPropiedad {
     }
     public List<Propiedad> listarPropiedades() {
 
-        //return this.repositorioPropiedad.listarPropiedades();
-        return propiedadesFalsas();
+        return this.repositorioPropiedad.listarPropiedades();
+//        return propiedadesFalsas();
     }
 }

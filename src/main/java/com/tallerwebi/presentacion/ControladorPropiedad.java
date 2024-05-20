@@ -3,7 +3,9 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.ServicioPropiedad;
 import com.tallerwebi.dominio.SubirImagenServicio;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 import com.tallerwebi.infraestructura.ServicioUsuario;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -34,10 +37,103 @@ public class ControladorPropiedad {
         ModelMap model = new ModelMap();
 
         try {
+            Usuario usuario = null;
+            System.out.println("1");
+
+//TODO: validar usuario loggeado
+            System.out.println("2");
+
+            usuario = servicioUsuario.getUsuarioByEmail("test@unlam.edu.ar");
+            System.out.println("3");
+            servicioUsuario.agregarFavorito(usuario, servicioPropiedad.buscarPropiedad((long)1));
+//fin validar usuario loggeado
             List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
-//            List<Integer> favoritos = UsuarioLoggeado.getFavoritos();
-            model.put("propiedades", propiedades);
+
+            propiedades.add(new Propiedad(
+                    (long)1,
+                    "Casa en la playa",
+                    2,
+                    3,
+                    4,
+                    250.0,
+                    300000.0,
+                    "Playa del Carmen, México"
+            ));
+
+            propiedades.add(new Propiedad(
+                    (long)2,
+                    "Apartamento céntrico",
+                    1,
+                    1,
+                    2,
+                    80.0,
+                    150000.0,
+                    "Madrid, España"
+            ));
+
+            propiedades.add(new Propiedad(
+                    (long)3,
+                    "Chalet en la montaña",
+                    3,
+                    4,
+                    5,
+                    350.0,
+                    450000.0,
+                    "Sierra Nevada, España"
+            ));
+
+            propiedades.add(new Propiedad(
+                    (long)4,
+                    "Casa rural",
+                    1,
+                    2,
+                    3,
+                    150.0,
+                    200000.0,
+                    "Toscana, Italia"
+            ));
+
+            propiedades.add(new Propiedad(
+                    (long)5,
+                    "Penthouse de lujo",
+                    1,
+                    2,
+                    3,
+                    200.0,
+                    600000.0,
+                    "Nueva York, EE.UU."
+            ));
+
+
+
+            List<Propiedad> favoritos = usuario.getFavoritos();
+            List<PropiedadDto> propiedadesDto = new ArrayList<>();
+
+            for (Propiedad propiedad : propiedades) {
+                propiedadesDto.add(new PropiedadDto(
+                        propiedad.getId(),
+                        propiedad.getNombre(),
+                        propiedad.getPisos(),
+                        propiedad.getBanios(),
+                        propiedad.getHabitaciones(),
+                        propiedad.getSuperficie(),
+                        propiedad.getPrecio(),
+                        propiedad.getUbicacion(),
+                        propiedad.getEstado(),
+                        propiedad.getRutaImagen(),
+                        favoritos.stream()
+                                .map(Propiedad::getId)
+                                .anyMatch(id -> id.equals(propiedad.getId()))
+                ));
+            }
+
+            System.out.println(propiedadesDto.size());
+
+
+            model.put("propiedades", propiedadesDto);
         } catch (Exception e){
+            System.out.println("ex: " + e.getMessage());
+
             model.put("message", "Ha Ocurrido un Error Inesperado");
         }
 

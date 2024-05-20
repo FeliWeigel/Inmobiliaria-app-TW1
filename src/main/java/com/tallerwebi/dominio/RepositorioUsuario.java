@@ -7,7 +7,7 @@ public interface RepositorioUsuario {
     Usuario buscarPorEmail(String email);
     void modificar(Usuario usuario);
 
-    void agregarFavorito(Propiedad propiedad);
-    void eliminarFavorito(Propiedad propiedad);
+    void agregarFavorito(Usuario usuario, Propiedad propiedad);
+    void eliminarFavorito(Usuario usuario, Propiedad propiedad);
 }
 

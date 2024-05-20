@@ -25,7 +25,7 @@ public class ControladorPropiedadTest {
     @BeforeEach
     public void init(){
         this.servicioPropiedad = mock(ServicioPropiedad.class);
-        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, servicioImagen);
+//        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, this.servicioImagen);
     }
 
 
