@@ -11,72 +11,98 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/css/agregar-propiedad.css}">
-  <link rel="stylesheet" href="../../../resources/core/css/agregar-propiedad.css">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <script src="https://kit.fontawesome.com/f3e8220cf2.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <form action="#" enctype="multipart/form-data" th:action="@{/agregar-propiedad}" method="POST" th:object="${propiedad}">
-    <h3>Agregar Propiedad</h3>
 
-    <label for="nombre">Nombre</label>
-    <input th:field="*{nombre}" id="nombre" type="text" required/>
-    <label for="ubicacion">Ubicacion</label>
-    <input th:field="*{ubicacion}" id="ubicacion" type="text" required/>
+  <header>
+    <a class="button-logo" th:href="@{/home}">
+      <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+    </a>
+    <nav>
+      <a href="#">
+        <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
+      </a>
+      <a href="#">
+        <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
+      </a>
+      <!--            <a href="#">-->
+      <!--                <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>-->
+      <!--            </a>-->
+      <a href="#">
+        <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
+      </a>
+    </nav>
+  </header>
 
-    <div class="form-flex">
-      <div>
-        <label for="pisos">Pisos</label>
-        <input th:field="*{pisos}" id="pisos" type="number" required/>
-      </div>
-      <div>
-        <label for="banios">Baños</label>
-        <input th:field="*{banios}" id="banios" type="number" required/>
-      </div>
-      <div>
-        <label for="superficie">Superficie(m2)</label>
-        <input th:field="*{superficie}" id="superficie" type="number" required/>
-      </div>
-    </div>
+  <main>
+    <form action="#" enctype="multipart/form-data" th:action="@{/agregar-propiedad}" method="POST" th:object="${propiedad}">
+      <h3>Agregar Propiedad</h3>
 
-    <div class="form-flex">
-      <div>
-        <label for="precio">Precio</label>
-        <input th:field="*{precio}" id="precio" type="number" placeholder="$" required/>
-      </div>
-      <div>
-        <label for="habitaciones">Habitaciones</label>
-        <input th:field="*{habitaciones}" id="habitaciones" type="number" required/>
-      </div>
-      <div style="margin-left: .5rem">
-        <label>Estado:</label>
-        <div style="display: flex; flex-direction: row; align-items: center; font-size: .9rem">
-          En alquiler
-          <input type="radio" value="ALQUILER" name="estado" th:field="*{estado}">
+      <label for="nombre">Nombre</label>
+      <input th:field="*{nombre}" id="nombre" type="text" required/>
+      <label for="ubicacion">Ubicacion</label>
+      <input th:field="*{ubicacion}" id="ubicacion" type="text" required/>
+
+      <div class="form-flex">
+        <div>
+          <label for="pisos">Pisos</label>
+          <input th:field="*{pisos}" id="pisos" type="number" required/>
         </div>
-        <div style="display: flex; flex-direction: row; align-items: center; font-size: .9rem">
-          En venta
-          <input type="radio" value="VENTA" name="estado" th:field="*{estado}">
+        <div>
+          <label for="banios">Baños</label>
+          <input th:field="*{banios}" id="banios" type="number" required/>
+        </div>
+        <div>
+          <label for="superficie">Superficie(m2)</label>
+          <input th:field="*{superficie}" id="superficie" type="number" required/>
         </div>
       </div>
-    </div>
 
-    <label for="imagen">Imagen:</label>
-    <input name="imagen" id="imagen" type="file" required/>
+      <div class="form-flex">
+        <div>
+          <label for="precio">Precio</label>
+          <input th:field="*{precio}" id="precio" type="number" placeholder="$" required/>
+        </div>
+        <div>
+          <label for="habitaciones">Habitaciones</label>
+          <input th:field="*{habitaciones}" id="habitaciones" type="number" required/>
+        </div>
+        <div style="margin-left: .5rem">
+          <label>Estado:</label>
+          <div style="display: flex; flex-direction: row; align-items: center; font-size: .9rem">
+            En alquiler
+            <input type="radio" value="ALQUILER" name="estado" th:field="*{estado}">
+          </div>
+          <div style="display: flex; flex-direction: row; align-items: center; font-size: .9rem">
+            En venta
+            <input type="radio" value="VENTA" name="estado" th:field="*{estado}">
+          </div>
+        </div>
+      </div>
 
-    <p
-        class="alert"
-        th:if="${error != null}"
-        th:text="${error}"
-    >
-    </p>
+      <label for="imagen">Imagen:</label>
+      <input name="imagen" id="imagen" type="file" required/>
 
-    <p
-       class="success"
-       th:if="${success != null}"
-       th:text="${success}"
-    >
-    </p>
-    <button type="Submit">Agregar propiedad</button>
-  </form>
+      <p
+              class="alert"
+              th:if="${error != null}"
+              th:text="${error}"
+      >
+      </p>
+
+      <p
+              class="success"
+              th:if="${success != null}"
+              th:text="${success}"
+      >
+      </p>
+      <button type="Submit">Agregar propiedad</button>
+    </form>
+  </main>
+
+
 </body>
 </html>

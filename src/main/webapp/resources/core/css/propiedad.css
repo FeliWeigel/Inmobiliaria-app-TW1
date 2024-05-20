@@ -96,7 +96,7 @@ p {
 
 .nuevo-btn {
     position: absolute;
-    bottom: 22%;
+    bottom: 22.5%;
     left: calc(50% - 170px);
     background-color: #16a2da;
     color: #000;
@@ -104,7 +104,7 @@ p {
     font-weight: bold;
     border: none;
     border-radius: 100%;
-    padding: 15px;
+    padding: 17px;
     cursor: pointer;
 }
 

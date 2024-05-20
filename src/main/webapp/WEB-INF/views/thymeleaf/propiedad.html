@@ -10,23 +10,24 @@
     <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
     <header>
         <a class="button-logo" th:href="@{/home}">
-           <!-- <img class="logo" th:src="@{/img/logo.png}" alt="Logo"> -->
-            <img class="logo" src="../../../resources/core/img/logo.png" alt="Logo">
+            <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
         </a>
         <nav>
-            <a style="color: #fff; font-size: 1.1rem" href="#">
-                <i class="fa-regular fa-star"></i>
+            <a href="#">
+                <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
             </a>
-            <a style="color: #fff; font-size: 1.1rem" href="#">
-                <i class="fa-regular fa-bell"></i>
-            <a style="color: #fff; font-size: 1.1rem" href="#">
-                <i class="fa-regular fa-comment"></i>
+            <a href="#">
+                <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
             </a>
-            <a style="color: #fff; font-size: 1.1rem" href="#">
-                <i class="fa-solid fa-user"></i>
-             </a>
+            <!--            <a href="#">-->
+            <!--                <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>-->
+            <!--            </a>-->
+            <a href="#">
+                <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
+            </a>
         </nav>
     </header>
 
@@ -36,9 +37,9 @@
     <main th:if="${propiedad != null}" class="detalles-propiedad">
         <div class="img-container">
             <img th:src="@{/img/casa-2.jpg}" class="img-propiedad" alt="casa-img">
-            <button class="nuevo-btn" >
-                <img th:src="@{/img/bx-heart.svg}" class="img-fav">
-            </button>
+            <a href="#" class="nuevo-btn">
+                <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
+            </a>
             <button class="alquilar-btn">Alquilar</button>
         </div>
 
@@ -52,7 +53,7 @@
             <p><i style="margin-right: .5rem" class="fa-solid fa-person-shelter"></i>Habitaciones: <span th:text="${propiedad.habitaciones}"></span></p>
             <p><i style="margin-right: .5rem" class="fa-brands fa-codepen"></i>Superficie: <span th:text="${propiedad.superficie}"></span> (m2)</p>
         </div>
-        <h5 class="prop-det-price">$17.800 (por noche)</h5>
+        <h5 class="prop-det-price" th:text="${propiedad.precio} + '$ (Por Noche)'"></h5>
     </main>
 
 
