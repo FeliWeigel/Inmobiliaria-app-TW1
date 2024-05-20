@@ -31,8 +31,13 @@
         </nav>
 
     </header>
-
     <main>
+        <form action="#" th:action="@{/filtrado}" method="POST" th:object="${datosFiltro}">
+            Precio: <input type="number" step="0.01" name="precio" placeholder="Ingrese el valor" id="precio" th:field="*{precio}">
+            Minimo: <input type="radio" name="filtro-precio" id="minimo" th:field="*{filtrarPorPrecio}" th:value="FiltrarPorPrecio.MINIMO" value="FiltrarPorPrecio.MINIMO">
+            Maximo: <input type="radio" name="filtro-precio" id="maximo" th:field="*{filtrarPorPrecio}" th:value="FiltrarPorPrecio.MAXIMO" value="FiltrarPorPrecio.MAXIMO">
+            <button type="submit">Aplicar filtro</button>
+        </form>
          <div class="container">
              <div th:each="propiedad : ${propiedades}">
                  <a class="container-a" th:href="@{/propiedad/{id}(id=${propiedad.id})}">

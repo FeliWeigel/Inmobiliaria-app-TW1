@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.ServicioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.filtro.FiltroPorArea;
 import com.tallerwebi.dominio.filtro.FiltroPorPrecio;
 import com.tallerwebi.dominio.filtro.FiltroPropiedad;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ public class ControladorPropiedad {
 
         try {
             List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+            model.put("datosFiltro", new DatosFiltro());
             model.put("propiedades", propiedades);
         } catch (Exception e){
             model.put("message", "Ha Ocurrido un Error Inesperado");
@@ -56,17 +58,25 @@ public class ControladorPropiedad {
         }
     }
 
-    @RequestMapping("/home")
+    @RequestMapping(path = "/filtrado", method = RequestMethod.POST)
     public ModelAndView mostrarPropiedadesFiltradas(@ModelAttribute("datosFiltro") DatosFiltro datosFiltro) {
-
+        FiltroPropiedad filtro = getFiltroPropiedad(datosFiltro);
         ModelMap model = new ModelMap();
-        // ESTO ES SOLO PARA QUE PASE UNA PRUEBA, TIENE QUE OBTENER EL FILTRO DE LA PETICION HTTP
-        FiltroPropiedad filtro = new FiltroPorPrecio();
-        ///////////////////////////////////////////////////////////////////////////7
+
         List<Propiedad> propiedades = servicioPropiedad.filtrar(filtro, datosFiltro);
         model.put("propiedades", propiedades);
 
         return new ModelAndView("home", model);
+    }
+
+    private static FiltroPropiedad getFiltroPropiedad(DatosFiltro datosFiltro) {
+        FiltroPropiedad filtro;
+        if(datosFiltro.getTipoDeFiltro() == TipoDeFiltro.PRECIO){
+            filtro = new FiltroPorPrecio();
+        } else {
+            filtro = new FiltroPorArea();
+        }
+        return filtro;
     }
 
 }

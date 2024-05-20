@@ -10,7 +10,7 @@ import java.util.List;
 public class FiltroPorPrecio implements FiltroPropiedad {
     @Override
     public List<Propiedad> filtrar(List<Propiedad> propiedades, DatosFiltro datosFiltro) {
-        FiltrarPorPrecio filtro = datosFiltro.getFiltroPorPrecio();
+        FiltrarPorPrecio filtro = datosFiltro.getFiltrarPorPrecio();
         Double precioDelFiltro = datosFiltro.getPrecio();
 
         if (filtro == FiltrarPorPrecio.MINIMO) {

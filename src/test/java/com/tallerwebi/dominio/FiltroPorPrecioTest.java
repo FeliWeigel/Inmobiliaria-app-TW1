@@ -22,13 +22,14 @@ public class FiltroPorPrecioTest {
         propiedades.add(new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1"));
         propiedades.add(new Propiedad(2L, "Casa 2", 3, 2, 5, 250.0, 180000.0, "Ubicacion 2"));
         propiedades.add(new Propiedad(3L, "Casa 3", 1, 1, 2, 120.0, 90000.0, "Ubicacion 3"));
-        datosFiltro = new DatosFiltro(TipoDeFiltro.PRECIO);
+        datosFiltro = new DatosFiltro();
     }
 
     @Test
     public void queSeDevuelvanLasPropiedadesFiltradasPorPrecioMinimo() {
+        datosFiltro.setTipoDeFiltro(TipoDeFiltro.PRECIO);
         datosFiltro.setPrecio(100000.0);
-        datosFiltro.setFiltroPorPrecio(FiltrarPorPrecio.MINIMO);
+        datosFiltro.setFiltrarPorPrecio(FiltrarPorPrecio.MINIMO);
 
         FiltroPropiedad filtroPorPrecio = new FiltroPorPrecio();
         List<Propiedad> propFiltradas = filtroPorPrecio.filtrar(propiedades, datosFiltro);
@@ -39,8 +40,9 @@ public class FiltroPorPrecioTest {
 
     @Test
     public void queSeDevuelvanLasPropiedadesFiltradasPorPrecioMaximo() {
+        datosFiltro.setTipoDeFiltro(TipoDeFiltro.PRECIO);
         datosFiltro.setPrecio(100000.0);
-        datosFiltro.setFiltroPorPrecio(FiltrarPorPrecio.MAXIMO);
+        datosFiltro.setFiltrarPorPrecio(FiltrarPorPrecio.MAXIMO);
 
         FiltroPropiedad filtroPorPrecio = new FiltroPorPrecio();
         List<Propiedad> propFiltradas = filtroPorPrecio.filtrar(propiedades, datosFiltro);

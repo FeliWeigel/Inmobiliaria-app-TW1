@@ -1,16 +1,11 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.ServicioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
-import com.tallerwebi.dominio.filtro.FiltroPorPrecio;
 import com.tallerwebi.dominio.filtro.FiltroPropiedad;
-import org.dom4j.rule.Mode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -19,8 +14,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -33,7 +27,7 @@ public class ControladorPropiedadTest {
     public void init(){
         this.servicioPropiedad = mock(ServicioPropiedad.class);
         this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad);
-        this.datosFiltroMock = new DatosFiltro(TipoDeFiltro.PRECIO);
+        this.datosFiltroMock = new DatosFiltro();
     }
 
 
@@ -146,10 +140,13 @@ public class ControladorPropiedadTest {
         // devuelve el metodo filtrarPropiedades(), ya son adecuadas y establecemos que las que tiene que devolver son los mocks)
 
         DatosFiltro datosFiltroMock = mock(DatosFiltro.class);
+        when(datosFiltroMock.getTipoDeFiltro()).thenReturn(TipoDeFiltro.PRECIO);
+        when(datosFiltroMock.getFiltrarPorPrecio()).thenReturn(FiltrarPorPrecio.MINIMO);
+        when(datosFiltroMock.getPrecio()).thenReturn(500.0);
         List<Propiedad> propiedadesMock = crearPropiedades();
-        FiltroPropiedad filtro = new FiltroPorPrecio();
 
-        when(this.servicioPropiedad.filtrar(filtro, datosFiltroMock)).thenReturn(propiedadesMock);
+        when(servicioPropiedad.filtrar(any(FiltroPropiedad.class), eq(datosFiltroMock)))
+                .thenReturn(propiedadesMock);
 
         ModelAndView mav = this.controladorPropiedad.mostrarPropiedadesFiltradas(datosFiltroMock);
 
