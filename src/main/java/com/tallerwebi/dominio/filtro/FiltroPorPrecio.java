@@ -6,12 +6,17 @@ import com.tallerwebi.presentacion.FiltrarPorPrecio;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FiltroPorPrecio implements FiltroPropiedad {
     @Override
     public List<Propiedad> filtrar(List<Propiedad> propiedades, DatosFiltro datosFiltro) {
         FiltrarPorPrecio filtro = datosFiltro.getFiltrarPorPrecio();
         Double precioDelFiltro = datosFiltro.getPrecio();
+
+        if(precioDelFiltro == null) {
+            precioDelFiltro = 0.0;
+        }
 
         if (filtro == FiltrarPorPrecio.MINIMO) {
             return filtrarPorMinimo(propiedades, precioDelFiltro);
@@ -39,5 +44,5 @@ public class FiltroPorPrecio implements FiltroPropiedad {
         }
         return propiedadesFiltradas;
     }
-
 }
+

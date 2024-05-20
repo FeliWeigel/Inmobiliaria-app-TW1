@@ -134,11 +134,6 @@ public class ControladorPropiedadTest {
     @Test
     public void queAlFiltrarPorPrecioSeListenLasPropiedadesQueCumplanConElRequisito(){
 
-        // El otro test estaba haciendo algo más parecido a testear el servicio. Este test solo hace un mock de las
-        // propiedades que se supone que se deben devolver y de una instancia de DatosFiltro. No importan sus valores, porque
-        // que se devuelva lo correcto ya fue testeado en ServicioPropiedadTest, por lo que asumimos que las propiedades que
-        // devuelve el metodo filtrarPropiedades(), ya son adecuadas y establecemos que las que tiene que devolver son los mocks)
-
         DatosFiltro datosFiltroMock = mock(DatosFiltro.class);
         when(datosFiltroMock.getTipoDeFiltro()).thenReturn(TipoDeFiltro.PRECIO);
         when(datosFiltroMock.getFiltrarPorPrecio()).thenReturn(FiltrarPorPrecio.MINIMO);
@@ -152,33 +147,9 @@ public class ControladorPropiedadTest {
 
         List<Propiedad> propiedadesFiltradas = (List<Propiedad>) mav.getModel().get("propiedades");
 
-        // Lo unico que queremos comprobar es que la cantidad de propiedades correcta esta en el ModelAndView.
         assertThat(mav.getViewName(), equalTo("home"));
         assertThat(propiedadesFiltradas.size(), equalTo(3));
-        // Dejo el test anterior comentado abajo, si te parece que este esta bien, borra el test comentado.
     }
-
-
-    /*@Test
-    public void queAlFiltrarPorPrecioMinimoSeListenLasPropiedadesQueCumplanConElRequisito(){
-
-        DatosFiltro datosFiltroMock = new DatosFiltro(TipoDeFiltro.PRECIO);
-        datosFiltroMock.setPrecio(10000.0);
-        datosFiltroMock.setFiltroPorPrecio(FiltroPorPrecio.MINIMO);
-        List<Propiedad> propiedades = crearPropiedades();
-        when(this.servicioPropiedad.filtrarPropiedades(datosFiltroMock)).thenReturn(propiedades);
-
-        // Ejecutar el método que deseas probar
-        ModelAndView mav = this.controladorPropiedad.mostrarPropiedadesFiltradas(datosFiltroMock);
-
-        // Verificar los resultados
-        List<Propiedad> propiedadesFiltradas = (List<Propiedad>) mav.getModel().get("propiedades");
-        assertThat(mav.getViewName(), equalTo("home"));
-        assertThat(propiedadesFiltradas.size(), equalTo(3));
-    }*/
-
-
-
 
 
     private List<Propiedad> crearPropiedades() {
