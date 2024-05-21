@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,13 +18,13 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
-    @ManyToMany
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
             name = "usuario_favoritos",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "propiedad_id")
     )
-    private List<Propiedad> favoritos;
+    private List<Propiedad> favoritos = new ArrayList<Propiedad>();
 
     public Long getId() {
         return id;

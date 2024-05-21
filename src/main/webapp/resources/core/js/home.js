@@ -10,20 +10,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 // Realizar una solicitud POST a '/favorite'
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', '/spring/favorite', true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.open("POST", '/spring/unfavorite', true);
+                // xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
                             // Manejar la respuesta exitosa
-                            console.log('Added to favorites');
+                            console.log('Removed from favorites');
                         } else {
                             // Manejar la respuesta de error
-                            console.error('Failed to add to favorites');
+                            console.error('Failed to remove from favorites');
                         }
                     }
                 };
-                xhr.send(JSON.stringify({ favorite: favorite }));
+
+                xhr.send(favorite);
+                // xhr.send(JSON.stringify({ favoriteId: favorite }));
             });
         }
     })
@@ -42,20 +45,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 // Realizar una solicitud POST a '/unfavorite'
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', '/spring/unfavorite', true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.open("POST", '/spring/favorite', true);
+                // xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xhr.setRequestHeader('Accept', 'application/json');
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
                             // Manejar la respuesta exitosa
-                            console.log('Removed from favorites');
+                            console.log('Added to favorites');
                         } else {
                             // Manejar la respuesta de error
-                            console.error('Failed to remove from favorites');
+                            console.error('Failed to add to favorites');
                         }
                     }
                 };
-                xhr.send(JSON.stringify({ favorite: favorite }));
+                // xhr.send(JSON.stringify({ favoriteId: favorite }));
+                xhr.send(favorite);
             });
         }
     })

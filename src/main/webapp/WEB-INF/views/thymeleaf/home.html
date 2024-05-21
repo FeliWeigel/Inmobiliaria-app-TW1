@@ -46,21 +46,21 @@
                          <img class="prop-img" th:src="@{/img/Casa.jpg}" alt="propiedad">
                          <p class="prop-ubi" th:text="${propiedad.ubicacion}"></p>
                          <div class="prop-header">
-                            <h3 class="prop-title" th:text="${propiedad.nombre}"></h3>
+                            <h4 class="prop-title" th:text="${propiedad.nombre}"></h4>
                              <div class="fav-container" onclick="event.stopPropagation()">
                                  <a href="#"
                                     class="favHeart"
                                     th:id="'favoriteButton_' + ${propiedad.id}"
                                     th:if="${propiedad.isFavorite}"
-                                    th:attr="data-favorite='${propiedad}'">
-                                        <i class="fa-regular fa-heart" style="color:#11698E;"></i>
+                                    th:attr="data-favorite=${propiedad.id}">
+                                        <i class="fa-solid fa-heart" style="color:#11698E;"></i>
                                 </a>
                                  <a href="#"
                                     class="unfavHeart"
                                     th:id="'unfavoriteButton_' + ${propiedad.id}"
                                     th:unless="${propiedad.isFavorite}"
-                                    th:attr="data-favorite='${propiedad}'">
-                                        <i class="fa-solid fa-heart" style="color:#11698E;"></i>
+                                    th:attr="data-favorite=${propiedad.id}">
+                                        <i class="fa-regular fa-heart" style="color:#11698E;"></i>
                                 </a>
                              </div>
                         </div>

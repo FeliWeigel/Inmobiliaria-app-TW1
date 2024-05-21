@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.RepositorioPropiedad;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -66,6 +67,13 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
         } else {
             throw new CRUDPropiedadExcepcion("La propiedad no cuenta con ID definido para su búsqueda en la base de datos.");
         }
+    }
+
+    @Override
+    public Propiedad buscarPorId(long propiedadId) {
+        return (Propiedad) sessionFactory.getCurrentSession().createCriteria(Propiedad.class)
+                .add(Restrictions.eq("id", propiedadId))
+                .uniqueResult();
     }
 
 

@@ -9,4 +9,6 @@ public interface RepositorioPropiedad {
     void eliminarPropiedad(Long propiedadId);
     List<Propiedad> listarPropiedades();
     void editarPropiedad(Propiedad propiedad);
+
+    Propiedad buscarPorId(long propiedadId);
 }

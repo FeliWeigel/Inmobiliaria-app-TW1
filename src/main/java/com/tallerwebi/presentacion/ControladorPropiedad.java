@@ -38,16 +38,13 @@ public class ControladorPropiedad {
 
         try {
             Usuario usuario = null;
-            System.out.println("1");
 
 //TODO: validar usuario loggeado
-            System.out.println("2");
 
             usuario = servicioUsuario.getUsuarioByEmail("test@unlam.edu.ar");
-            System.out.println("3");
-            servicioUsuario.agregarFavorito(usuario, servicioPropiedad.buscarPropiedad((long)1));
-//fin validar usuario loggeado
+            //fin validar usuario loggeado
             List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+
 
             propiedades.add(new Propiedad(
                     (long)1,
@@ -104,10 +101,12 @@ public class ControladorPropiedad {
                     "Nueva York, EE.UU."
             ));
 
+            System.out.println("5");
 
 
             List<Propiedad> favoritos = usuario.getFavoritos();
             List<PropiedadDto> propiedadesDto = new ArrayList<>();
+
 
             for (Propiedad propiedad : propiedades) {
                 propiedadesDto.add(new PropiedadDto(
@@ -126,6 +125,7 @@ public class ControladorPropiedad {
                                 .anyMatch(id -> id.equals(propiedad.getId()))
                 ));
             }
+            System.out.println("6");
 
             System.out.println(propiedadesDto.size());
 

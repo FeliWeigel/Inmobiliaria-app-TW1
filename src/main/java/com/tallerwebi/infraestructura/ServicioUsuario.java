@@ -4,27 +4,31 @@ import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class ServicioUsuario  {
 
     private RepositorioUsuario repositorioUsuario;
-    public ServicioUsuario(RepositorioUsuario repositorioUsuario) {
+    private RepositorioPropiedad repositorioPropiedad;
+    public ServicioUsuario(RepositorioUsuario repositorioUsuario, RepositorioPropiedad repositorioPropiedad) {
         this.repositorioUsuario = repositorioUsuario;
+        this.repositorioPropiedad = repositorioPropiedad;
     }
 
 
-    public void agregarFavorito(Usuario usuario, Propiedad propiedad) {
+    public void agregarFavorito(long usuarioId, long propiedadId) {
+        Usuario usuario = repositorioUsuario.buscarPorId(usuarioId);
+        Propiedad propiedad = repositorioPropiedad.buscarPorId(propiedadId);
         repositorioUsuario.agregarFavorito(usuario, propiedad);
     }
 
-    public void eliminarFavorito(Usuario usuario, Propiedad propiedad) {
+    public void eliminarFavorito(long usuarioId, long propiedadId) {
+        Usuario usuario = repositorioUsuario.buscarPorId(usuarioId);
+        Propiedad propiedad = repositorioPropiedad.buscarPorId(propiedadId);
         repositorioUsuario.eliminarFavorito(usuario, propiedad);
     }
 

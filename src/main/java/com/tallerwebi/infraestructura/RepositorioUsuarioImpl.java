@@ -3,11 +3,14 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
 
 @Repository("RepositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
@@ -41,13 +44,26 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
+    public Usuario buscarPorId(long usuarioId) {
+        return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+                .add(Restrictions.eq("id", usuarioId))
+                .uniqueResult();
+    }
+
+    @Override
     public void modificar(Usuario usuario) {
         sessionFactory.getCurrentSession().update(usuario);
     }
 
     @Override
+    @Transactional
     public void agregarFavorito(Usuario usuario, Propiedad propiedad) {
         final Session session = sessionFactory.getCurrentSession();
+//        usuario.getFavoritos().add(propiedad);
+//        session.update(usuario);
+
+        usuario = session.get(Usuario.class, usuario.getId());
+        Hibernate.initialize(usuario.getFavoritos());
         usuario.getFavoritos().add(propiedad);
         session.update(usuario);
     }
