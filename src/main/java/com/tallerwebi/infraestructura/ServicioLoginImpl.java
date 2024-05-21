@@ -76,7 +76,7 @@ public class ServicioLoginImpl implements ServicioLogin {
 
     private Boolean validarPassword(String password){
         boolean esMayuscula = false, esNumero = false, esCaracterEspecial = false;
-        Pattern listaEspeciales = Pattern.compile ("[?!¡@¿.,´)]");
+        Pattern listaEspeciales = Pattern.compile ("[?!¡@¿.,´)$(]");
         Matcher tieneEspeciales = listaEspeciales.matcher(password);
         char[] passwordArray = password.toCharArray();
 

@@ -74,7 +74,7 @@ public class ControladorPropiedadTest {
         ModelAndView mav = this.controladorPropiedad.verPropiedad(idMock);
 
         assertThat(mav.getViewName(), equalTo("propiedad"));
-        assertThat(mav.getModel().get("message"), equalTo("Detalles de la Propiedad."));
+        assertThat(mav.getModel().get("messageSuccess"), equalTo("Detalles de la Propiedad."));
     }
 
 
@@ -107,7 +107,7 @@ public class ControladorPropiedadTest {
         when(this.servicioPropiedad.buscarPropiedad(idInexistente)).thenThrow(new CRUDPropiedadExcepcion("La Propiedad Buscada no Existe."));
 
         ModelAndView mav = this.controladorPropiedad.verPropiedad(idInexistente);
-        String error = mav.getModel().get("message").toString();
+        String error = mav.getModel().get("messageError").toString();
 
         assertThat(mav.getViewName(), equalToIgnoringCase("propiedad"));
         assertThat(error, equalTo("La Propiedad Buscada no Existe."));
@@ -122,10 +122,10 @@ public class ControladorPropiedadTest {
         when(this.servicioPropiedad.buscarPropiedad(idPropiedadInexistente)).thenThrow(new RuntimeException());
 
         ModelAndView mav = this.controladorPropiedad.verPropiedad(idPropiedadInexistente);
-        String error = mav.getModel().get("message").toString();
+        String error = mav.getModel().get("messageError").toString();
 
         assertThat(mav.getViewName(), equalToIgnoringCase("propiedad"));
-        assertThat(error, equalTo("Error al Mostrar la Propiedad."));
+        assertThat(error, equalTo("Error al encontrar la propiedad seleccionada."));
     }
 
     private List<Propiedad> crearPropiedades() {

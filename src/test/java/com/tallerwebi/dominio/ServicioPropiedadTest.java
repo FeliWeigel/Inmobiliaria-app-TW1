@@ -3,7 +3,9 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class ServicioPropiedadTest {
     @BeforeEach
     public void init() {
         this.repositorioPropiedad = mock(RepositorioPropiedad.class);
+        this.imagenServicio= mock(SubirImagenServicio.class);
         this.servicioPropiedad = new ServicioPropiedad(this.repositorioPropiedad, imagenServicio);
     }
 
@@ -59,4 +62,37 @@ public class ServicioPropiedadTest {
 
         assertThat(propiedadesListadas, equalTo(propiedadesMock));
     }
+
+
+    @Test
+    public void queSePuedaAregarUnaPropiedadValida() throws IOException {
+
+        MultipartFile imageMock = mock(MultipartFile.class);
+        Long id = 2L;
+        Propiedad propiedad = new Propiedad(id, "Casa", 2, 3, 4, 200.0,
+                150000.0, "Ubicacion");
+
+        this.servicioPropiedad.agregarPropiedad(propiedad, imageMock);
+
+        when(this.repositorioPropiedad.buscarPropiedad(id)).thenReturn(propiedad);
+        Propiedad propiedadAgregada = this.servicioPropiedad.buscarPropiedad(id);
+
+        assertThat(propiedadAgregada, equalTo(propiedad));
+    }
+
+
+    @Test
+    public void queSeLanceUnaExcepcionAlIntentarAgregarUnaPropiedadInvalida() throws IOException {
+        String nombreInvalido = "32131312";
+        MultipartFile imageMock = mock(MultipartFile.class);
+
+        Propiedad propiedad = new Propiedad(2L, nombreInvalido, 2, 3, 4, 200.0,
+                150000.0, "Ubicacion");
+
+
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            this.servicioPropiedad.agregarPropiedad(propiedad, imageMock);
+        });
+    }
+
 }
