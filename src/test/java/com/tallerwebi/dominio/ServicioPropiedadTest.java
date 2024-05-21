@@ -24,11 +24,12 @@ public class ServicioPropiedadTest {
     List<Propiedad> propiedadesMock;
     private FiltroPropiedad filtro;
     private DatosFiltro datosFiltro;
+    private SubirImagenServicio imagenServicio;
 
     @BeforeEach
     public void init() {
         this.repositorioPropiedad = mock(RepositorioPropiedad.class);
-        this.servicioPropiedad = new ServicioPropiedad(this.repositorioPropiedad);
+        this.servicioPropiedad = new ServicioPropiedad(this.repositorioPropiedad, imagenServicio);
         propiedadesMock = new ArrayList<>();
         propiedadesMock.add(new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1"));
         propiedadesMock.add(new Propiedad(2L, "Casa 2", 3, 2, 5, 250.0, 180000.0, "Ubicacion 2"));

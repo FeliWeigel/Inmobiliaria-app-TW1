@@ -38,17 +38,9 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
     }
 
     @Override
-    public Boolean agregarPropiedad(Propiedad propiedad) {
+    public void agregarPropiedad(Propiedad propiedad) {
         final Session session = sessionFactory.getCurrentSession();
-
-        if(propiedad.getNombre() != null && propiedad.getBanios() != null && propiedad.getHabitaciones() != null
-                && propiedad.getPisos() != null && propiedad.getPrecio() != null && propiedad.getSuperficie() != null && propiedad.getUbicacion() != null){
-            session.save(propiedad);
-            return true;
-        } else {
-            throw new CRUDPropiedadExcepcion("Todos los campos deben completarse con datos validos.");
-        }
-
+        session.save(propiedad);
     }
 
     @Override
@@ -74,6 +66,27 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
         } else {
             throw new CRUDPropiedadExcepcion("La propiedad no cuenta con ID definido para su búsqueda en la base de datos.");
         }
+    }
+
+    @Override
+    public List<Propiedad> listarPorRangoPrecio(Double min, Double max) {
+        final Session session = sessionFactory.getCurrentSession(); // devuelvo la session(unidad de comunicacion con la base de datos) actual asociada al contexto de transacciones en el que estoy trabajando
+        String query = "FROM Propiedad WHERE precio BETWEEN :min AND :max"; //creo la query que filtra los objetos
+
+        return session.createQuery(query, Propiedad.class) //ejecuto la query y asigno el tipo de dato que espero a la salida
+                .setParameter("min", min)// seteo los valores para los parametros de comparacion asignados en la query (":min y :max)
+                .setParameter("max", max)
+                .getResultList(); //devuelvo la lista con los objetos filtrados
+    }
+
+    @Override
+    public List<Propiedad> listarPorUbicacion(String ubicacionFiltro) {
+        final Session session = sessionFactory.getCurrentSession();
+        String query = "FROM Propiedad WHERE LOCATE(LOWER(:ubicacionFiltro), LOWER(ubicacion)) > 0";
+
+        return session.createQuery(query, Propiedad.class)
+                .setParameter("ubicacionFiltro",ubicacionFiltro)
+                .getResultList();
     }
 
 

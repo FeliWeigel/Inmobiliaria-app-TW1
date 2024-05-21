@@ -5,8 +5,10 @@ import java.util.List;
 public interface RepositorioPropiedad {
 
     Propiedad buscarPropiedad(Long id);
-    Boolean agregarPropiedad(Propiedad propiedad);
+    void agregarPropiedad(Propiedad propiedad);
     void eliminarPropiedad(Long propiedadId);
     List<Propiedad> listarPropiedades();
     void editarPropiedad(Propiedad propiedad);
+    List<Propiedad> listarPorRangoPrecio(Double min, Double max);
+    List<Propiedad> listarPorUbicacion(String ubicacion);
 }

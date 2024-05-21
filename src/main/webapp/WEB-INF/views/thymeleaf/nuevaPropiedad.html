@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Nueva propiedad</title>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/agregar-propiedad.css}">
+  <link rel="stylesheet" th:href="@{/css/header.css}"/>
+  <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+</head>
+
+<body>
+  <header>
+    <a class="button-logo" th:href="@{/home}">
+      <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+    </a>
+
+    <nav>
+      <a href="#">
+        <img th:src="@{/img/bx-heart.svg}" alt="favoritos">
+      </a>
+      <a href="#">
+        <img th:src="@{/img/bx-bell.svg}" alt="notificaciones">
+      </a>
+      <a href="#">
+        <img th:src="@{/img/bx-conversation.svg}" alt="mensajes">
+      </a>
+      <a href="#">
+        <img th:src="@{/img/bx-user.svg}" alt="perfil">
+      </a>
+    </nav>
+
+  </header>
+  <main>
+    <form action="#" enctype="multipart/form-data" th:action="@{/agregar-propiedad}" method="POST" th:object="${propiedad}">
+      <h3>Agregar Propiedad</h3>
+
+      <label for="nombre">Nombre</label>
+      <input th:field="*{nombre}" id="nombre" type="text" required/>
+      <label for="ubicacion">Ubicacion</label>
+      <input th:field="*{ubicacion}" id="ubicacion" type="text" required/>
+
+      <div class="form-flex">
+        <div>
+          <label for="pisos">Pisos</label>
+          <input th:field="*{pisos}" id="pisos" type="number" required/>
+        </div>
+        <div>
+          <label for="banios">Baños</label>
+          <input th:field="*{banios}" id="banios" type="number" required/>
+        </div>
+        <div>
+          <label for="superficie">Superficie(m2)</label>
+          <input th:field="*{superficie}" id="superficie" type="number" required/>
+        </div>
+      </div>
+
+      <div class="form-flex">
+        <div>
+          <label for="precio">Precio</label>
+          <input th:field="*{precio}" id="precio" type="number" placeholder="$" required/>
+        </div>
+        <div>
+          <label for="habitaciones">Habitaciones</label>
+          <input th:field="*{habitaciones}" id="habitaciones" type="number" required/>
+        </div>
+        <div>
+          <label for="estado">Estado</label>
+          <select id="estado" th:field="*{estado}">
+            <option value="VENTA">En Venta</option>
+            <option value="ALQUILER">En Alquiler</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="imagen">Imagen:</label>
+      <input name="imagen" id="imagen" type="file" required/>
+
+      <p
+              class="alert"
+              th:if="${error != null}"
+              th:text="${error}"
+      >
+      </p>
+
+      <p
+              class="success"
+              th:if="${success != null}"
+              th:text="${success}"
+      >
+      </p>
+      <button type="Submit">Agregar propiedad</button>
+    </form>
+  </main>
+
+  <footer>
+    <div class="social">
+      <a href="https://www.instagram.com">
+        <img th:src="@{/img/bx-instagram.svg}" alt="instagram">
+      </a>
+      <a href="https://www.whatsapp.com">
+        <img th:src="@{/img/bx-whatsapp.svg}" alt="whatsapp">
+      </a>
+    </div>
+  </footer>
+</body>
+</html>

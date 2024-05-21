@@ -1,20 +1,11 @@
-body{
-    margin: 0;
-}
 footer{
+    height: 4rem;
     background-color: #11698E;
-    height: auto;
     display: flex;
     align-items: center;
-    padding: 10px 20px;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    padding: 0 1rem;
 }
-a{
+
+a {
     text-decoration: none;
-}
-.social{
-    gap: 15px;
 }

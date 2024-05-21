@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +19,8 @@ public class Propiedad {
     private Integer habitaciones;
     private Double superficie;
     private Double precio;
+
+    private EstadoPropiedad estado;
     private String ubicacion;
 
     public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
@@ -96,6 +100,12 @@ public class Propiedad {
 
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
+    }
+    public EstadoPropiedad getEstado() {
+        return estado;
+    }
+    public void setEstado(EstadoPropiedad estado) {
+        this.estado = estado;
     }
 
 }

@@ -2,28 +2,29 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.filtro.FiltroPropiedad;
+import com.tallerwebi.dominio.utilidad.ValidarString;
 import com.tallerwebi.presentacion.DatosFiltro;
-import com.tallerwebi.presentacion.FiltrarPorPrecio;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 @Service
 public class ServicioPropiedad {
 
     private RepositorioPropiedad repositorioPropiedad;
+    private SubirImagenServicio imagenServicio;
 
-    public ServicioPropiedad(RepositorioPropiedad repositorioPropiedad) {
+    public ServicioPropiedad(RepositorioPropiedad repositorioPropiedad, SubirImagenServicio imagenServicio) {
         this.repositorioPropiedad = repositorioPropiedad;
+        this.imagenServicio = imagenServicio;
     }
 
     // Para probar que funcionen las views, descomentar las lineas comentadas y comentar las que estan encima de ellas.
 
     public Propiedad buscarPropiedad(Long id) {
-
-        //Propiedad propiedad = this.repositorioPropiedad.buscarPropiedad(id);
-        Propiedad propiedad = busquedaFalsa(id, propiedadesFalsas());
+        Propiedad propiedad = this.repositorioPropiedad.buscarPropiedad(id);
 
         if (propiedad != null) {
             return propiedad;
@@ -34,66 +35,43 @@ public class ServicioPropiedad {
 
 
     public List<Propiedad> listarPropiedades() {
-        //return this.repositorioPropiedad.listarPropiedades();
-        return propiedadesFalsas();
+        return this.repositorioPropiedad.listarPropiedades();
+    }
+
+    public void agregarPropiedad(Propiedad propiedad, MultipartFile imagen) throws IOException {
+        ValidarString validarString = new ValidarString();
+
+        if(validarString.tieneNumeros(propiedad.getUbicacion()) || validarString.tieneNumeros(propiedad.getNombre())){
+            throw new CRUDPropiedadExcepcion("Error! Debe completar todos los campos con datos validos.");
+        }
+        repositorioPropiedad.agregarPropiedad(propiedad);
+
+        try {
+            imagenServicio.subirImagen(propiedad.getId(), imagen);
+        } catch (IOException e) {
+            repositorioPropiedad.eliminarPropiedad(propiedad.getId());
+            throw new IOException(e.getMessage());
+        }
+
+    }
+
+    public List<Propiedad> listarPropiedadesPorPrecio(Double min, Double max){
+        if(min >= 0.0 && max >= 0.0){
+            return this.repositorioPropiedad.listarPorRangoPrecio(min, max);
+        }
+        throw new CRUDPropiedadExcepcion("No se ha podido aplicar el filtro de precio correctamente, revise los datos enviados.");
+    }
+
+    public List<Propiedad> listarPropiedadesPorUbicacion(String ubicacion){
+        if(!ubicacion.isBlank()){
+            return this.repositorioPropiedad.listarPorUbicacion(ubicacion);
+        }
+        throw new CRUDPropiedadExcepcion("No se ha podido aplicar el filtro de ubicacion correctamente, revise los datos enviados.");
     }
 
 
     public List<Propiedad> filtrar(FiltroPropiedad filtro, DatosFiltro datosFiltro) {
         return filtro.filtrar(listarPropiedades(), datosFiltro);
-    }
-
-
-
-
-    //                              BORRAR MÁS TARDE:
-    // Estos metodos son solo para probar que las vistas anden bien, eliminarlos cuando haya una base de datos ya creada.
-
-    private List<Propiedad> propiedadesFalsas() {
-
-        List<Propiedad> propiedades = new ArrayList<>();
-
-        Propiedad propiedad1 = new Propiedad(1L, "Casa 1", 2, 3, 4,
-                150.0, 110000.0, "Ubicacion 1");
-        Propiedad propiedad2 = new Propiedad(2L, "Casa 2", 2, 3, 4,
-                200.0, 120000.0, "Ubicacion 2");
-        Propiedad propiedad3 = new Propiedad(3L, "Casa 3", 2, 3, 4,
-                250.0, 150000.0, "Ubicacion 3");
-        Propiedad propiedad4 = new Propiedad(4L, "Casa 4", 2, 3, 4,
-                100.0, 10000.0, "Ubicacion 4");
-        Propiedad propiedad5 = new Propiedad(5L, "Casa 5", 2, 3, 4,
-                50.0, 1200.0, "Ubicacion 5");
-        Propiedad propiedad6 = new Propiedad(6L, "Casa 6", 2, 3, 4,
-                80.0, 1500.0, "Ubicacion 6");
-        Propiedad propiedad7 = new Propiedad(7L, "Casa 7", 2, 3, 4,
-                100.0, 10000.0, "Ubicacion 7");
-        Propiedad propiedad8 = new Propiedad(8L, "Casa 8", 2, 3, 4,
-                50.0, 1200.0, "Ubicacion 8");
-        Propiedad propiedad9 = new Propiedad(9L, "Casa 9", 2, 3, 4,
-                80.0, 1500.0, "Ubicacion 9");
-
-
-        propiedades.add(propiedad1);
-        propiedades.add(propiedad2);
-        propiedades.add(propiedad3);
-        propiedades.add(propiedad4);
-        propiedades.add(propiedad5);
-        propiedades.add(propiedad6);
-        propiedades.add(propiedad7);
-        propiedades.add(propiedad8);
-        propiedades.add(propiedad9);
-
-        return propiedades;
-    }
-
-    private Propiedad busquedaFalsa(Long id, List<Propiedad> propiedades ) {
-
-        for (Propiedad propiedad : propiedades) {
-            if (propiedad.getId().equals(id)) {
-                return propiedad;
-            }
-        }
-        return null;
     }
 
 }

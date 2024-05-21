@@ -1,0 +1,211 @@
+body {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    row-gap: .5rem;
+    position: relative;
+    width: 30%;
+    height: 85%;
+    padding: 0 2.3rem;
+    box-shadow: 0px 0px 5px 0px rgba(25, 69, 107, 0.51);
+}
+
+h3 {
+    font-size: 1.5rem;
+    margin-bottom: .4rem;
+}
+
+input, select, option {
+    padding: 5px 10px;
+    border: 1px solid #16a2da;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border: 1px solid #16a2da;
+}
+
+#pisos, #banios, #superficie{
+    width: 100px;
+}
+
+#habitaciones, #precio {
+    width: 80px;
+}
+
+#imagen {
+    padding: 7px;
+}
+
+#estado {
+    width: 160px;
+}
+
+.form-flex div {
+    display: flex;
+    flex-direction: column;
+    row-gap: .3rem;
+}
+
+.form-flex {
+    display: flex;
+    justify-content: center;
+    gap: .8rem;
+}
+
+button {
+    margin-top: 1rem;
+    border: 1px solid #16C79A;
+    padding: 7px 20px;
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    color: #022d4f;
+    background: #fff;
+    cursor: pointer;
+    transition: .4s;
+}
+
+button:hover {
+    background: #16C79A;
+    color: #fff;
+}
+
+.alert {
+    color: rgba(190,0,0);
+    font-size: .75rem;
+}
+
+.success {
+    color: rgba(0,150,0);
+    font-size: .75rem;
+}
+
+.alert, .success {
+    position: absolute;
+    bottom: -5px;
+}
+
+@media screen and (max-width: 1200px){
+    #pisos, #banios, #superficie{
+        width: 80px;
+    }
+
+    #habitaciones, #precio {
+        width: 60px;
+    }
+
+    #estado {
+        width: 130px;
+    }
+}
+
+@media screen and (max-width: 980px){
+    #pisos, #banios, #superficie{
+        width: 70px;
+    }
+
+    #estado {
+        width: 110px;
+    }
+}
+
+@media screen and (max-width: 870px){
+    h3 {
+        font-size: 1.25rem;
+    }
+    form {
+        height: 78%;
+        width: 45%;
+    }
+    label {
+        font-size: .8rem;
+    }
+    #pisos, #banios, #superficie{
+        width: 90px;
+    }
+
+    #habitaciones, #precio {
+        width: 80px;
+    }
+
+    #estado {
+        width: 130px;
+    }
+}
+
+
+@media screen and (max-width: 780px){
+    #pisos, #banios, #superficie{
+        width: 80px;
+    }
+
+    #precio {
+        width:90px;
+        padding: 4px;
+    }
+
+    #habitaciones {
+        padding: 4px;
+        width: 80px;
+    }
+
+    #estado {
+        width: 115px;
+        padding: 4px;
+    }
+}
+
+@media screen and (max-width: 670px){
+    #pisos, #banios, #superficie{
+        width: 55px;
+    }
+
+    #precio {
+        width:60px;
+        padding: 4px;
+    }
+
+    #habitaciones {
+        padding: 4px;
+        width: 60px;
+    }
+
+    #estado {
+        width: 100px;
+        padding: 4px;
+    }
+}
+
+@media screen and (max-width: 540px){
+    #pisos, #banios, #superficie{
+        width: 45px;
+    }
+
+    #precio {
+        width: 40px;
+        padding: 4px;
+    }
+
+    #habitaciones {
+        padding: 4px;
+        width: 60px;
+    }
+
+    #estado {
+        width: 90px;
+        padding: 4px;
+    }
+}
