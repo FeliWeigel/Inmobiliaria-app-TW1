@@ -40,7 +40,7 @@ public class ControladorPropiedad {
 
 
     @RequestMapping(path = "/filtro/precio", method = RequestMethod.POST)
-    public ModelAndView filtrarPropiedadesPorUbicacion(
+    public ModelAndView filtrarPropiedadesPorPrecio(
             @RequestParam("min") Double min,
             @RequestParam("max") Double max
     ) {
