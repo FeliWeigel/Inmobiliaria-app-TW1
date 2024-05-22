@@ -2,7 +2,6 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.ServicioPropiedad;
-import com.tallerwebi.dominio.SubirImagenServicio;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,12 +19,13 @@ import static org.mockito.Mockito.when;
 public class ControladorPropiedadTest {
     private ControladorPropiedad controladorPropiedad;
     private ServicioPropiedad servicioPropiedad;
-    private SubirImagenServicio servicioImagen;
+
 
     @BeforeEach
     public void init(){
         this.servicioPropiedad = mock(ServicioPropiedad.class);
-        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, servicioImagen);
+        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad);
+        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad);
     }
 
 
@@ -134,9 +134,9 @@ public class ControladorPropiedadTest {
         Propiedad propiedad1 = new Propiedad(1L, "Casa 1", 2, 3, 4,
                 200.0, 150000.0, "Ubicacion 1");
         Propiedad propiedad2 = new Propiedad(2L, "Casa 2", 2, 3, 4,
-                200.0, 150000.0, "Ubicacion 2");
+                200.0, 300000.0, "Ubicacion 2");
         Propiedad propiedad3 = new Propiedad(3L, "Casa 3", 2, 3, 4,
-                200.0, 150000.0, "Ubicacion 3");
+                200.0, 600000.0, "Ubicacion 3");
 
         propiedades.add(propiedad1);
         propiedades.add(propiedad2);
@@ -145,5 +145,4 @@ public class ControladorPropiedadTest {
         return propiedades;
     }
 }
-
 

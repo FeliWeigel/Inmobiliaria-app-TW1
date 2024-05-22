@@ -1,8 +1,6 @@
-body{
-    margin: 0;
-}
 header{
     background-color: #11698E;
+    width: 100%;
     height: auto;
     display: flex;
     justify-content: space-between;
@@ -11,11 +9,10 @@ header{
 }
 nav{
     display: flex;
-    width: auto;
-    gap: 15px;
+    column-gap: .5rem;
 }
 .logo{
-    height: 30px;
+    height: 37px;
 }
 .button-logo{
     cursor: pointer;

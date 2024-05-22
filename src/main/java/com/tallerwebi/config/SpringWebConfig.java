@@ -80,6 +80,4 @@ public class SpringWebConfig implements WebMvcConfigurer {
         resolver.setMaxUploadSize(20971520); // 20MB
         return resolver;
     }
-
-
 }

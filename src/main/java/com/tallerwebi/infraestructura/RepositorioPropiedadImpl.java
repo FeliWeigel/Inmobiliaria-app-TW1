@@ -68,6 +68,27 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
         }
     }
 
+    @Override
+    public List<Propiedad> listarPorRangoPrecio(Double min, Double max) {
+        final Session session = sessionFactory.getCurrentSession(); // devuelvo la session(unidad de comunicacion con la base de datos) actual asociada al contexto de transacciones en el que estoy trabajando
+        String query = "FROM Propiedad WHERE precio BETWEEN :min AND :max"; //creo la query que filtra los objetos
+
+        return session.createQuery(query, Propiedad.class) //ejecuto la query y asigno el tipo de dato que espero a la salida
+                .setParameter("min", min)// seteo los valores para los parametros de comparacion asignados en la query (":min y :max)
+                .setParameter("max", max)
+                .getResultList(); //devuelvo la lista con los objetos filtrados
+    }
+
+    @Override
+    public List<Propiedad> listarPorUbicacion(String ubicacionFiltro) {
+        final Session session = sessionFactory.getCurrentSession();
+        String query = "FROM Propiedad WHERE LOCATE(LOWER(:ubicacionFiltro), LOWER(ubicacion)) > 0";
+
+        return session.createQuery(query, Propiedad.class)
+                .setParameter("ubicacionFiltro",ubicacionFiltro)
+                .getResultList();
+    }
+
 
     @Override
     public void eliminarPropiedad(Long propiedadId) {

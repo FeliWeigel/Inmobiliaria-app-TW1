@@ -2,7 +2,6 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.ServicioPropiedad;
-import com.tallerwebi.dominio.SubirImagenServicio;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,11 +16,10 @@ import java.util.List;
 public class ControladorPropiedad {
 
     private final ServicioPropiedad servicioPropiedad;
-    private final SubirImagenServicio servicioImagen;
 
-    public ControladorPropiedad(ServicioPropiedad servicioPropiedad, SubirImagenServicio servicioImagen) {
+
+    public ControladorPropiedad(ServicioPropiedad servicioPropiedad) {
         this.servicioPropiedad = servicioPropiedad;
-        this.servicioImagen = servicioImagen;
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -33,6 +31,43 @@ public class ControladorPropiedad {
             List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
             model.put("propiedades", propiedades);
         } catch (Exception e){
+            model.put("message", "Ha Ocurrido un Error Inesperado");
+        }
+
+        return new ModelAndView("home", model);
+    }
+
+    @RequestMapping(path = "/filtro/precio", method = RequestMethod.POST)
+    public ModelAndView filtrarPropiedadesPorPrecio(
+            @RequestParam("min") Double min,
+            @RequestParam("max") Double max
+    ) {
+        ModelMap model = new ModelMap();
+
+        try {
+            List<Propiedad> propiedadesFiltradas = servicioPropiedad.listarPropiedadesPorPrecio(min, max);
+            model.put("propiedades", propiedadesFiltradas);
+        }catch(CRUDPropiedadExcepcion e){
+            model.put("message", e.getMessage());
+        }
+        catch (Exception e){
+            model.put("message", "Ha Ocurrido un Error Inesperado");
+        }
+
+        return new ModelAndView("home", model);
+    }
+
+    @RequestMapping(path = "/filtro/ubicacion", method = RequestMethod.POST)
+    public ModelAndView filtrarPropiedadesPorPrecio(@RequestParam("ubicacion") String ubicacion) {
+        ModelMap model = new ModelMap();
+
+        try {
+            List<Propiedad> propiedadesFiltradas = servicioPropiedad.listarPropiedadesPorUbicacion(ubicacion);
+            model.put("propiedades", propiedadesFiltradas);
+        }catch(CRUDPropiedadExcepcion e){
+            model.put("message", e.getMessage());
+        }
+        catch (Exception e){
             model.put("message", "Ha Ocurrido un Error Inesperado");
         }
 
@@ -85,7 +120,6 @@ public class ControladorPropiedad {
 
         return new ModelAndView("propiedad", model);
     }
-
 
 }
 

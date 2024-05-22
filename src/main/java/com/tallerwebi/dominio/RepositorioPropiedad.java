@@ -9,4 +9,6 @@ public interface RepositorioPropiedad {
     void eliminarPropiedad(Long propiedadId);
     List<Propiedad> listarPropiedades();
     void editarPropiedad(Propiedad propiedad);
+    List<Propiedad> listarPorRangoPrecio(Double min, Double max);
+    List<Propiedad> listarPorUbicacion(String ubicacion);
 }

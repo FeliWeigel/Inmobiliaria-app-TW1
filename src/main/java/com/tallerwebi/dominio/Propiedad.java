@@ -19,8 +19,9 @@ public class Propiedad {
     private Integer habitaciones;
     private Double superficie;
     private Double precio;
-    private String ubicacion;
+
     private EstadoPropiedad estado;
+    private String ubicacion;
     private String rutaImagen;
 
     public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
@@ -98,4 +99,5 @@ public class Propiedad {
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
     }
+
 }

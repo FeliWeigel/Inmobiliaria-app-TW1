@@ -11,12 +11,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/css/agregar-propiedad.css}">
-  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/header.css}"/>
+  <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+  <link rel="stylesheet" th:href="@{/css/index.css}">
+
   <script src="https://kit.fontawesome.com/f3e8220cf2.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-
   <header>
     <a class="button-logo" th:href="@{/home}">
       <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
@@ -36,7 +38,6 @@
       </a>
     </nav>
   </header>
-
   <main>
     <form action="#" enctype="multipart/form-data" th:action="@{/agregar-propiedad}" method="POST" th:object="${propiedad}">
       <h3>Agregar Propiedad</h3>
@@ -102,7 +103,15 @@
       <button type="Submit">Agregar propiedad</button>
     </form>
   </main>
-
-
+  <footer>
+    <div class="social">
+      <a href="https://www.instagram.com">
+        <img th:src="@{/img/bx-instagram.svg}" alt="instagram">
+      </a>
+      <a href="https://www.whatsapp.com">
+        <img th:src="@{/img/bx-whatsapp.svg}" alt="whatsapp">
+      </a>
+    </div>
+  </footer>
 </body>
 </html>

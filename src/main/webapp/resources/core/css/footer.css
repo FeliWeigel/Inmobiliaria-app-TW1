@@ -1,19 +1,7 @@
-body{
-    margin: 0;
-}
 footer{
+    height: 4rem;
     background-color: #11698E;
-    height: auto;
     display: flex;
     align-items: center;
-    padding: 10px 20px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-a{
-    text-decoration: none;
-}
-.social{
-    gap: 15px;
+    padding: 0 1rem;
 }

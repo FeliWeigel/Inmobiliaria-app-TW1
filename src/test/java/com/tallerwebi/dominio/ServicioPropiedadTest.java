@@ -16,12 +16,19 @@ import static org.mockito.Mockito.when;
 public class ServicioPropiedadTest {
     private RepositorioPropiedad repositorioPropiedad;
     private ServicioPropiedad servicioPropiedad;
+
+    List<Propiedad> propiedadesMock;
     private SubirImagenServicio imagenServicio;
 
     @BeforeEach
     public void init() {
         this.repositorioPropiedad = mock(RepositorioPropiedad.class);
         this.servicioPropiedad = new ServicioPropiedad(this.repositorioPropiedad, imagenServicio);
+
+        propiedadesMock = new ArrayList<>();
+        propiedadesMock.add(new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1"));
+        propiedadesMock.add(new Propiedad(2L, "Casa 2", 3, 2, 5, 250.0, 180000.0, "Ubicacion 2"));
+        propiedadesMock.add(new Propiedad(3L, "Casa 3", 1, 1, 2, 120.0, 90000.0, "Ubicacion 3"));
     }
 
     @Test
@@ -37,7 +44,7 @@ public class ServicioPropiedadTest {
     }
 
     @Test
-    public void queSeLanzeUnaExcepcionCuandoLaPropiedadBuscadaNoExiste() {
+    public void queSeLanceUnaExcepcionCuandoLaPropiedadBuscadaNoExiste() {
 
         Long idInexistente = 1L;
 
@@ -49,14 +56,22 @@ public class ServicioPropiedadTest {
     @Test
     public void queSeDevuelvanLasPropiedadesListadas() {
 
-        List<Propiedad> propiedadesMock = new ArrayList<>();
-        propiedadesMock.add(new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1"));
-        propiedadesMock.add(new Propiedad(2L, "Casa 2", 3, 2, 5, 250.0, 180000.0, "Ubicacion 2"));
-        propiedadesMock.add(new Propiedad(3L, "Casa 3", 1, 1, 2, 120.0, 90000.0, "Ubicacion 3"));
-
         when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
         List<Propiedad> propiedadesListadas = this.servicioPropiedad.listarPropiedades();
 
         assertThat(propiedadesListadas, equalTo(propiedadesMock));
+    }
+
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorPrecioMinimo() {
+
+    }
+
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorPrecioMaximo() {
+
+
     }
 }
