@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.Set;
 
 @Repository("RepositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
@@ -76,6 +77,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
+    @Transactional
     public void eliminarFavorito(Usuario usuario, Long propiedadId) {
         final Session session = sessionFactory.getCurrentSession();
         Usuario usuarioAlmacenado = session.get(Usuario.class, usuario.getId());
@@ -92,5 +94,18 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
         throw new CRUDPropiedadExcepcion("Error! La propiedad no forma parte de la lista de favoritos.");
     }
+
+    @Override
+    public Set<Propiedad> listarFavoritos(Usuario usuario) {
+        final Session session = sessionFactory.getCurrentSession();
+        Usuario usuarioAlmacenado = session.get(Usuario.class, usuario.getId());
+
+        if(usuarioAlmacenado != null){
+            return usuarioAlmacenado.getFavoritos();
+        }
+
+        throw new CRUDPropiedadExcepcion("Error! El usuario no ha sido encontrado.");
+    }
+
 
 }

@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import java.util.Set;
+
 public interface RepositorioUsuario {
 
     Usuario buscarUsuario(String email, String password);
@@ -8,5 +10,6 @@ public interface RepositorioUsuario {
     void modificar(Usuario usuario);
     void agregarFavorito(Usuario usuario, Long propiedadId);
     void eliminarFavorito(Usuario usuario, Long propiedadId);
+    Set<Propiedad> listarFavoritos(Usuario usuario);
 }
 

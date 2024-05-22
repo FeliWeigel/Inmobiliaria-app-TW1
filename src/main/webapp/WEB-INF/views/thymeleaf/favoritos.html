@@ -1,52 +1,42 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
     <link rel="stylesheet" th:href="@{/css/home.css}"/>
     <link rel="stylesheet" th:href="@{/css/index.css}"/>
-
-    <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/f3e8220cf2.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<header>
-    <a class="button-logo" th:href="@{/home}">
-        <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
-    </a>
-    <nav>
-        <a th:href="@{/favoritos}">
-            <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
+    <header>
+        <a class="button-logo" th:href="@{/home}">
+            <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
         </a>
-        <a href="#">
-            <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
-        </a>
-        <!--            <a href="#">-->
-        <!--                <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>-->
-        <!--            </a>-->
-        <a href="#">
-            <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
-        </a>
-    </nav>
-</header>
+        <nav>
+            <a th:href="@{/favoritos}">
+                <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
+            </a>
+            <a href="#">
+                <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
+            </a>
+            <!--            <a href="#">-->
+            <!--                <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>-->
+            <!--            </a>-->
+            <a href="#">
+                <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
+            </a>
+        </nav>
+    </header>
     <main style="padding: 1.5rem 2rem">
-
-        <div class="filtros">
-            <form action="#" th:action="@{/filtro/precio}" method="POST">
-                <input id="input-minimo" class="filtro-precio" type="number" name="min" placeholder="Min" min="0.0" max="2000000" required>
-                <input id="input-maximo" class="filtro-precio" type="number" name="max" placeholder="Max" min="0.0" max="2000000" required>
-                <button class="filtro-btn" type="submit">Aplicar filtro</button>
-            </form>
-            <form action="#" th:action="@{/filtro/ubicacion}" method="POST">
-                <input class="filtro-ubicacion" type="text" name="ubicacion" placeholder="Ubicacion" required>
-                <button class="filtro-btn" type="submit">Aplicar filtro</button>
-            </form>
-        </div>
-
+        <h1 style="margin-bottom: 1.5rem; text-align: center">Lista de propiedades favoritas</h1>
+        <p th:if="${listEmpty != null}" th:text="${listEmpty}" style="text-align: center; font-size: 1.5rem; color: #022d4f"></p>
         <div class="container">
-            <div th:each="propiedad : ${propiedades}">
+            <div th:each="propiedad : ${listaFavoritos}">
                 <a class="item" th:href="@{'/propiedad/' + ${propiedad.id}}" >
                     <p class="prop-estado">En venta</p>
                     <img class="prop-img" th:src="@{/img/Casa.jpg}" src="../../../resources/core/img/Casa.jpg"  alt="propiedad">
@@ -85,10 +75,7 @@
                 </a>
             </div>
         </div>
-
-        <p id="successMessage" class="fav-alert-success" th:if="${success != null}" th:text="${success}"></p>
     </main>
-
     <footer>
         <div class="social">
             <a href="https://www.instagram.com">
@@ -98,8 +85,7 @@
                 <i class="fa-brands fa-whatsapp" style="color: #f8f1f1;"></i>
             </a>
         </div>
-    </footer>
 
-    <script th:src="@{/js/home.js}"></script>
+    </footer>
 </body>
 </html>

@@ -32,7 +32,7 @@ public class ControladorPropiedadTest {
     @Test
     public void queSeMuestreElHome(){
 
-        ModelAndView mav = this.controladorPropiedad.irAHome();
+        ModelAndView mav = this.controladorPropiedad.vistaHome();
 
         assertThat(mav.getViewName(), equalTo("home"));
     }
@@ -43,7 +43,7 @@ public class ControladorPropiedadTest {
 
         when(this.servicioPropiedad.listarPropiedades()).thenThrow(RuntimeException.class);
 
-        ModelAndView mav = this.controladorPropiedad.irAHome();
+        ModelAndView mav = this.controladorPropiedad.vistaHome();
 
         assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
     }
@@ -55,7 +55,7 @@ public class ControladorPropiedadTest {
         List<Propiedad> propiedades = crearPropiedades();
 
         when(servicioPropiedad.listarPropiedades()).thenReturn(propiedades);
-        ModelAndView mav = this.controladorPropiedad.irAHome();
+        ModelAndView mav = this.controladorPropiedad.vistaHome();
         List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
 
         assertThat(mav.getViewName(), equalTo("home"));

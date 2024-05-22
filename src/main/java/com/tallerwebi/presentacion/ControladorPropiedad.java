@@ -17,14 +17,12 @@ public class ControladorPropiedad {
 
     private final ServicioPropiedad servicioPropiedad;
 
-
     public ControladorPropiedad(ServicioPropiedad servicioPropiedad) {
         this.servicioPropiedad = servicioPropiedad;
     }
 
-
     @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHome() {
+    public ModelAndView vistaHome() {
 
         ModelMap model = new ModelMap();
 
@@ -37,7 +35,6 @@ public class ControladorPropiedad {
 
         return new ModelAndView("home", model);
     }
-
 
     @RequestMapping(path = "/filtro/precio", method = RequestMethod.POST)
     public ModelAndView filtrarPropiedadesPorPrecio(
@@ -58,7 +55,6 @@ public class ControladorPropiedad {
 
         return new ModelAndView("home", model);
     }
-
 
     @RequestMapping(path = "/filtro/ubicacion", method = RequestMethod.POST)
     public ModelAndView filtrarPropiedadesPorUbicacion(@RequestParam("ubicacion") String ubicacion) {
