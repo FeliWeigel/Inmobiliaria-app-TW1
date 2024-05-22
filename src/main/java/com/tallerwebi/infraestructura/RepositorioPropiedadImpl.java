@@ -68,6 +68,7 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
         }
     }
 
+
     @Override
     public List<Propiedad> listarPorRangoPrecio(Double min, Double max) {
         final Session session = sessionFactory.getCurrentSession(); // devuelvo la session(unidad de comunicacion con la base de datos) actual asociada al contexto de transacciones en el que estoy trabajando
@@ -78,6 +79,7 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
                 .setParameter("max", max)
                 .getResultList(); //devuelvo la lista con los objetos filtrados
     }
+
 
     @Override
     public List<Propiedad> listarPorUbicacion(String ubicacionFiltro) {
@@ -101,6 +103,8 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
             throw new CRUDPropiedadExcepcion("La propiedad seleccionda para eliminar no existe en la base de datos.");
         }
     }
+
+
     @Override
     public List<Propiedad> listarPropiedades() {
         final Session session = sessionFactory.getCurrentSession();

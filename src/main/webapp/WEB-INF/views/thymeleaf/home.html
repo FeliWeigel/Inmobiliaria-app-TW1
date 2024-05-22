@@ -12,27 +12,25 @@
     <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>
-        <a class="button-logo" th:href="@{/home}">
-            <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+<header>
+    <a class="button-logo" th:href="@{/home}">
+        <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+    </a>
+    <nav>
+        <a href="#">
+            <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
         </a>
-
-        <nav>
-            <a href="#">
-                <img th:src="@{/img/bx-heart.svg}" alt="favoritos">
-            </a>
-            <a href="#">
-                <img th:src="@{/img/bx-bell.svg}" alt="notificaciones">
-            </a>
-            <a href="#">
-                <img th:src="@{/img/bx-conversation.svg}" alt="mensajes">
-            </a>
-            <a href="#">
-                <img th:src="@{/img/bx-user.svg}" alt="perfil">
-            </a>
-        </nav>
-
-    </header>
+        <a href="#">
+            <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
+        </a>
+        <!--            <a href="#">-->
+        <!--                <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>-->
+        <!--            </a>-->
+        <a href="#">
+            <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
+        </a>
+    </nav>
+</header>
     <main style="padding: 1.5rem 2rem">
 
         <div class="filtros">
@@ -84,12 +82,13 @@
     <footer>
         <div class="social">
             <a href="https://www.instagram.com">
-                <img th:src="@{/img/bx-instagram.svg}" alt="instagram">
+                <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>
             </a>
             <a href="https://www.whatsapp.com">
-                <img th:src="@{/img/bx-whatsapp.svg}" alt="whatsapp">
+                <i class="fa-brands fa-whatsapp" style="color: #f8f1f1;"></i>
             </a>
         </div>
     </footer>
+
 </body>
 </html>

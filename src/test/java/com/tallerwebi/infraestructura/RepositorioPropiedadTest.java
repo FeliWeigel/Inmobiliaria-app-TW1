@@ -59,7 +59,8 @@ public class RepositorioPropiedadTest {
         Propiedad propiedad = new Propiedad(id, "Casa 1", 2, 3, 4, 200.0,
                 150000.0, "Ubicacion 1");
 
-        this.repositorioPropiedad.agregarPropiedad(propiedad);
+        this.sessionFactory.getCurrentSession().save(propiedad);
+
         Propiedad propiedadBuscada = this.repositorioPropiedad.buscarPropiedad(propiedad.getId());
 
         assertThat(propiedad, equalTo(propiedadBuscada));
@@ -104,6 +105,7 @@ public class RepositorioPropiedadTest {
         });
     }
 
+
     @Test
     @Transactional
     @Rollback
@@ -115,6 +117,34 @@ public class RepositorioPropiedadTest {
 
         assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesAlmacenadas));
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedanListarLasPropiedadesPorRangoPrecio(){
+
+        Integer numeroDePropiedadesQueCumplenElFiltro = this.sessionFactory.getCurrentSession()
+                .createQuery("FROM Propiedad WHERE precio BETWEEN 1000 AND 25000").getResultList().size();
+
+        List <Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPorRangoPrecio(1000.0, 25000.0);
+
+        assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesQueCumplenElFiltro));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedanListarLasPropiedadesPorUbicacion(){
+
+        Integer numeroDePropiedadesQueCumplenElFiltro = this.sessionFactory.getCurrentSession()
+                .createQuery("FROM Propiedad WHERE LOCATE(LOWER('Moron'), LOWER(ubicacion)) > 0").getResultList().size();
+
+        List <Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPorUbicacion("Moron");
+
+        assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesQueCumplenElFiltro));
+    }
+
 
 
     @Test

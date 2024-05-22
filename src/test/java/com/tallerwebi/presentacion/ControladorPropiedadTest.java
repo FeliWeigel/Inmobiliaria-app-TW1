@@ -128,6 +128,35 @@ public class ControladorPropiedadTest {
         assertThat(error, equalTo("Error al encontrar la propiedad seleccionada."));
     }
 
+
+    @Test
+    public void queSeListenLasPropiedadesFiltradasPorPrecio(){
+
+        List<Propiedad> propiedadesFiltradas = crearPropiedades();
+
+        when(this.servicioPropiedad.listarPropiedadesPorPrecio(1000.0, 25000.0)).thenReturn(propiedadesFiltradas);
+        ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorUbicacion(1000.0, 25000.0);
+        List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
+
+        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(propiedaesDevueltas.size(), equalTo(3));
+    }
+
+
+    @Test
+    public void queSeListenLasPropiedadesFiltradasPorUbicacion(){
+
+        List<Propiedad> propiedadesFiltradas = crearPropiedades();
+
+        when(this.servicioPropiedad.listarPropiedadesPorUbicacion("Ubicacion")).thenReturn(propiedadesFiltradas);
+        ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorUbicacion("Ubicacion");
+        List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
+
+        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(propiedaesDevueltas.size(), equalTo(3));
+    }
+
+
     private List<Propiedad> crearPropiedades() {
         List<Propiedad> propiedades = new ArrayList<>();
 
