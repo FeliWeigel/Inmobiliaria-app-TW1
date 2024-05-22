@@ -96,6 +96,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
+    @Transactional
     public Set<Propiedad> listarFavoritos(Usuario usuario) {
         final Session session = sessionFactory.getCurrentSession();
         Usuario usuarioAlmacenado = session.get(Usuario.class, usuario.getId());

@@ -2,10 +2,9 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Propiedad {
@@ -23,6 +22,9 @@ public class Propiedad {
     private EstadoPropiedad estado;
     private String ubicacion;
     private String rutaImagen;
+
+    @ManyToMany(mappedBy = "favoritos")
+    private Set<Usuario> usuariosFavoritos = new HashSet<>();
 
     public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
         this.id = id;
