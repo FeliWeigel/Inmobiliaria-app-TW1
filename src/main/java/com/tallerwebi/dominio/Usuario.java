@@ -2,8 +2,8 @@ package com.tallerwebi.dominio;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Usuario {
@@ -18,8 +18,14 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
-    //@OneToMany
-    //private List<Propiedad> favoritos;
+
+    @ManyToMany (fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuario_favoritos",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "propiedad_id")
+    )
+    private Set<Propiedad> favoritos;
 
     public Long getId() {
         return id;
@@ -68,16 +74,19 @@ public class Usuario {
     public void setRol(String rol) {
         this.rol = rol;
     }
-    public boolean isActivo() {
+    public Boolean getActivo() {
         return activo;
     }
-    public void activar() {
-        activo = true;
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
-//    public void agregarFavorito(Propiedad propiedad) {
-//        favoritos.add(propiedad);
-//    }
+    public Set<Propiedad> getFavoritos() {
+        return favoritos;
+    }
 
-
+    public void setFavoritos(Set<Propiedad> favoritos) {
+        this.favoritos = favoritos;
+    }
 }

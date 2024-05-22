@@ -30,7 +30,6 @@ public class ServicioPropiedad {
 
     }
 
-
     public void agregarPropiedad(Propiedad propiedad, MultipartFile imagen) throws IOException {
         ValidarString validarString = new ValidarString();
 

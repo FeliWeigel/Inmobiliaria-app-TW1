@@ -47,10 +47,18 @@
 
         <div class="container">
             <div th:each="propiedad : ${propiedades}">
-                <a class="item" th:href="@{/propiedad/{id}(id=${propiedad.id})}" >
+                <a class="item" th:href="@{'/propiedad/' + ${propiedad.id}}" >
                     <p class="prop-estado">En venta</p>
                     <img class="prop-img" th:src="@{/img/Casa.jpg}" src="../../../resources/core/img/Casa.jpg"  alt="propiedad">
-                    <h5 class="prop-nombre" th:text="${propiedad.nombre}"></h5>
+                    <div style="display: flex; gap: .5rem; align-items: center; justify-content: space-between; padding-top: 7px">
+                        <h5 class="prop-nombre" th:text="${propiedad.nombre}"></h5>
+                        <form th:action="@{'/favoritos/agregar/' + ${propiedad.id}}" method="post">
+                            <button onclick="manejadorFavorito()" type="submit" style="background: none; border: none;">
+                                <i id="fav-vacio" class="fa-regular fa-heart" style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"></i>
+                                <i id="fav-relleno" class="fa-solid fa-heart" style="color: #022d4f; font-size: 1.2rem; cursor: pointer; display: none"></i>
+                            </button>
+                        </form>
+                    </div>
                     <div class="prop-desc-item">
                         <i style="margin-right: .5rem" class="fa-solid fa-location-dot"></i>
                         <h5 class="prop-ubicacion" th:text="${propiedad.ubicacion}"></h5>
@@ -77,6 +85,8 @@
                 </a>
             </div>
         </div>
+
+        <p id="successMessage" class="fav-alert-success" th:if="${success != null}" th:text="${success}"></p>
     </main>
 
     <footer>
@@ -90,5 +100,6 @@
         </div>
     </footer>
 
+    <script th:src="@{/js/home.js}"></script>
 </body>
 </html>

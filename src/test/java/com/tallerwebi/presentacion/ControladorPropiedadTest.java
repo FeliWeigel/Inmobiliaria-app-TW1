@@ -135,7 +135,7 @@ public class ControladorPropiedadTest {
         List<Propiedad> propiedadesFiltradas = crearPropiedades();
 
         when(this.servicioPropiedad.listarPropiedadesPorPrecio(1000.0, 25000.0)).thenReturn(propiedadesFiltradas);
-        ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorUbicacion(1000.0, 25000.0);
+        ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorPrecio(1000.0, 25000.0);
         List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
 
         assertThat(mav.getViewName(), equalTo("home"));

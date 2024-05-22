@@ -30,11 +30,7 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
                 .add(Restrictions.eq("id", id))
                 .uniqueResult();
 
-        if (propiedadBuscada == null) {
-            throw new CRUDPropiedadExcepcion("No se encontro la propiedad buscada.");
-        } else {
-            return propiedadBuscada;
-        }
+        return propiedadBuscada;
     }
 
     @Override
