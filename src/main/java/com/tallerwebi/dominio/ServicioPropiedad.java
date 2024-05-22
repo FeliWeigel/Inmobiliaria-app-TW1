@@ -29,6 +29,8 @@ public class ServicioPropiedad {
         }
 
     }
+
+
     public void agregarPropiedad(Propiedad propiedad, MultipartFile imagen) throws IOException {
         ValidarString validarString = new ValidarString();
 
@@ -43,8 +45,9 @@ public class ServicioPropiedad {
             repositorioPropiedad.eliminarPropiedad(propiedad.getId());
             throw new IOException(e.getMessage());
         }
-
     }
+
+
     public List<Propiedad> listarPropiedades() {
         return this.repositorioPropiedad.listarPropiedades();
     }

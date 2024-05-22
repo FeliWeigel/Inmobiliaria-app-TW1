@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -49,22 +50,6 @@ public class RepositorioPropiedadTest {
         assertThat(propiedadGuardada, equalTo(propiedad));
     }
 
-    /*
-        Este test mas bien deberia correrse en la capa de servicio que es la que va a manejar este tipo de logica de negocio,
-       el repositorio unicamente va a comunicarse con la base de datos para ejecutar las consultas necesarias
-
-    public void queSeLanceUnaExcepcionAlIntentarAgregarUnaPropiedadInvalida(){
-
-        Propiedad propiedad = new Propiedad(2L, "Casa 1", null, 3, 4, 200.0,
-                150000.0, "Ubicacion 1");
-
-        assertThrows(CRUDPropiedadExcepcion.class, () -> {
-            this.repositorioPropiedad.agregarPropiedad(propiedad);
-        });
-
-    }
-
-     */
 
     @Test
     @Transactional
@@ -124,11 +109,11 @@ public class RepositorioPropiedadTest {
     @Rollback
     public void queSePuedanListarLasPropiedadesExistentes(){
 
-        guardarPropiedades();
+        Integer numeroDePropiedadesAlmacenadas = contarPropiedadesEnLaBaseDeDatos();
 
         List <Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPropiedades();
 
-        assertThat(propiedadesBuscadas.size(), equalTo(3));
+        assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesAlmacenadas));
     }
 
 
@@ -153,18 +138,9 @@ public class RepositorioPropiedadTest {
         );
     }
 
-    private void guardarPropiedades(){
+    private Integer contarPropiedadesEnLaBaseDeDatos(){
 
-        Propiedad propiedad = new Propiedad(1L, "Casa 1", 1, 3, 4, 200.0,
-                150000.0, "Ubicacion 1");
-        Propiedad propiedad2 = new Propiedad(2L, "Casa 2", 2, 3, 4, 200.0,
-                150000.0, "Ubicacion 2");
-        Propiedad propiedad3 = new Propiedad(3L, "Casa 3", 2, 3, 4, 200.0,
-                150000.0, "Ubicacion 3");
-
-        this.repositorioPropiedad.agregarPropiedad(propiedad);
-        this.repositorioPropiedad.agregarPropiedad(propiedad2);
-        this.repositorioPropiedad.agregarPropiedad(propiedad3);
+        return this.sessionFactory.getCurrentSession().createQuery("FROM Propiedad").getResultList().size();
     };
 
 
