@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +35,7 @@ public class ServicioPropiedadTest {
         propiedadesMock.add(new Propiedad(3L, "Casa 3", 1, 1, 2, 120.0, 90000.0, "Ubicacion 3"));
     }
 
+
     @Test
     public void queSeDevuelvaLaPropiedadBuscada() {
 
@@ -46,6 +48,7 @@ public class ServicioPropiedadTest {
         assertThat(propiedadBuscada, equalTo(propiedadMock));
     }
 
+
     @Test
     public void queSeLanceUnaExcepcionCuandoLaPropiedadBuscadaNoExiste() {
 
@@ -55,6 +58,7 @@ public class ServicioPropiedadTest {
             this.servicioPropiedad.buscarPropiedad(idInexistente);
         });
     }
+
 
     @Test
     public void queSeDevuelvanLasPropiedadesListadas() {
@@ -67,13 +71,46 @@ public class ServicioPropiedadTest {
 
 
     @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorPrecio() {
 
-    public void queSeDevuelvanLasPropiedadesFiltradasPorPrecioMinimo() {
+        when(this.repositorioPropiedad.listarPorRangoPrecio(1000.0, 25000.0)).thenReturn(propiedadesMock);
+        List<Propiedad> propiedadesListadas = this.servicioPropiedad.listarPropiedadesPorPrecio(1000.0, 25000.0);
+
+        assertThat(propiedadesListadas, equalTo(propiedadesMock));
     }
 
 
     @Test
-    public void queSePuedaAregarUnaPropiedadValida() throws IOException {
+    public void queSeLanceUnaExcepcionAlIntentarFiltradasPorPrecioDeFormaInvalida() {
+
+
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            this.servicioPropiedad.listarPropiedadesPorPrecio(-1.0, 25000.0);
+        });
+    }
+
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorUbicacion() {
+        when(this.repositorioPropiedad.listarPorUbicacion("Moron")).thenReturn(propiedadesMock);
+        List<Propiedad> propiedadesListadas = this.servicioPropiedad.listarPropiedadesPorUbicacion("Moron");
+
+        assertThat(propiedadesListadas, equalTo(propiedadesMock));
+    }
+
+
+    @Test
+    public void queSeLanceUnaExcepcionAlIntentarFiltradasPorUbicacionDeFormaInvalida() {
+
+
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            this.servicioPropiedad.listarPropiedadesPorUbicacion("");
+        });
+    }
+
+
+    @Test
+    public void queSePuedaAgregarUnaPropiedadValida() throws IOException {
 
         MultipartFile imageMock = mock(MultipartFile.class);
         Long id = 2L;
@@ -90,11 +127,6 @@ public class ServicioPropiedadTest {
 
 
     @Test
-    public void queSeDevuelvanLasPropiedadesFiltradasPorPrecioMaximo() {
-
-
-    }
-    @Test
     public void queSeLanceUnaExcepcionAlIntentarAgregarUnaPropiedadInvalida() throws IOException {
         String nombreInvalido = "32131312";
         MultipartFile imageMock = mock(MultipartFile.class);
@@ -107,5 +139,4 @@ public class ServicioPropiedadTest {
             this.servicioPropiedad.agregarPropiedad(propiedad, imageMock);
         });
     }
-
 }
