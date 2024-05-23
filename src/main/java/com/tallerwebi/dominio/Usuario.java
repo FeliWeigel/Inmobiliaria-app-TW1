@@ -18,15 +18,12 @@ public class Usuario {
     private String rol;
     private Boolean activo = false;
 
-
-
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
             name = "usuario_favoritos",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "propiedad_id")
     )
-
     private Set<Propiedad> favoritos;
 
     public Long getId() {
