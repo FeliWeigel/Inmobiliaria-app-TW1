@@ -90,9 +90,10 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         if (usuarioAlmacenado.getFavoritos().contains(propiedadAlmacenada)) {
             usuarioAlmacenado.getFavoritos().remove(propiedadAlmacenada);
             sessionFactory.getCurrentSession().update(usuarioAlmacenado);
+        } else {
+            throw new CRUDPropiedadExcepcion("Error! La propiedad no forma parte de la lista de favoritos.");
         }
 
-        throw new CRUDPropiedadExcepcion("Error! La propiedad no forma parte de la lista de favoritos.");
     }
 
     @Override
