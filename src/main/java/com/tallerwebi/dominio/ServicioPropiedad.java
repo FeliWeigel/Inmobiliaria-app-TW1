@@ -29,6 +29,7 @@ public class ServicioPropiedad {
         }
 
     }
+
     public void agregarPropiedad(Propiedad propiedad, MultipartFile imagen) throws IOException {
         ValidarString validarString = new ValidarString();
 
@@ -43,11 +44,27 @@ public class ServicioPropiedad {
             repositorioPropiedad.eliminarPropiedad(propiedad.getId());
             throw new IOException(e.getMessage());
         }
-
     }
+
+
     public List<Propiedad> listarPropiedades() {
-
         return this.repositorioPropiedad.listarPropiedades();
-//        return propiedadesFalsas();
     }
+
+
+    public List<Propiedad> listarPropiedadesPorPrecio(Double min, Double max){
+        if(min >= 0.0 && max >= 0.0){
+            return this.repositorioPropiedad.listarPorRangoPrecio(min, max);
+        }
+        throw new CRUDPropiedadExcepcion("No se ha podido aplicar el filtro de precio correctamente, revise los datos enviados.");
+    }
+
+
+    public List<Propiedad> listarPropiedadesPorUbicacion(String ubicacion){
+        if(!ubicacion.isBlank()){
+            return this.repositorioPropiedad.listarPorUbicacion(ubicacion);
+        }
+        throw new CRUDPropiedadExcepcion("No se ha podido aplicar el filtro de ubicacion correctamente, revise los datos enviados.");
+    }
+
 }

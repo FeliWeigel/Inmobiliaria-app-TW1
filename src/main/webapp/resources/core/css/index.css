@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+button, a {
+    text-decoration: none;
+    background: none;
+    cursor: pointer;
+}
+
+input:focus, a:focus, button:focus {
+    outline: none;
+}

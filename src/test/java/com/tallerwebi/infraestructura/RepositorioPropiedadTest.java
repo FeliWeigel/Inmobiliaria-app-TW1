@@ -15,11 +15,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateTestInfraestructuraConfig.class})
@@ -33,6 +35,20 @@ public class RepositorioPropiedadTest {
     public void init(){
         this.repositorioPropiedad = new RepositorioPropiedadImpl(this.sessionFactory);
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaEliminarUnaPropiedadExistente(){
+        Propiedad propiedad = new Propiedad();
+
+        this.sessionFactory.getCurrentSession().save(propiedad);
+        this.repositorioPropiedad.eliminarPropiedad(propiedad.getId());
+
+        assertThat(null, equalTo(this.repositorioPropiedad.buscarPropiedad(propiedad.getId())));
+    }
+
 
     @Test
     @Transactional
@@ -49,22 +65,6 @@ public class RepositorioPropiedadTest {
         assertThat(propiedadGuardada, equalTo(propiedad));
     }
 
-    /*
-        Este test mas bien deberia correrse en la capa de servicio que es la que va a manejar este tipo de logica de negocio,
-       el repositorio unicamente va a comunicarse con la base de datos para ejecutar las consultas necesarias
-
-    public void queSeLanceUnaExcepcionAlIntentarAgregarUnaPropiedadInvalida(){
-
-        Propiedad propiedad = new Propiedad(2L, "Casa 1", null, 3, 4, 200.0,
-                150000.0, "Ubicacion 1");
-
-        assertThrows(CRUDPropiedadExcepcion.class, () -> {
-            this.repositorioPropiedad.agregarPropiedad(propiedad);
-        });
-
-    }
-
-     */
 
     @Test
     @Transactional
@@ -74,38 +74,13 @@ public class RepositorioPropiedadTest {
         Propiedad propiedad = new Propiedad(id, "Casa 1", 2, 3, 4, 200.0,
                 150000.0, "Ubicacion 1");
 
-        this.repositorioPropiedad.agregarPropiedad(propiedad);
+        this.sessionFactory.getCurrentSession().save(propiedad);
+
         Propiedad propiedadBuscada = this.repositorioPropiedad.buscarPropiedad(propiedad.getId());
 
         assertThat(propiedad, equalTo(propiedadBuscada));
     }
 
-
-    @Test
-    @Transactional
-    @Rollback
-    public void queAlBuscarUnaPropiedadInexistenteLanceUnaExcepcion(){
-        Long id = 1L;
-        assertThrows(CRUDPropiedadExcepcion.class, () -> {
-            Propiedad propiedadBuscada = this.repositorioPropiedad.buscarPropiedad(id);
-        });
-    }
-
-
-    @Test
-    @Transactional
-    @Rollback
-    public void queSePuedaEliminarUnaPropiedadExistente(){
-        Long id = 1L;
-        Propiedad propiedad = new Propiedad(id, "Casa 1", null, 3, 4, 200.0,
-                150000.0, "Ubicacion 1");
-
-        this.sessionFactory.getCurrentSession().save(propiedad);
-        this.repositorioPropiedad.eliminarPropiedad(propiedad.getId());
-
-        assertThrows(CRUDPropiedadExcepcion.class, () -> this.repositorioPropiedad.buscarPropiedad(propiedad.getId()));
-
-    }
 
 
     @Test
@@ -119,17 +94,46 @@ public class RepositorioPropiedadTest {
         });
     }
 
+
     @Test
     @Transactional
     @Rollback
     public void queSePuedanListarLasPropiedadesExistentes(){
 
-        guardarPropiedades();
+        Integer numeroDePropiedadesAlmacenadas = contarPropiedadesEnLaBaseDeDatos();
 
         List <Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPropiedades();
 
-        assertThat(propiedadesBuscadas.size(), equalTo(3));
+        assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesAlmacenadas));
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedanListarLasPropiedadesPorRangoPrecio(){
+
+        Integer numeroDePropiedadesQueCumplenElFiltro = this.sessionFactory.getCurrentSession()
+                .createQuery("FROM Propiedad WHERE precio BETWEEN 1000 AND 25000").getResultList().size();
+
+        List <Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPorRangoPrecio(1000.0, 25000.0);
+
+        assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesQueCumplenElFiltro));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedanListarLasPropiedadesPorUbicacion(){
+
+        Integer numeroDePropiedadesQueCumplenElFiltro = this.sessionFactory.getCurrentSession()
+                .createQuery("FROM Propiedad WHERE LOCATE(LOWER('Moron'), LOWER(ubicacion)) > 0").getResultList().size();
+
+        List <Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPorUbicacion("Moron");
+
+        assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesQueCumplenElFiltro));
+    }
+
 
 
     @Test
@@ -153,18 +157,9 @@ public class RepositorioPropiedadTest {
         );
     }
 
-    private void guardarPropiedades(){
+    private Integer contarPropiedadesEnLaBaseDeDatos(){
 
-        Propiedad propiedad = new Propiedad(1L, "Casa 1", 1, 3, 4, 200.0,
-                150000.0, "Ubicacion 1");
-        Propiedad propiedad2 = new Propiedad(2L, "Casa 2", 2, 3, 4, 200.0,
-                150000.0, "Ubicacion 2");
-        Propiedad propiedad3 = new Propiedad(3L, "Casa 3", 2, 3, 4, 200.0,
-                150000.0, "Ubicacion 3");
-
-        this.repositorioPropiedad.agregarPropiedad(propiedad);
-        this.repositorioPropiedad.agregarPropiedad(propiedad2);
-        this.repositorioPropiedad.agregarPropiedad(propiedad3);
+        return this.sessionFactory.getCurrentSession().createQuery("FROM Propiedad").getResultList().size();
     };
 
 

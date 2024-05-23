@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Usuario {
@@ -18,13 +20,17 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
+
+
+
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
             name = "usuario_favoritos",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "propiedad_id")
     )
-    private List<Propiedad> favoritos = new ArrayList<Propiedad>();
+
+    private Set<Propiedad> favoritos;
 
     public Long getId() {
         return id;
@@ -73,18 +79,19 @@ public class Usuario {
     public void setRol(String rol) {
         this.rol = rol;
     }
-    public boolean isActivo() {
+    public Boolean getActivo() {
         return activo;
     }
-    public void activar() {
-        activo = true;
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
-    public List<Propiedad> getFavoritos() {
+    public Set<Propiedad> getFavoritos() {
         return favoritos;
     }
 
-    public void setFavoritos(List<Propiedad> favoritos) {
+    public void setFavoritos(Set<Propiedad> favoritos) {
         this.favoritos = favoritos;
     }
 }

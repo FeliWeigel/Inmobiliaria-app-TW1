@@ -4,6 +4,8 @@ import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Propiedad {
@@ -17,9 +19,13 @@ public class Propiedad {
     private Integer habitaciones;
     private Double superficie;
     private Double precio;
-    private String ubicacion;
+
     private EstadoPropiedad estado;
+    private String ubicacion;
     private String rutaImagen;
+
+    @ManyToMany(mappedBy = "favoritos")
+    private Set<Usuario> usuariosFavoritos = new HashSet<>();
 
     public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
         this.id = id;
@@ -96,4 +102,5 @@ public class Propiedad {
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
     }
+
 }

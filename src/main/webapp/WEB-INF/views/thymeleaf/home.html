@@ -14,68 +14,86 @@
     <script src="https://kit.fontawesome.com/f3e8220cf2.js" crossorigin="anonymous"></script>
 
 
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
+
+    <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
-    <header>
-        <a class="button-logo" th:href="@{/home}">
-            <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+<header>
+    <a class="button-logo" th:href="@{/home}">
+        <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+    </a>
+    <nav>
+        <a th:href="@{/favoritos}">
+            <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
         </a>
-        <nav>
-            <a href="#">
-                <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
-            </a>
-            <a href="#">
-                <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
-            </a>
-<!--            <a href="#">-->
-<!--                <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>-->
-<!--            </a>-->
-            <a href="#">
-                <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
-            </a>
-        </nav>
-    </header>
+        <a href="#">
+            <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
+        </a>
+        <!--            <a href="#">-->
+        <!--                <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>-->
+        <!--            </a>-->
+        <a href="#">
+            <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
+        </a>
+    </nav>
+</header>
+    <main style="padding: 1.5rem 2rem">
 
-    <main>
-
-         <div class="container">
-             <div th:each="propiedad : ${propiedades}">
-                 <div class="container-a" th:attr="onclick=|verPropiedad('@{/propiedad/{id}(id=${propiedad.id})}')|">
-                     <div class="item">
-                         <img class="prop-img" th:src="@{/img/Casa.jpg}" alt="propiedad">
-                         <p class="prop-ubi" th:text="${propiedad.ubicacion}"></p>
-                         <div class="prop-header">
-                            <h4 class="prop-title" th:text="${propiedad.nombre}"></h4>
-                             <div class="fav-container" onclick="event.stopPropagation()">
-                                 <a href="#"
-                                    class="favHeart"
-                                    th:id="'favoriteButton_' + ${propiedad.id}"
-                                    th:if="${propiedad.isFavorite}"
-                                    th:attr="data-favorite=${propiedad.id}">
-                                        <i class="fa-solid fa-heart" style="color:#11698E;"></i>
-                                </a>
-                                 <a href="#"
-                                    class="unfavHeart"
-                                    th:id="'unfavoriteButton_' + ${propiedad.id}"
-                                    th:unless="${propiedad.isFavorite}"
-                                    th:attr="data-favorite=${propiedad.id}">
-                                        <i class="fa-regular fa-heart" style="color:#11698E;"></i>
-                                </a>
-                             </div>
-                        </div>
-                         <div class="prop-desc">
-                             <p th:text="'Superficie: ' + ${propiedad.superficie} + ' mt2'"></p>
-                             <p th:text="'Ambientes: ' + ${propiedad.habitaciones}"></p>
-                             <p th:text="'Baños: ' + ${propiedad.banios}"></p>
-                             <p th:text="'Pisos: ' + ${propiedad.pisos}"></p>
-                         </div>
-                         <h4 class="prop-price" th:text="'$' + ${propiedad.precio} + ' por noche'"></h4>
-                     </div>
-                 </div>
-             </div>
-
+        <div class="filtros">
+            <form action="#" th:action="@{/filtro/precio}" method="POST">
+                <input id="input-minimo" class="filtro-precio" type="number" name="min" placeholder="Min" min="0.0" max="2000000" required>
+                <input id="input-maximo" class="filtro-precio" type="number" name="max" placeholder="Max" min="0.0" max="2000000" required>
+                <button class="filtro-btn" type="submit">Aplicar filtro</button>
+            </form>
+            <form action="#" th:action="@{/filtro/ubicacion}" method="POST">
+                <input class="filtro-ubicacion" type="text" name="ubicacion" placeholder="Ubicacion" required>
+                <button class="filtro-btn" type="submit">Aplicar filtro</button>
+            </form>
         </div>
+
+        <div class="container">
+            <div th:each="propiedad : ${propiedades}">
+                <a class="item" th:href="@{'/propiedad/' + ${propiedad.id}}" >
+                    <p class="prop-estado">En venta</p>
+                    <img class="prop-img" th:src="@{/img/Casa.jpg}" src="../../../resources/core/img/Casa.jpg"  alt="propiedad">
+                    <div style="display: flex; gap: .5rem; align-items: center; justify-content: space-between; padding-top: 7px">
+                        <h5 class="prop-nombre" th:text="${propiedad.nombre}"></h5>
+                        <form th:action="@{'/favoritos/agregar/' + ${propiedad.id}}" method="post">
+                            <button onclick="manejadorFavorito()" type="submit" style="background: none; border: none;">
+                                <i id="fav-vacio" class="fa-regular fa-heart" style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"></i>
+                                <i id="fav-relleno" class="fa-solid fa-heart" style="color: #022d4f; font-size: 1.2rem; cursor: pointer; display: none"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="prop-desc-item">
+                        <i style="margin-right: .5rem" class="fa-solid fa-location-dot"></i>
+                        <h5 class="prop-ubicacion" th:text="${propiedad.ubicacion}"></h5>
+                    </div>
+                    <div class="prop-desc">
+                        <div class="prop-desc-item">
+                            <i style="margin-right: .5rem" class="fa-brands fa-codepen"></i>
+                            <p th:text="${propiedad.superficie} + '(mt2)'"></p>
+                        </div>
+                        <div class="prop-desc-item">
+                            <i style="margin-right: .5rem" class="fa-solid fa-layer-group"></i>
+                            <p th:text="':' + ${propiedad.pisos}"></p>
+                        </div>
+                        <div class="prop-desc-item">
+                            <i style="margin-right: .5rem" class="fa-solid fa-bath"></i>
+                            <p th:text="':' + ${propiedad.banios}"></p>
+                        </div>
+                        <div class="prop-desc-item">
+                            <i style="margin-right: .5rem" class="fa-solid fa-person-shelter"></i>
+                            <p th:text="':' + ${propiedad.habitaciones}"></p>
+                        </div>
+                    </div>
+                    <h4 th:text="'$' + ${propiedad.precio} + ' (por noche)'" class="prop-precio"></h4>
+                </a>
+            </div>
+        </div>
+
+        <p id="successMessage" class="fav-alert-success" th:if="${success != null}" th:text="${success}"></p>
     </main>
 
     <footer>
@@ -87,9 +105,8 @@
                 <i class="fa-brands fa-whatsapp" style="color: #f8f1f1;"></i>
             </a>
         </div>
-
     </footer>
 
-    
+    <script th:src="@{/js/home.js}"></script>
 </body>
 </html>

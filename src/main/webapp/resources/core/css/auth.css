@@ -78,10 +78,10 @@ input{
 ::placeholder{
     color: #e5e5e5;
 }
+
 button{
     margin-top: 20px;
     width: 100%;
-    background-color: #F8F1F1;
     color: #080710;
     padding: 10px 0;
     font-size: 18px;

@@ -1,9 +1,11 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Propiedad;
+import org.hibernate.Hibernate;
+import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
-import org.hibernate.Hibernate;
+import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -11,15 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
+import java.util.Set;
 
 @Repository("RepositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     private final SessionFactory sessionFactory;
+    private final RepositorioPropiedad repositorioPropiedad;
 
     @Autowired
-    public RepositorioUsuarioImpl(SessionFactory sessionFactory){
+    public RepositorioUsuarioImpl(SessionFactory sessionFactory, RepositorioPropiedad repositorioPropiedad){
         this.sessionFactory = sessionFactory;
+        this.repositorioPropiedad = repositorioPropiedad;
     }
 
     @Override
@@ -57,22 +63,59 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     @Override
     @Transactional
-    public void agregarFavorito(Usuario usuario, Propiedad propiedad) {
+    public void agregarFavorito(Usuario usuario, Long propiedadId) {
         final Session session = sessionFactory.getCurrentSession();
-//        usuario.getFavoritos().add(propiedad);
-//        session.update(usuario);
+        Usuario usuarioAlmacenado = session.get(Usuario.class, usuario.getId());
+        Propiedad propiedadAlmacenada = repositorioPropiedad.buscarPropiedad(propiedadId);
 
-        usuario = session.get(Usuario.class, usuario.getId());
-        Hibernate.initialize(usuario.getFavoritos());
-        usuario.getFavoritos().add(propiedad);
-        session.update(usuario);
+        if(propiedadAlmacenada == null){
+            throw new CRUDPropiedadExcepcion("Error! La propiedad no pudo ser encontrada.");
+        }
+
+        if(usuarioAlmacenado.getFavoritos() == null){
+            usuarioAlmacenado.setFavoritos(new HashSet<>());
+        }
+
+        if (!usuarioAlmacenado.getFavoritos().contains(propiedadAlmacenada)) {
+            usuarioAlmacenado.getFavoritos().add(propiedadAlmacenada);
+            sessionFactory.getCurrentSession().update(usuarioAlmacenado);
+        }else {
+            throw new CRUDPropiedadExcepcion("Error! La propiedad forma parte de la lista de favoritos.");
+        }
     }
 
     @Override
-    public void eliminarFavorito(Usuario usuario, Propiedad propiedad) {
+    @Transactional
+    public void eliminarFavorito(Usuario usuario, Long propiedadId) {
         final Session session = sessionFactory.getCurrentSession();
-        usuario.getFavoritos().remove(propiedad);
-        session.update(usuario);
+        Usuario usuarioAlmacenado = session.get(Usuario.class, usuario.getId());
+        Propiedad propiedadAlmacenada = repositorioPropiedad.buscarPropiedad(propiedadId);
+
+        if(propiedadAlmacenada == null){
+            throw new CRUDPropiedadExcepcion("Error! La propiedad no pudo ser encontrada.");
+        }
+
+        if (usuarioAlmacenado.getFavoritos().contains(propiedadAlmacenada)) {
+            usuarioAlmacenado.getFavoritos().remove(propiedadAlmacenada);
+            sessionFactory.getCurrentSession().update(usuarioAlmacenado);
+        } else {
+            throw new CRUDPropiedadExcepcion("Error! La propiedad no forma parte de la lista de favoritos.");
+        }
+
     }
+
+    @Override
+    @Transactional
+    public Set<Propiedad> listarFavoritos(Usuario usuario) {
+        final Session session = sessionFactory.getCurrentSession();
+        Usuario usuarioAlmacenado = session.get(Usuario.class, usuario.getId());
+
+        if(usuarioAlmacenado != null){
+            return usuarioAlmacenado.getFavoritos();
+        }
+
+        throw new CRUDPropiedadExcepcion("Error! El usuario no ha sido encontrado.");
+    }
+
 
 }

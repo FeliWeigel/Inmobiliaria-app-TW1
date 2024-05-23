@@ -31,8 +31,12 @@ public class ControladorPropiedad {
         this.servicioUsuario = servicioUsuario;
     }
 
+    public ControladorPropiedad(ServicioPropiedad servicioPropiedad) {
+        this.servicioPropiedad = servicioPropiedad;
+    }
+
     @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHome() {
+    public ModelAndView vistaHome() {
 
         ModelMap model = new ModelMap();
 
@@ -140,12 +144,51 @@ public class ControladorPropiedad {
         return new ModelAndView("home", model);
     }
 
+    @RequestMapping(path = "/filtro/precio", method = RequestMethod.POST)
+    public ModelAndView filtrarPropiedadesPorPrecio(
+            @RequestParam("min") Double min,
+            @RequestParam("max") Double max
+    ) {
+        ModelMap model = new ModelMap();
+
+        try {
+            List<Propiedad> propiedadesFiltradas = servicioPropiedad.listarPropiedadesPorPrecio(min, max);
+            model.put("propiedades", propiedadesFiltradas);
+        }catch(CRUDPropiedadExcepcion e){
+            model.put("message", e.getMessage());
+        }
+        catch (Exception e){
+            model.put("message", "Ha Ocurrido un Error Inesperado");
+        }
+
+        return new ModelAndView("home", model);
+    }
+
+    @RequestMapping(path = "/filtro/ubicacion", method = RequestMethod.POST)
+    public ModelAndView filtrarPropiedadesPorUbicacion(@RequestParam("ubicacion") String ubicacion) {
+        ModelMap model = new ModelMap();
+
+        try {
+            List<Propiedad> propiedadesFiltradas = servicioPropiedad.listarPropiedadesPorUbicacion(ubicacion);
+            model.put("propiedades", propiedadesFiltradas);
+        }catch(CRUDPropiedadExcepcion e){
+            model.put("message", e.getMessage());
+        }
+        catch (Exception e){
+            model.put("message", "Ha Ocurrido un Error Inesperado");
+        }
+
+        return new ModelAndView("home", model);
+    }
+
+
     @RequestMapping(path = "/agregar-propiedad", method = RequestMethod.GET)
     public ModelAndView vistaAgregarPropiedad() {
         ModelMap model = new ModelMap();
         model.put("propiedad", new Propiedad());
         return new ModelAndView("nuevaPropiedad", model);
     }
+
 
     @RequestMapping(path = "/agregar-propiedad", method = RequestMethod.POST)
     public ModelAndView agregarPropiedad(
