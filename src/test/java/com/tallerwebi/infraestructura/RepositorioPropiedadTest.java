@@ -21,6 +21,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateTestInfraestructuraConfig.class})
@@ -34,6 +35,20 @@ public class RepositorioPropiedadTest {
     public void init(){
         this.repositorioPropiedad = new RepositorioPropiedadImpl(this.sessionFactory);
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaEliminarUnaPropiedadExistente(){
+        Propiedad propiedad = new Propiedad();
+
+        this.sessionFactory.getCurrentSession().save(propiedad);
+        this.repositorioPropiedad.eliminarPropiedad(propiedad.getId());
+
+        assertThat(null, equalTo(this.repositorioPropiedad.buscarPropiedad(propiedad.getId())));
+    }
+
 
     @Test
     @Transactional
@@ -66,32 +81,6 @@ public class RepositorioPropiedadTest {
         assertThat(propiedad, equalTo(propiedadBuscada));
     }
 
-
-    @Test
-    @Transactional
-    @Rollback
-    public void queAlBuscarUnaPropiedadInexistenteLanceUnaExcepcion(){
-        Long id = 1L;
-        assertThrows(CRUDPropiedadExcepcion.class, () -> {
-            Propiedad propiedadBuscada = this.repositorioPropiedad.buscarPropiedad(id);
-        });
-    }
-
-
-    @Test
-    @Transactional
-    @Rollback
-    public void queSePuedaEliminarUnaPropiedadExistente(){
-        Long id = 1L;
-        Propiedad propiedad = new Propiedad(id, "Casa 1", null, 3, 4, 200.0,
-                150000.0, "Ubicacion 1");
-
-        this.sessionFactory.getCurrentSession().save(propiedad);
-        this.repositorioPropiedad.eliminarPropiedad(propiedad.getId());
-
-        assertThrows(CRUDPropiedadExcepcion.class, () -> this.repositorioPropiedad.buscarPropiedad(propiedad.getId()));
-
-    }
 
 
     @Test

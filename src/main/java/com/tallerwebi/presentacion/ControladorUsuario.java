@@ -27,6 +27,7 @@ public class ControladorUsuario {
         this.servicioPropiedad = servicioPropiedad;
     }
 
+
     @RequestMapping(path = "/favoritos", method = RequestMethod.GET)
     public ModelAndView vistaFavoritos(HttpSession session) {
         ModelMap model = new ModelMap();
@@ -50,6 +51,7 @@ public class ControladorUsuario {
         return new ModelAndView("favoritos", model);
     }
 
+
     @RequestMapping(path = "/favoritos/agregar/{propiedadId}", method = RequestMethod.POST)
     public ModelAndView agregarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
@@ -67,6 +69,7 @@ public class ControladorUsuario {
         return new ModelAndView("home", model);
     }
 
+
     @RequestMapping(path = "/favoritos/eliminar/{propiedadId}", method = RequestMethod.DELETE)
     public ModelAndView eliminarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
@@ -81,5 +84,7 @@ public class ControladorUsuario {
 
         return new ModelAndView("home", model);
     }
+
+
 
 }

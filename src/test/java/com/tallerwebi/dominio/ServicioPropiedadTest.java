@@ -4,8 +4,10 @@ import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +63,15 @@ public class ServicioPropiedadTest {
 
 
     @Test
+    public void queAlBuscarUnaPropiedadInexistenteSeLanceUnaExcepcion(){
+        Long id = 1L;
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            Propiedad propiedadBuscada = this.servicioPropiedad.buscarPropiedad(id);
+        });
+    }
+
+
+    @Test
     public void queSeDevuelvanLasPropiedadesListadas() {
 
         when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
@@ -81,7 +92,7 @@ public class ServicioPropiedadTest {
 
 
     @Test
-    public void queSeLanceUnaExcepcionAlIntentarFiltradasPorPrecioDeFormaInvalida() {
+    public void queSeLanceUnaExcepcionAlIntentarFiltrarPorPrecioDeFormaInvalida() {
 
 
         assertThrows(CRUDPropiedadExcepcion.class, () -> {
@@ -100,7 +111,7 @@ public class ServicioPropiedadTest {
 
 
     @Test
-    public void queSeLanceUnaExcepcionAlIntentarFiltradasPorUbicacionDeFormaInvalida() {
+    public void queSeLanceUnaExcepcionAlIntentarFiltrarPorUbicacionDeFormaInvalida() {
 
 
         assertThrows(CRUDPropiedadExcepcion.class, () -> {
