@@ -1,75 +1,111 @@
 package com.tallerwebi.integracion;
 
-import com.tallerwebi.integracion.config.HibernateTestConfig;
-import com.tallerwebi.integracion.config.SpringWebTestConfig;
+import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
+import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
+import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
+import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
+import com.tallerwebi.presentacion.ControladorLogin;
+import com.tallerwebi.presentacion.DatosLogin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class})
 public class ControladorLoginTest {
 
+	private ControladorLogin controladorLogin;
 	private Usuario usuarioMock;
-
-	@Autowired
-	private WebApplicationContext wac;
-	private MockMvc mockMvc;
+	private DatosLogin datosLoginMock;
+	private HttpServletRequest requestMock;
+	private HttpSession sessionMock;
+	private ServicioLogin servicioLoginMock;
 
 
 	@BeforeEach
 	public void init(){
+		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
 		usuarioMock = mock(Usuario.class);
 		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+		requestMock = mock(HttpServletRequest.class);
+		sessionMock = mock(HttpSession.class);
+		when(requestMock.getSession()).thenReturn(sessionMock);
+		servicioLoginMock = mock(ServicioLogin.class);
+		controladorLogin = new ControladorLogin(servicioLoginMock);
 	}
 
 	@Test
-	public void debeRetornarLaPaginaLoginCuandoSeNavegaALaRaiz() throws Exception {
+	public void loginConUsuarioYPasswordInorrectosDeberiaLlevarALoginNuevamente(){
+		// preparacion
+		when(servicioLoginMock.consultarUsuario(anyString(), anyString())).thenReturn(null);
 
-		MvcResult result = this.mockMvc.perform(get("/"))
-				/*.andDo(print())*/
-				.andExpect(status().is3xxRedirection())
-				.andReturn();
+		// ejecucion
+		ModelAndView modelAndView = controladorLogin.validarLogin(datosLoginMock, requestMock);
 
-		ModelAndView modelAndView = result.getModelAndView();
-        assert modelAndView != null;
-		assertThat("redirect:/login", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
-		assertThat(true, is(modelAndView.getModel().isEmpty()));
+		// validacion
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("login"));
+		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Usuario o clave incorrecta"));
+		verify(sessionMock, times(0)).setAttribute("ROL", "ADMIN");
+	}
+	
+	@Test
+	public void loginConUsuarioYPasswordCorrectosDeberiaLLevarAHome(){
+		// preparacion
+		Usuario usuarioEncontradoMock = mock(Usuario.class);
+		when(usuarioEncontradoMock.getRol()).thenReturn("ADMIN");
+
+		when(requestMock.getSession()).thenReturn(sessionMock);
+		when(servicioLoginMock.consultarUsuario(anyString(), anyString())).thenReturn(usuarioEncontradoMock);
+		
+		// ejecucion
+		ModelAndView modelAndView = controladorLogin.validarLogin(datosLoginMock, requestMock);
+		
+		// validacion
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/home"));
+		verify(sessionMock, times(1)).setAttribute("ROL", usuarioEncontradoMock.getRol());
 	}
 
 	@Test
-	public void debeRetornarLaPaginaLoginCuandoSeNavegaALLogin() throws Exception {
+	public void registrameSiUsuarioNoExisteDeberiaCrearUsuarioYVolverAlLogin() throws UsuarioExistenteExcepcion, CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
 
-		MvcResult result = this.mockMvc.perform(get("/login"))
-				.andExpect(status().isOk())
-				.andReturn();
+		// ejecucion
+		ModelAndView modelAndView = controladorLogin.registrarse(usuarioMock);
 
-		ModelAndView modelAndView = result.getModelAndView();
-        assert modelAndView != null;
-        assertThat(modelAndView.getViewName(), equalToIgnoringCase("login"));
-		assertThat(modelAndView.getModel().get("datosLogin").toString(),  containsString("com.tallerwebi.presentacion.DatosLogin"));
+		// validacion
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/login"));
+		verify(servicioLoginMock, times(1)).registrar(usuarioMock);
+	}
 
+	@Test
+	public void registrarmeSiUsuarioExisteDeberiaVolverAFormularioYMostrarError() throws UsuarioExistenteExcepcion, CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
+		// preparacion
+		doThrow(UsuarioExistenteExcepcion.class).when(servicioLoginMock).registrar(usuarioMock);
+
+		// ejecucion
+		ModelAndView modelAndView = controladorLogin.registrarse(usuarioMock);
+
+		// validacion
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("registrarme"));
+		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El email ingresado esta asociado a una cuenta existente!"));
+	}
+
+	@Test
+	public void errorEnRegistrarmeDeberiaVolverAFormularioYMostrarError() throws UsuarioExistenteExcepcion, CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
+		// preparacion
+		doThrow(RuntimeException.class).when(servicioLoginMock).registrar(usuarioMock);
+
+		// ejecucion
+		ModelAndView modelAndView = controladorLogin.registrarse(usuarioMock);
+
+		// validacion
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("registrarme"));
+		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Error al registrar el nuevo usuario"));
 	}
 }
