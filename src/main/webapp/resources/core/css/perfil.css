@@ -1,0 +1,134 @@
+body{
+    background: linear-gradient(#16C79A, #11698E);
+    height: 100vh;  
+    display: flex;
+    flex-direction: column;
+}
+
+main{
+
+    height: auto;
+    width: 40vw;
+    margin: auto;
+    padding: 30px;
+    align-self: center;
+    justify-self: center;
+    background-color: #f8f1f1;
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+}
+
+form *{
+    font-family: 'Poppins',sans-serif;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+}
+form h3{
+    margin: 15px;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 42px;
+    text-align: center;
+}
+label{
+    display: block;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 500;
+}
+input{
+    display: block;
+    height: 35px;
+    width: 95%;
+    /* background-color: rgba(255,255,255,0.07); */
+    border-radius: 3px;
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: 300;
+}
+.pswLabel {
+    display: flex;
+    height: auto;
+}
+.plusIcon {
+    margin: 18px 0 0 5px;
+    height: 18px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  visibility: hidden;
+  width: 140px;
+  background-color: #ccc;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 90%;
+  margin-left: -55px;
+  padding: 5px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tooltip .tooltiptext p {
+    color: #19456B;
+    font-size: 10px;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #ccc transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.button-container {
+    text-align: center;
+}
+button {	
+margin-top: 10px;
+width:auto;
+color: #f8f1f1;
+background: #11698E;
+padding: 10px 20px;
+font-size: 18px;
+font-weight: 600;
+border-radius: 5px;
+cursor: pointer;
+transition: .4s;
+}
+
+button:hover {
+background: #19456B;
+}
+
+.button-logout {
+    font-family: 'Poppins',sans-serif;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+    background: #547e91;
+}
+
+.button-logout a {
+   text-decoration: none;
+   color: #f8f1f1;
+}
