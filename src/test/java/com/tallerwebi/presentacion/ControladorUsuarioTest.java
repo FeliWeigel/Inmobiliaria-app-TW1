@@ -24,6 +24,7 @@ public class ControladorUsuarioTest {
 
 	private RepositorioUsuarioImpl repositorioUsuario;
 	private ServicioPropiedad servicioPropiedad;
+	private ServicioLogin servicioLogin;
 	private ControladorUsuario controladorUsuario;
 	private HttpSession session;
 	private Usuario usuario;
@@ -33,7 +34,7 @@ public class ControladorUsuarioTest {
 	public void init() {
 		this.repositorioUsuario = mock(RepositorioUsuarioImpl.class);
 		this.servicioPropiedad = mock(ServicioPropiedad.class);
-		this.controladorUsuario = new ControladorUsuario(this.repositorioUsuario, this.servicioPropiedad);
+		this.controladorUsuario = new ControladorUsuario(this.repositorioUsuario, this.servicioPropiedad, this.servicioLogin);
 		this.session = mock(HttpSession.class);
 
 		this.usuario = new Usuario();

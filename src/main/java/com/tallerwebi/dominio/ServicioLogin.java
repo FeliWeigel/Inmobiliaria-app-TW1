@@ -10,4 +10,5 @@ public interface ServicioLogin {
     Usuario consultarUsuario(String email, String password);
     void registrar(Usuario usuario) throws UsuarioExistenteExcepcion, CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion;
 
+    void editarPerfil(Usuario usuario) throws PasswordInvalidaExcepcion, EdadInvalidaExcepcion, CredencialesInvalidasExcepcion;
 }

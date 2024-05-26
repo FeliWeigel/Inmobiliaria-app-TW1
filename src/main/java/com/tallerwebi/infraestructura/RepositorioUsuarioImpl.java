@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Repository("RepositorioUsuario")
+@Transactional
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     private final SessionFactory sessionFactory;
@@ -49,8 +50,21 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public void modificar(Usuario usuario) {
-        sessionFactory.getCurrentSession().update(usuario);
+    public void editarPerfil(Usuario usuario) {
+        final Session session = sessionFactory.getCurrentSession();
+        Usuario usuarioAlmacenado = session.get(Usuario.class, usuario.getId());
+
+        if(usuarioAlmacenado == null){
+            throw new CRUDPropiedadExcepcion("Error! El usuario no pudo ser encontrado.");
+        }
+        else{
+            usuarioAlmacenado.setEmail(usuario.getEmail());
+            usuarioAlmacenado.setPassword(usuario.getPassword());
+            usuarioAlmacenado.setNombre(usuario.getNombre());
+            usuarioAlmacenado.setApellido(usuario.getApellido());
+            usuarioAlmacenado.setFechaNacimiento(usuario.getFechaNacimiento());
+            session.saveOrUpdate(usuarioAlmacenado);
+        }
     }
 
     @Override

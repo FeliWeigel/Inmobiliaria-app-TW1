@@ -1,15 +1,22 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body{
     background: linear-gradient(#16C79A, #11698E);
-    height: 100vh;  
+    height: 100vh;
     display: flex;
     flex-direction: column;
+    margin: 0;
 }
 
 main{
 
     height: auto;
     width: 40vw;
-    margin: auto;
+    margin: 30px auto;
     padding: 30px;
     align-self: center;
     justify-self: center;
@@ -25,7 +32,7 @@ form *{
     border: none;
 }
 form h3{
-    margin: 15px;
+    margin: 10px;
     font-size: 28px;
     font-weight: 500;
     line-height: 42px;
@@ -33,11 +40,11 @@ form h3{
 }
 label{
     display: block;
-    margin-top: 10px;
     font-size: 16px;
     font-weight: 500;
 }
 input{
+    margin-bottom: 10px;
     display: block;
     height: 35px;
     width: 95%;
@@ -46,6 +53,7 @@ input{
     padding: 0 10px;
     font-size: 14px;
     font-weight: 300;
+    border: 1px solid darkgrey;
 }
 .pswLabel {
     display: flex;
@@ -109,7 +117,7 @@ width:auto;
 color: #f8f1f1;
 background: #11698E;
 padding: 10px 20px;
-font-size: 18px;
+font-size: 16px;
 font-weight: 600;
 border-radius: 5px;
 cursor: pointer;

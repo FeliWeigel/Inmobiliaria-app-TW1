@@ -97,5 +97,24 @@ public class ServicioLoginImpl implements ServicioLogin {
         return esMayuscula && esNumero && esCaracterEspecial;
     }
 
+    @Override
+    public void editarPerfil(Usuario usuario) throws PasswordInvalidaExcepcion, EdadInvalidaExcepcion, CredencialesInvalidasExcepcion {
+        ValidarString validarString = new ValidarString();
+
+        validarEdad(usuario.getFechaNacimiento());
+        if(validarString.tieneNumeros(usuario.getNombre()) || validarString.tieneNumeros(usuario.getApellido())){
+            throw new CredencialesInvalidasExcepcion();
+        }
+        if(usuario.getPassword().length() >= 6){
+            if(!validarPassword(usuario.getPassword())){
+                throw new PasswordInvalidaExcepcion();
+            }
+        }else {
+            throw new PasswordInvalidaExcepcion();
+        }
+
+        repositorioUsuario.editarPerfil(usuario);
+    }
+
 }
 

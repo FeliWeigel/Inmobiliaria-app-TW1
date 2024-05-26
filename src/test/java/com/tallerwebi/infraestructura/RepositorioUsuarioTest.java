@@ -99,7 +99,7 @@ public class RepositorioUsuarioTest {
     @Rollback
     public void queSePuedaModificarUnUsuario() {
         this.usuario.setPassword("newpassword456");
-        repositorioUsuarioImpl.modificar(this.usuario);
+        repositorioUsuarioImpl.editarPerfil(this.usuario);
 
         Usuario usuarioModificado = (Usuario) this.sessionFactory.getCurrentSession().createCriteria(Usuario.class)
                 .add(Restrictions.eq("email", "test@example.com"))
