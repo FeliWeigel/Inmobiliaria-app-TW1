@@ -32,6 +32,11 @@ public class ControladorUsuario {
     public ModelAndView vistaFavoritos(HttpSession session) {
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
         Set<Propiedad> favoritos = new HashSet<>();
 
         try {
@@ -56,6 +61,11 @@ public class ControladorUsuario {
     public ModelAndView agregarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
         List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
 
         try {
