@@ -62,6 +62,7 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getModel().containsKey("listEmpty"), is(false));
 	}
 
+
 	@Test
 	public void queMuestreMensajeCuandoNoHayFavoritos() {
 		Set<Propiedad> favoritos = new HashSet<>();
@@ -75,6 +76,17 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getModel().get("listEmpty"), is("Todavia no has agregado propiedades a la lista de favoritos."));
 	}
 
+
+	@Test
+	public void queRedirijaAlLoginAlIntentarAccederAFacoritosSinSesionIniciada() {
+
+		when(this.session.getAttribute("usuario")).thenReturn(null);
+		ModelAndView modelAndView = this.controladorUsuario.vistaFavoritos(this.session);
+
+		assertThat(modelAndView.getViewName(), is("redirect:/login"));
+	}
+
+
 	@Test
 	public void queMuestreErrorCuandoCRUDPropiedadExcepcion() {
 		when(this.repositorioUsuario.listarFavoritos(this.usuario)).thenThrow(new CRUDPropiedadExcepcion("Error! La propiedad no pudo ser encontrada."));
@@ -85,6 +97,7 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getModel().get("error"), is("Error! La propiedad no pudo ser encontrada."));
 	}
 
+
 	@Test
 	public void queMuestreErrorGeneralCuandoExcepcion() {
 		when(this.repositorioUsuario.listarFavoritos(this.usuario)).thenThrow(new RuntimeException("Error inesperado"));
@@ -94,6 +107,7 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getViewName(), is("favoritos"));
 		assertThat(modelAndView.getModel().get("error"), is("Ha Ocurrido un Error Inesperado"));
 	}
+
 
 	@Test
 	public void queAgregueFavoritoExitosamente() {
@@ -106,6 +120,17 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getModel().get("propiedades"), is(this.propiedades));
 		verify(this.repositorioUsuario).agregarFavorito(this.usuario, propiedadId);
 	}
+
+	@Test
+	public void queAlAgregarUnaPropiedadFavoritosSinSesionIniciadaRedirijaAlLogin() {
+		Long propiedadId = 1L;
+
+		when(this.session.getAttribute("usuario")).thenReturn(null);
+		ModelAndView modelAndView = this.controladorUsuario.agregarFavorito(propiedadId, this.session);
+
+		assertThat(modelAndView.getViewName(), is("redirect:/login"));
+	}
+
 
 	@Test
 	public void queMuestreErrorCuandoCRUDPropiedadExcepcionAlAgregar() {
