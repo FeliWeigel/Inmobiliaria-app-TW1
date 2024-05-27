@@ -63,6 +63,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
             usuarioAlmacenado.setNombre(usuario.getNombre());
             usuarioAlmacenado.setApellido(usuario.getApellido());
             usuarioAlmacenado.setFechaNacimiento(usuario.getFechaNacimiento());
+
             session.saveOrUpdate(usuarioAlmacenado);
         }
     }
