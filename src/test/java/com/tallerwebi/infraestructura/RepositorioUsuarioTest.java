@@ -53,6 +53,7 @@ public class RepositorioUsuarioTest {
         this.session.save(this.usuario);
     }
 
+
     @Test
     @Transactional
     @Rollback
@@ -63,6 +64,7 @@ public class RepositorioUsuarioTest {
         assertThat(usuarioEncontrado.getEmail(), is("test@example.com"));
         assertThat(usuarioEncontrado.getPassword(), is("password123"));
     }
+
 
     @Test
     @Transactional
@@ -83,6 +85,7 @@ public class RepositorioUsuarioTest {
         assertThat(usuarioGuardado.getPassword(), is("newpassword123"));
     }
 
+
     @Test
     @Transactional
     @Rollback
@@ -94,12 +97,13 @@ public class RepositorioUsuarioTest {
         assertThat(usuarioEncontrado.getPassword(), is("password123"));
     }
 
+
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaModificarUnUsuario() {
+    public void queSePuedaEditarUnUsuario() {
         this.usuario.setPassword("newpassword456");
-        repositorioUsuarioImpl.editarPerfil(this.usuario);
+        this.repositorioUsuarioImpl.editarPerfil(this.usuario);
 
         Usuario usuarioModificado = (Usuario) this.sessionFactory.getCurrentSession().createCriteria(Usuario.class)
                 .add(Restrictions.eq("email", "test@example.com"))
@@ -109,6 +113,7 @@ public class RepositorioUsuarioTest {
         assertThat(usuarioModificado.getEmail(), is("test@example.com"));
         assertThat(usuarioModificado.getPassword(), is("newpassword456"));
     }
+
 
     @Test
     @Transactional

@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.*;
+import org.dom4j.rule.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -85,13 +86,20 @@ public class ControladorUsuario {
         return new ModelAndView("home", model);
     }
 
+
     @RequestMapping("/perfil")
     public ModelAndView irAPerfil(HttpSession session) {
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
         model.put("usuario", usuarioAutenticado);
         return new ModelAndView("perfil", model);
     }
+
 
     @RequestMapping(path = "/editar-perfil", method = RequestMethod.POST)
     public ModelAndView perfil(@ModelAttribute("usuario") Usuario usuario, HttpSession session) throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {

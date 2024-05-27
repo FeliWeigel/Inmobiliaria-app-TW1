@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
+import com.tallerwebi.infraestructura.ServicioLoginImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,6 +35,7 @@ public class ControladorUsuarioTest {
 	public void init() {
 		this.repositorioUsuario = mock(RepositorioUsuarioImpl.class);
 		this.servicioPropiedad = mock(ServicioPropiedad.class);
+		this.servicioLogin = mock(ServicioLoginImpl.class);
 		this.controladorUsuario = new ControladorUsuario(this.repositorioUsuario, this.servicioPropiedad, this.servicioLogin);
 		this.session = mock(HttpSession.class);
 
@@ -144,5 +146,66 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getViewName(), is("home"));
 		assertThat(modelAndView.getModel().get("error"), is("Error! La propiedad no pudo ser encontrada."));
 		verify(this.repositorioUsuario).eliminarFavorito(this.usuario, propiedadId);
+	}
+
+
+	@Test
+	public void queSeLleveALaVistaDePerfilExitosamente() {
+
+		ModelAndView modelAndView = this.controladorUsuario.irAPerfil(this.session);
+
+		assertThat(modelAndView.getViewName(), is("perfil"));
+	}
+
+
+	@Test
+	public void queSeRedirijaAlLoginAlIntentarAccederAPerfilSinSesionIniciada() {
+
+		when(this.session.getAttribute("usuario")).thenReturn(null);
+		ModelAndView modelAndView = this.controladorUsuario.irAPerfil(this.session);
+
+		assertThat(modelAndView.getViewName(), is("redirect:/login"));
+	}
+
+
+	@Test
+	public void queSeRedirijaALaMismaPaginaAlEditarElPerfilCorrectamente() throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
+
+		ModelAndView modelAndView = this.controladorUsuario.perfil(this.usuario, this.session);
+
+		assertThat(modelAndView.getViewName(), is("perfil"));
+	}
+
+
+	@Test
+	public void queMuestreErrorCuandoPasswordEsInvalidaAlEditarPerfil() throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
+		doThrow(new PasswordInvalidaExcepcion()).when(servicioLogin).editarPerfil(usuario);
+
+		ModelAndView modelAndView = this.controladorUsuario.perfil(this.usuario, this.session);
+
+		assertThat(modelAndView.getViewName(), is("perfil"));
+		assertThat(modelAndView.getModel().get("error"), is("Error! La contraseña debe contener al menos: 6 digitos, una mayuscula, un numero y un caracter especial."));
+	}
+
+
+	@Test
+	public void queMuestreErrorCuandoEdadEsInvalidaAlEditarPerfil() throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
+		doThrow(new EdadInvalidaExcepcion()).when(servicioLogin).editarPerfil(usuario);
+
+		ModelAndView modelAndView = this.controladorUsuario.perfil(this.usuario, this.session);
+
+		assertThat(modelAndView.getViewName(), is("perfil"));
+		assertThat(modelAndView.getModel().get("error"), is("Cuidado! Debe ser mayor de 18 años."));
+	}
+
+
+	@Test
+	public void queMuestreErrorCuandoCredencialesSonInvalidasAlEditarPerfil() throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
+		doThrow(new CredencialesInvalidasExcepcion()).when(servicioLogin).editarPerfil(usuario);
+
+		ModelAndView modelAndView = this.controladorUsuario.perfil(this.usuario, this.session);
+
+		assertThat(modelAndView.getViewName(), is("perfil"));
+		assertThat(modelAndView.getModel().get("error"), is("Debe completar todos los campos con datos validos!"));
 	}
 }
