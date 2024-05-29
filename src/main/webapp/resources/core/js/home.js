@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 5000)
 })
 
-function manejadorFavorito(){
+/*function manejadorFavorito(){
     let iconoVacio = document.getElementById('fav-vacio')
     let iconoRelleno = document.getElementById('fav-relleno')
 
@@ -22,4 +22,4 @@ function manejadorFavorito(){
         iconoRelleno.style.display = 'none'
         iconoVacio.style.display = 'block'
     }
-}
+}*/

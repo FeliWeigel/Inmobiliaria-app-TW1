@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -100,6 +101,18 @@ public class Propiedad {
     }
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Propiedad propiedad = (Propiedad) o;
+        return Objects.equals(id, propiedad.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

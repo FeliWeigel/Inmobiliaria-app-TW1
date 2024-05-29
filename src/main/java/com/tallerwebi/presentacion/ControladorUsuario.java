@@ -82,10 +82,15 @@ public class ControladorUsuario {
         return new ModelAndView("home", model);
     }
 
-    @RequestMapping(path = "/favoritos/eliminar/{propiedadId}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/favoritos/eliminar/{propiedadId}", method = RequestMethod.POST)
     public ModelAndView eliminarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+        List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+
+        if (usuarioAutenticado == null){
+            return new ModelAndView("redirect:/login");
+        }
 
         try {
             repositorioUsuario.eliminarFavorito(usuarioAutenticado, propiedadId);
@@ -94,6 +99,14 @@ public class ControladorUsuario {
             model.put("error", e.getMessage());
         }
 
+        try{
+            Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+            model.put("favoritos", favoritos);
+        }catch(CRUDPropiedadExcepcion e){
+            model.put("error", e.getMessage());
+        }
+
+        model.put("propiedades", propiedades);
         return new ModelAndView("home", model);
     }
 
