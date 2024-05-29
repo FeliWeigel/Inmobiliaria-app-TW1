@@ -5,6 +5,9 @@ import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
+import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
+import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -46,12 +49,15 @@ public class RepositorioUsuarioTest {
         this.repositorioUsuarioImpl = new RepositorioUsuarioImpl(this.sessionFactory, this.repositorioPropiedad);
 
         this.usuario = new Usuario();
+        this.usuario.setNombre("usuario");
+        this.usuario.setApellido("apellido");
         this.usuario.setEmail("test@example.com");
         this.usuario.setPassword("password123");
 
         this.session = this.sessionFactory.getCurrentSession();
         this.session.save(this.usuario);
     }
+
 
     @Test
     @Transactional
@@ -63,6 +69,7 @@ public class RepositorioUsuarioTest {
         assertThat(usuarioEncontrado.getEmail(), is("test@example.com"));
         assertThat(usuarioEncontrado.getPassword(), is("password123"));
     }
+
 
     @Test
     @Transactional
@@ -83,6 +90,7 @@ public class RepositorioUsuarioTest {
         assertThat(usuarioGuardado.getPassword(), is("newpassword123"));
     }
 
+
     @Test
     @Transactional
     @Rollback
@@ -94,12 +102,13 @@ public class RepositorioUsuarioTest {
         assertThat(usuarioEncontrado.getPassword(), is("password123"));
     }
 
+
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaModificarUnUsuario() {
-        this.usuario.setPassword("newpassword456");
-        repositorioUsuarioImpl.modificar(this.usuario);
+    public void queSePuedaEditarUnUsuario() throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, UsuarioExistenteExcepcion {
+        this.usuario.setPassword("newPassword.456");
+        this.repositorioUsuarioImpl.editarPerfil(this.usuario);
 
         Usuario usuarioModificado = (Usuario) this.sessionFactory.getCurrentSession().createCriteria(Usuario.class)
                 .add(Restrictions.eq("email", "test@example.com"))
@@ -107,8 +116,9 @@ public class RepositorioUsuarioTest {
 
         assertThat(usuarioModificado, notNullValue());
         assertThat(usuarioModificado.getEmail(), is("test@example.com"));
-        assertThat(usuarioModificado.getPassword(), is("newpassword456"));
+        assertThat(usuarioModificado.getPassword(), is("newPassword.456"));
     }
+
 
     @Test
     @Transactional

@@ -1,12 +1,11 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.ServicioPropiedad;
-import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.excepcion.*;
+import org.dom4j.rule.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,11 +31,6 @@ public class ControladorUsuario {
     public ModelAndView vistaFavoritos(HttpSession session) {
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-
-        if (usuarioAutenticado == null) {
-            return new ModelAndView("redirect:/login");
-        }
-
         Set<Propiedad> favoritos = new HashSet<>();
 
         try {
@@ -61,11 +55,6 @@ public class ControladorUsuario {
     public ModelAndView agregarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-
-        if (usuarioAutenticado == null) {
-            return new ModelAndView("redirect:/login");
-        }
-
         List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
 
         try {
@@ -96,5 +85,40 @@ public class ControladorUsuario {
     }
 
 
+    @RequestMapping("/perfil")
+    public ModelAndView irAPerfil(HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        model.put("usuario", usuarioAutenticado);
+        return new ModelAndView("perfil", model);
+    }
+
+
+    @RequestMapping(path = "/editar-perfil", method = RequestMethod.POST)
+    public ModelAndView perfil(@ModelAttribute("usuario") Usuario usuario, HttpSession session) throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+        usuario.setId(usuarioAutenticado.getId());
+
+        try {
+            repositorioUsuario.editarPerfil(usuario);
+        }catch(PasswordInvalidaExcepcion e){
+            model.put("error", "Error! La contraseña debe contener al menos: 6 digitos, una mayuscula, un numero y un caracter especial.");
+            return new ModelAndView("perfil", model);
+        }catch(CredencialesInvalidasExcepcion e){
+            model.put("error", "Debe completar todos los campos con datos validos!");
+            return new ModelAndView("perfil", model);
+        } catch (UsuarioExistenteExcepcion e) {
+            model.put("error", "El email ya esta asociado a una cuenta existente.");
+            return new ModelAndView("perfil", model);
+        }
+
+        return new ModelAndView("perfil");
+    }
 
 }

@@ -5,6 +5,10 @@ import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
+import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
+import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
+import com.tallerwebi.dominio.utilidad.ValidarString;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -14,8 +18,11 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Repository("RepositorioUsuario")
+@Transactional
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     private final SessionFactory sessionFactory;
@@ -49,9 +56,38 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public void modificar(Usuario usuario) {
-        sessionFactory.getCurrentSession().update(usuario);
+    public void editarPerfil(Usuario usuario) throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, UsuarioExistenteExcepcion {
+        final Session session = sessionFactory.getCurrentSession();
+        Usuario usuarioAlmacenado = session.get(Usuario.class, usuario.getId());
+        ValidarString validarString = new ValidarString();
+
+        if(usuarioAlmacenado == null){
+            throw new CRUDPropiedadExcepcion("Error! El usuario no pudo ser encontrado.");
+        }
+        if(validarString.tieneNumeros(usuario.getNombre()) || validarString.tieneNumeros(usuario.getApellido())){
+            throw new CredencialesInvalidasExcepcion();
+        }
+
+        if(usuario.getPassword().length() >= 6){
+            if(!validarPassword(usuario.getPassword())){
+                throw new PasswordInvalidaExcepcion();
+            }
+        }else {
+            throw new PasswordInvalidaExcepcion();
+        }
+
+        if(!usuarioAlmacenado.getEmail().equals(usuario.getEmail()) && this.buscarPorEmail(usuario.getEmail()) != null){
+            throw new UsuarioExistenteExcepcion();
+        }
+
+        usuarioAlmacenado.setEmail(usuario.getEmail());
+        usuarioAlmacenado.setPassword(usuario.getPassword());
+        usuarioAlmacenado.setNombre(usuario.getNombre());
+        usuarioAlmacenado.setApellido(usuario.getApellido());
+
+        session.update(usuarioAlmacenado);
     }
+
 
     @Override
     @Transactional
@@ -107,6 +143,29 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
 
         throw new CRUDPropiedadExcepcion("Error! El usuario no ha sido encontrado.");
+    }
+
+    private Boolean validarPassword(String password){
+        boolean esMayuscula = false, esNumero = false, esCaracterEspecial = false;
+        Pattern listaEspeciales = Pattern.compile ("[?!¡@¿.,´)$(]");
+        Matcher tieneEspeciales = listaEspeciales.matcher(password);
+        char[] passwordArray = password.toCharArray();
+
+        if(!password.isBlank() && password.length() >= 6){
+            for(char i : passwordArray){
+                if(Character.isUpperCase(i)){
+                    esMayuscula = true;
+                }else if(Character.isDigit(i)){
+                    esNumero = true;
+                }else if(tieneEspeciales.find()){
+                    esCaracterEspecial = true;
+                }
+            }
+        }else{
+            return false;
+        }
+
+        return esMayuscula && esNumero && esCaracterEspecial;
     }
 
 

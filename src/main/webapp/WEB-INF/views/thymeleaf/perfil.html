@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" th:href="@{/css/perfil.css}"/>
+    <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+    <header>
+        <a class="button-logo" th:href="@{/home}">
+            <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+        </a>
+        <nav>
+            <a th:href="@{/favoritos}">
+                <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
+            </a>
+            <!--
+               <a href="#">
+                    <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
+               </a>
+             -->
+             <!--
+                <a href="#">
+                      <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>
+                </a>
+             -->
+            <a href="#" th:href="@{/perfil}">
+                <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
+            </a>
+        </nav>
+    </header>
+
+    <main>
+
+        <form class="perfil-form" action="#" th:action="@{/editar-perfil}" method="POST" th:object="${usuario}">
+
+            <h3>Información personal</h3>
+    
+            <div class="nombre-completo">
+                <div>
+                    <label for="nombre">Nombre</label>
+                    <input th:field="*{nombre}" type="text" id="nombre" class="form-control" required/>
+                </div>
+                <div>
+                    <label for="apellido">Apellido</label>
+                    <input th:field="*{apellido}" type="text" id="apellido" class="form-control" required/>
+                </div>
+            </div>
+            <!-- A definir -> Es necesario que el usuario setee otra fecha de nacimiento siendo este un requisito obligatorio y unequivoco al registrarse? (lo mismo podria llegar a pasar con nombre y apellido) -->
+            <label for="fecha-nacimiento">Fecha de nacimiento</label>
+            <input th:field="*{fechaNacimiento}" type="date" id="fecha-nacimiento" class="form-control" disabled/>
+
+            <label for="email">Correo electrónico</label>
+            <input th:field="*{email}" type="email" id="email" class="form-control" required/>
+
+            <label for="password">Contraseña</label>
+            <input th:field="*{password}" type="text"  id="password" class="form-control" required/>
+            <p
+                class="alert"
+                th:if="${error != null}"
+                th:text="${error}"
+            >
+            </p>
+
+            <div class="button-container">
+                <button type="submit">Guardar cambios</button>
+            </div>
+    
+        </form>
+
+        <div class="button-container">
+            <button class="button-logout">
+                <a th:href="@{/login}">Cerrar sesión</a>
+            </button>
+        </div>
+
+    </main>
+
+
+    <script th:src="@{/js/perfil.js}"></script>
+</body>
+</html>

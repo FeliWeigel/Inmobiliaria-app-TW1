@@ -97,5 +97,6 @@ public class ServicioLoginImpl implements ServicioLogin {
         return esMayuscula && esNumero && esCaracterEspecial;
     }
 
+
 }
 
