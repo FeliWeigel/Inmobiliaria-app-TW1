@@ -1,7 +1,9 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Propiedad;
+import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.ServicioPropiedad;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -9,28 +11,41 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class ControladorPropiedad {
 
     private final ServicioPropiedad servicioPropiedad;
+    private final RepositorioUsuario repositorioUsuario;
 
-    public ControladorPropiedad(ServicioPropiedad servicioPropiedad) {
+    public ControladorPropiedad(ServicioPropiedad servicioPropiedad, RepositorioUsuario repositorioUsuario) {
         this.servicioPropiedad = servicioPropiedad;
+        this.repositorioUsuario = repositorioUsuario;
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView vistaHome() {
-
+    public ModelAndView vistaHome(HttpSession session) {
         ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
 
         try {
             List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
             model.put("propiedades", propiedades);
         } catch (Exception e){
             model.put("message", "Ha Ocurrido un Error Inesperado");
+        }
+
+        if(usuarioAutenticado != null){
+            try{
+                Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+                model.put("favoritos", favoritos);
+            }catch(CRUDPropiedadExcepcion e){
+                model.put("error", e.getMessage());
+            }
         }
 
         return new ModelAndView("home", model);

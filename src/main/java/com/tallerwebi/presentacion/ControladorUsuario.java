@@ -26,12 +26,15 @@ public class ControladorUsuario {
         this.servicioPropiedad = servicioPropiedad;
     }
 
-
     @RequestMapping(path = "/favoritos", method = RequestMethod.GET)
     public ModelAndView vistaFavoritos(HttpSession session) {
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
         Set<Propiedad> favoritos = new HashSet<>();
+
+        if(usuarioAutenticado == null){
+            return new ModelAndView("redirect:/login");
+        }
 
         try {
             favoritos = repositorioUsuario.listarFavoritos(usuarioAutenticado);
@@ -57,6 +60,10 @@ public class ControladorUsuario {
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
         List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
 
+        if (usuarioAutenticado == null){
+            return new ModelAndView("redirect:/login");
+        }
+
         try {
             repositorioUsuario.agregarFavorito(usuarioAutenticado, propiedadId);
             model.put("success", "La propiedad ha sido agregada a tu lista de favoritos correctamente!");
@@ -64,10 +71,16 @@ public class ControladorUsuario {
             model.put("error", e.getMessage());
         }
 
+        try{
+            Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+            model.put("favoritos", favoritos);
+        }catch(CRUDPropiedadExcepcion e){
+            model.put("error", e.getMessage());
+        }
+
         model.put("propiedades", propiedades);
         return new ModelAndView("home", model);
     }
-
 
     @RequestMapping(path = "/favoritos/eliminar/{propiedadId}", method = RequestMethod.DELETE)
     public ModelAndView eliminarFavorito(@PathVariable Long propiedadId, HttpSession session){
@@ -84,7 +97,6 @@ public class ControladorUsuario {
         return new ModelAndView("home", model);
     }
 
-
     @RequestMapping("/perfil")
     public ModelAndView irAPerfil(HttpSession session) {
         ModelMap model = new ModelMap();
@@ -97,7 +109,6 @@ public class ControladorUsuario {
         model.put("usuario", usuarioAutenticado);
         return new ModelAndView("perfil", model);
     }
-
 
     @RequestMapping(path = "/editar-perfil", method = RequestMethod.POST)
     public ModelAndView perfil(@ModelAttribute("usuario") Usuario usuario, HttpSession session) throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {

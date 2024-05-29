@@ -1,12 +1,14 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Propiedad;
+import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.ServicioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,20 +21,21 @@ import static org.mockito.Mockito.when;
 public class ControladorPropiedadTest {
     private ControladorPropiedad controladorPropiedad;
     private ServicioPropiedad servicioPropiedad;
-
+    private RepositorioUsuario repositorioUsuario;
+    private HttpSession session;
 
     @BeforeEach
     public void init(){
         this.servicioPropiedad = mock(ServicioPropiedad.class);
-        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad);
-        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad);
+        this.session = mock(HttpSession.class);
+        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, repositorioUsuario);
     }
 
 
     @Test
     public void queSeMuestreElHome(){
 
-        ModelAndView mav = this.controladorPropiedad.vistaHome();
+        ModelAndView mav = this.controladorPropiedad.vistaHome(this.session);
 
         assertThat(mav.getViewName(), equalTo("home"));
     }
@@ -43,7 +46,7 @@ public class ControladorPropiedadTest {
 
         when(this.servicioPropiedad.listarPropiedades()).thenThrow(RuntimeException.class);
 
-        ModelAndView mav = this.controladorPropiedad.vistaHome();
+        ModelAndView mav = this.controladorPropiedad.vistaHome(this.session);
 
         assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
     }
@@ -55,7 +58,7 @@ public class ControladorPropiedadTest {
         List<Propiedad> propiedades = crearPropiedades();
 
         when(servicioPropiedad.listarPropiedades()).thenReturn(propiedades);
-        ModelAndView mav = this.controladorPropiedad.vistaHome();
+        ModelAndView mav = this.controladorPropiedad.vistaHome(this.session);
         List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
 
         assertThat(mav.getViewName(), equalTo("home"));

@@ -60,10 +60,20 @@
                     <img class="prop-img" th:src="@{/img/Casa.jpg}" src="../../../resources/core/img/Casa.jpg"  alt="propiedad">
                     <div style="display: flex; gap: .5rem; align-items: center; justify-content: space-between; padding-top: 7px">
                         <h5 class="prop-nombre" th:text="${propiedad.nombre}"></h5>
-                        <form th:action="@{'/favoritos/agregar/' + ${propiedad.id}}" method="post">
+                        <form th:if="${favoritos}" th:action="@{'/favoritos/agregar/' + ${propiedad.id}}" method="post">
                             <button onclick="manejadorFavorito()" type="submit" style="background: none; border: none;">
-                                <i id="fav-vacio" class="fa-regular fa-heart" style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"></i>
-                                <i id="fav-relleno" class="fa-solid fa-heart" style="color: #022d4f; font-size: 1.2rem; cursor: pointer; display: none"></i>
+                                <i
+                                    th:if="${!#lists.contains(favoritos, propiedad)}"
+                                    id="fav-vacio"
+                                    class="fa-regular fa-heart"
+                                    style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"
+                                ></i>
+                                <i
+                                    th:if="${#lists.contains(favoritos, propiedad)}"
+                                    id="fav-relleno"
+                                    class="fa-solid fa-heart"
+                                    style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"
+                                ></i>
                             </button>
                         </form>
                     </div>
