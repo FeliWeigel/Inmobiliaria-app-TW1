@@ -54,26 +54,36 @@ public class ControladorPropiedad {
     @RequestMapping(path = "/filtro/precio", method = RequestMethod.POST)
     public ModelAndView filtrarPropiedadesPorPrecio(
             @RequestParam("min") Double min,
-            @RequestParam("max") Double max
+            @RequestParam("max") Double max,
+            HttpSession session
     ) {
         ModelMap model = new ModelMap();
-
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
         try {
             List<Propiedad> propiedadesFiltradas = servicioPropiedad.listarPropiedadesPorPrecio(min, max);
             model.put("propiedades", propiedadesFiltradas);
         }catch(CRUDPropiedadExcepcion e){
             model.put("message", e.getMessage());
-        }
-        catch (Exception e){
+        }catch (Exception e){
             model.put("message", "Ha Ocurrido un Error Inesperado");
+        }
+
+        if(usuarioAutenticado != null){
+            try{
+                Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+                model.put("favoritos", favoritos);
+            }catch(CRUDPropiedadExcepcion e){
+                model.put("error", e.getMessage());
+            }
         }
 
         return new ModelAndView("home", model);
     }
 
     @RequestMapping(path = "/filtro/ubicacion", method = RequestMethod.POST)
-    public ModelAndView filtrarPropiedadesPorUbicacion(@RequestParam("ubicacion") String ubicacion) {
+    public ModelAndView filtrarPropiedadesPorUbicacion(@RequestParam("ubicacion") String ubicacion, HttpSession session) {
         ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
 
         try {
             List<Propiedad> propiedadesFiltradas = servicioPropiedad.listarPropiedadesPorUbicacion(ubicacion);
@@ -83,6 +93,15 @@ public class ControladorPropiedad {
         }
         catch (Exception e){
             model.put("message", "Ha Ocurrido un Error Inesperado");
+        }
+
+        if(usuarioAutenticado != null){
+            try{
+                Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+                model.put("favoritos", favoritos);
+            }catch(CRUDPropiedadExcepcion e){
+                model.put("error", e.getMessage());
+            }
         }
 
         return new ModelAndView("home", model);
