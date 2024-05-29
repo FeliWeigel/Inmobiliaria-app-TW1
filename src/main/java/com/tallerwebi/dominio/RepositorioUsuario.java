@@ -3,6 +3,7 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
+import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
 
 import java.util.Set;
 
@@ -14,6 +15,7 @@ public interface RepositorioUsuario {
     void agregarFavorito(Usuario usuario, Long propiedadId);
     void eliminarFavorito(Usuario usuario, Long propiedadId);
     Set<Propiedad> listarFavoritos(Usuario usuario);
+    void cerrarSesion(Usuario usuario) throws UsuarioNoIdentificadoExcepcion ;
     void editarPerfil(Usuario usuario) throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, UsuarioExistenteExcepcion;
 }
 

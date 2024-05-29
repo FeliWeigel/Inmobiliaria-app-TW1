@@ -4,10 +4,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
-import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
-import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
-import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
+import com.tallerwebi.dominio.excepcion.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +40,22 @@ public class ControladorLogin {
         ModelMap modelo = new ModelMap();
         modelo.put("usuario", new Usuario());
         return new ModelAndView("registrarme", modelo);
+    }
+
+    @RequestMapping(path = "/logout", method = RequestMethod.POST)
+    public ModelAndView logout(HttpSession session) {
+        ModelMap modelo = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        try{
+            servicioLogin.cerrarSesion(usuarioAutenticado);
+            session.invalidate();
+        }catch (UsuarioNoIdentificadoExcepcion e) {
+            modelo.put("error", "La sesion no se cerro correctamente, el usuario no ha podido ser identificado.");
+            return new ModelAndView("perfil", modelo);
+        }
+
+        return new ModelAndView("redirect:/login");
     }
 
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)

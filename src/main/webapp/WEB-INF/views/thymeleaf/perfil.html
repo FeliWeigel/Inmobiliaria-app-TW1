@@ -79,12 +79,13 @@
     
         </form>
 
-        <div class="button-container">
-            <button class="button-logout">
-                <a th:href="@{/login}">Cerrar sesión</a>
+        <form method="post" th:action="@{/logout}" class="button-container">
+            <button type="submit" class="button-logout">
+                <a>Cerrar sesión</a>
             </button>
-        </div>
+        </form>
 
+        
     </main>
 
 

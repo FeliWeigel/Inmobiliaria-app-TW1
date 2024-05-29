@@ -3,10 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
-import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
-import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
-import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.utilidad.ValidarString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,6 +54,15 @@ public class ServicioLoginImpl implements ServicioLogin {
 
         usuario.setRol("USER");
         repositorioUsuario.guardar(usuario);
+    }
+
+    @Override
+    public void cerrarSesion(Usuario usuario) throws UsuarioNoIdentificadoExcepcion {
+        if(usuario != null){
+            repositorioUsuario.cerrarSesion(usuario);
+        }else {
+            throw new UsuarioNoIdentificadoExcepcion();
+        }
     }
 
     private void validarEdad(Date fechaUsuario) throws EdadInvalidaExcepcion {

@@ -4,10 +4,7 @@ import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
-import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
-import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
-import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.utilidad.ValidarString;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -55,6 +52,8 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .uniqueResult();
     }
 
+
+
     @Override
     public void editarPerfil(Usuario usuario) throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, UsuarioExistenteExcepcion {
         final Session session = sessionFactory.getCurrentSession();
@@ -87,7 +86,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
         session.update(usuarioAlmacenado);
     }
-
 
     @Override
     @Transactional
@@ -143,6 +141,18 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
 
         throw new CRUDPropiedadExcepcion("Error! El usuario no ha sido encontrado.");
+    }
+
+    @Override
+    public void cerrarSesion(Usuario usuario) throws UsuarioNoIdentificadoExcepcion {
+        final Session session = sessionFactory.getCurrentSession();
+        Usuario usuarioAlmacenado = session.get(Usuario.class, usuario.getId());
+        if(usuarioAlmacenado != null){
+            session.clear();
+        }else {
+            throw new UsuarioNoIdentificadoExcepcion();
+        }
+
     }
 
     private Boolean validarPassword(String password){
