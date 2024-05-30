@@ -40,10 +40,12 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .uniqueResult();
     }
 
+
     @Override
     public void guardar(Usuario usuario) {
         sessionFactory.getCurrentSession().save(usuario);
     }
+
 
     @Override
     public Usuario buscarPorEmail(String email) {
@@ -87,6 +89,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         session.update(usuarioAlmacenado);
     }
 
+
     @Override
     @Transactional
     public void agregarFavorito(Usuario usuario, Long propiedadId) {
@@ -110,6 +113,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
     }
 
+
     @Override
     @Transactional
     public void eliminarFavorito(Usuario usuario, Long propiedadId) {
@@ -129,6 +133,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
 
     }
+
 
     @Override
     @Transactional
@@ -152,8 +157,8 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }else {
             throw new UsuarioNoIdentificadoExcepcion();
         }
-
     }
+
 
     private Boolean validarPassword(String password){
         boolean esMayuscula = false, esNumero = false, esCaracterEspecial = false;

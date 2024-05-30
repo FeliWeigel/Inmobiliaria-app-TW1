@@ -37,13 +37,16 @@ public class RepositorioPropiedadTest {
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaEliminarUnaPropiedadExistente(){
-        Propiedad propiedad = new Propiedad();
+    public void queSePuedanBuscarPropiedadesExistentes(){
+        Long id = 1L;
+        Propiedad propiedad = new Propiedad(id, "Casa 1", 2, 3, 4, 200.0,
+                150000.0, "Ubicacion 1");
 
         this.sessionFactory.getCurrentSession().save(propiedad);
-        this.repositorioPropiedad.eliminarPropiedad(propiedad.getId());
 
-        assertThat(null, equalTo(this.repositorioPropiedad.buscarPropiedad(propiedad.getId())));
+        Propiedad propiedadBuscada = this.repositorioPropiedad.buscarPropiedad(propiedad.getId());
+
+        assertThat(propiedad, equalTo(propiedadBuscada));
     }
 
 
@@ -66,28 +69,34 @@ public class RepositorioPropiedadTest {
     @Test
     @Transactional
     @Rollback
-    public void queSePuedanBuscarPropiedadesExistentes(){
+    public void queSePuedaEditarUnaPropiedadExistente(){
         Long id = 1L;
         Propiedad propiedad = new Propiedad(id, "Casa 1", 2, 3, 4, 200.0,
                 150000.0, "Ubicacion 1");
+        this.repositorioPropiedad.agregarPropiedad(propiedad);
 
-        this.sessionFactory.getCurrentSession().save(propiedad);
+        Double precioEditado = 1000.0;
+        Propiedad propiedadEditada = new Propiedad(propiedad.getId(), "Casa 1", 2, 3, 4, 200.0,
+                precioEditado, "Ubicacion 1");
 
-        Propiedad propiedadBuscada = this.repositorioPropiedad.buscarPropiedad(propiedad.getId());
-
-        assertThat(propiedad, equalTo(propiedadBuscada));
+        this.repositorioPropiedad.editarPropiedad(propiedadEditada);
+        Propiedad propiedadGuardada = this.repositorioPropiedad.buscarPropiedad(propiedad.getId());
+        assertThat(
+                propiedadGuardada.getPrecio(),
+                equalTo(precioEditado)
+        );
     }
-
 
 
     @Test
     @Transactional
     @Rollback
-    public void queSeLanceUnaExcepcionAlIntentarEliminarUnaPropiedadInexistente(){
-        Long id = 1L;
+    public void queLanceExcepcionCuandoLaPropiedadAEditarNoExiste() {
+        Long idInexistente = 999L;
+        Propiedad propiedadEditada = new Propiedad(idInexistente, "Casa 2", 2, 3, 4, 200.0, 1000.0, "Ubicacion 2");
 
         assertThrows(CRUDPropiedadExcepcion.class, () -> {
-            this.repositorioPropiedad.eliminarPropiedad(id);
+            this.repositorioPropiedad.editarPropiedad(propiedadEditada);
         });
     }
 
@@ -95,13 +104,12 @@ public class RepositorioPropiedadTest {
     @Test
     @Transactional
     @Rollback
-    public void queSePuedanListarLasPropiedadesExistentes(){
+    public void queLanceExcepcionCuandoLaPropiedadAEditarNoTieneID() {
+        Propiedad propiedadSinID = new Propiedad(null, "Casa 3", 2, 3, 4, 200.0, 1000.0, "Ubicacion 3");
 
-        Integer numeroDePropiedadesAlmacenadas = contarPropiedadesEnLaBaseDeDatos();
-
-        List <Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPropiedades();
-
-        assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesAlmacenadas));
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            this.repositorioPropiedad.editarPropiedad(propiedadSinID);
+        });
     }
 
 
@@ -132,27 +140,43 @@ public class RepositorioPropiedadTest {
     }
 
 
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaEliminarUnaPropiedadExistente(){
+        Propiedad propiedad = new Propiedad();
+
+        this.sessionFactory.getCurrentSession().save(propiedad);
+        this.repositorioPropiedad.eliminarPropiedad(propiedad.getId());
+
+        assertThat(null, equalTo(this.repositorioPropiedad.buscarPropiedad(propiedad.getId())));
+    }
+
 
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaEditarUnaPropiedadExistente(){
+    public void queSeLanceUnaExcepcionAlIntentarEliminarUnaPropiedadInexistente(){
         Long id = 1L;
-        Propiedad propiedad = new Propiedad(id, "Casa 1", 2, 3, 4, 200.0,
-                150000.0, "Ubicacion 1");
-        this.repositorioPropiedad.agregarPropiedad(propiedad);
 
-        Double precioEditado = 1000.0;
-        Propiedad propiedadEditada = new Propiedad(propiedad.getId(), "Casa 1", 2, 3, 4, 200.0,
-                precioEditado, "Ubicacion 1");
-
-        this.repositorioPropiedad.editarPropiedad(propiedadEditada);
-        Propiedad propiedadGuardada = this.repositorioPropiedad.buscarPropiedad(propiedad.getId());
-        assertThat(
-                propiedadGuardada.getPrecio(),
-                equalTo(precioEditado)
-        );
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            this.repositorioPropiedad.eliminarPropiedad(id);
+        });
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedanListarLasPropiedadesExistentes(){
+
+        Integer numeroDePropiedadesAlmacenadas = contarPropiedadesEnLaBaseDeDatos();
+
+        List <Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPropiedades();
+
+        assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesAlmacenadas));
+    }
+
 
     private Integer contarPropiedadesEnLaBaseDeDatos(){
 
