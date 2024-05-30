@@ -45,6 +45,7 @@ public class ControladorUsuarioTest {
 		when(this.servicioPropiedad.listarPropiedades()).thenReturn(this.propiedades);
 	}
 
+
 	@Test
 	public void queMuestreFavoritosDeUsuarioAutenticado() {
 		Propiedad propiedad1 = new Propiedad();
@@ -62,6 +63,7 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getModel().get("listaFavoritos"), is(favoritos));
 		assertThat(modelAndView.getModel().containsKey("listEmpty"), is(false));
 	}
+
 
 	@Test
 	public void queMuestreMensajeCuandoNoHayFavoritos() {
@@ -86,6 +88,7 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getModel().get("error"), is("Error! La propiedad no pudo ser encontrada."));
 	}
 
+
 	@Test
 	public void queMuestreErrorGeneralCuandoExcepcion() {
 		when(this.repositorioUsuario.listarFavoritos(this.usuario)).thenThrow(new RuntimeException("Error inesperado"));
@@ -95,6 +98,7 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getViewName(), is("favoritos"));
 		assertThat(modelAndView.getModel().get("error"), is("Ha Ocurrido un Error Inesperado"));
 	}
+
 
 	@Test
 	public void queAgregueFavoritoExitosamente() {
@@ -122,6 +126,7 @@ public class ControladorUsuarioTest {
 		verify(this.repositorioUsuario).agregarFavorito(this.usuario, propiedadId);
 	}
 
+
 	@Test
 	public void queElimineFavoritoExitosamente() {
 		Long propiedadId = 1L;
@@ -132,6 +137,7 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getModel().get("success"), is("La propiedad ha sido eliminada de tu lista de favoritos correctamente."));
 		verify(this.repositorioUsuario).eliminarFavorito(this.usuario, propiedadId);
 	}
+
 
 	@Test
 	public void queMuestreErrorCuandoCRUDPropiedadExcepcionAlEliminar() {
@@ -185,6 +191,7 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getModel().get("error"), is("Error! La contraseña debe contener al menos: 6 digitos, una mayuscula, un numero y un caracter especial."));
 	}
 
+
 	@Test
 	public void queMuestreErrorCuandoCredencialesSonInvalidasAlEditarPerfil() throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion, UsuarioExistenteExcepcion {
 		doThrow(new CredencialesInvalidasExcepcion()).when(repositorioUsuario).editarPerfil(usuario);
@@ -194,4 +201,16 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getViewName(), is("perfil"));
 		assertThat(modelAndView.getModel().get("error"), is("Debe completar todos los campos con datos validos!"));
 	}
+
+	@Test
+	public void queMuestreErrorCuandoEmailEstaAsociadoAOtraCuentaAlEditarPerfil() throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion, UsuarioExistenteExcepcion {
+		doThrow(new UsuarioExistenteExcepcion()).when(repositorioUsuario).editarPerfil(usuario);
+
+		ModelAndView modelAndView = this.controladorUsuario.perfil(this.usuario, this.session);
+
+		assertThat(modelAndView.getViewName(), is("perfil"));
+		assertThat(modelAndView.getModel().get("error"), is("El email ya esta asociado a una cuenta existente."));
+	}
+
+
 }

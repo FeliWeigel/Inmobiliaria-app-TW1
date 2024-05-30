@@ -82,6 +82,7 @@ public class ControladorUsuario {
         return new ModelAndView("home", model);
     }
 
+
     @RequestMapping(path = "/favoritos/eliminar/{propiedadId}", method = RequestMethod.POST)
     public ModelAndView eliminarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
@@ -110,6 +111,7 @@ public class ControladorUsuario {
         return new ModelAndView("home", model);
     }
 
+
     @RequestMapping("/perfil")
     public ModelAndView irAPerfil(HttpSession session) {
         ModelMap model = new ModelMap();
@@ -122,6 +124,7 @@ public class ControladorUsuario {
         model.put("usuario", usuarioAutenticado);
         return new ModelAndView("perfil", model);
     }
+
 
     @RequestMapping(path = "/editar-perfil", method = RequestMethod.POST)
     public ModelAndView perfil(@ModelAttribute("usuario") Usuario usuario, HttpSession session) throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {

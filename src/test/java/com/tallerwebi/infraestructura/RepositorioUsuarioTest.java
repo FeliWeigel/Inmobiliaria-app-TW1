@@ -4,10 +4,7 @@ import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
-import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
-import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
-import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -28,6 +25,7 @@ import java.util.Set;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -123,6 +121,98 @@ public class RepositorioUsuarioTest {
     @Test
     @Transactional
     @Rollback
+    public void queLanceCredencialesInvalidasExcepcionCuandoNombreTieneNumeros() {
+        Usuario usuarioConNombreInvalido = new Usuario();
+        usuarioConNombreInvalido.setId(this.usuario.getId());
+        usuarioConNombreInvalido.setEmail("test@example.com");
+        usuarioConNombreInvalido.setPassword("validPassword123");
+        usuarioConNombreInvalido.setNombre("Nombre123");
+        usuarioConNombreInvalido.setApellido("Apellido");
+
+        assertThrows(CredencialesInvalidasExcepcion.class, () -> {
+            this.repositorioUsuarioImpl.editarPerfil(usuarioConNombreInvalido);
+        });
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queLanceCredencialesInvalidasExcepcionCuandoApellidoTieneNumeros() {
+        Usuario usuarioConApellidoInvalido = new Usuario();
+        usuarioConApellidoInvalido.setId(this.usuario.getId());
+        usuarioConApellidoInvalido.setEmail("test@example.com");
+        usuarioConApellidoInvalido.setPassword("validPassword123");
+        usuarioConApellidoInvalido.setNombre("Nombre");
+        usuarioConApellidoInvalido.setApellido("Apellido123");
+
+        assertThrows(CredencialesInvalidasExcepcion.class, () -> {
+            this.repositorioUsuarioImpl.editarPerfil(usuarioConApellidoInvalido);
+        });
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queLancePasswordInvalidaExcepcionCuandoPasswordEsCorta() {
+        Usuario usuarioConPasswordCorta = new Usuario();
+        usuarioConPasswordCorta.setId(this.usuario.getId());
+        usuarioConPasswordCorta.setEmail("test@example.com");
+        usuarioConPasswordCorta.setPassword("12345");
+        usuarioConPasswordCorta.setNombre("Nombre");
+        usuarioConPasswordCorta.setApellido("Apellido");
+
+        assertThrows(PasswordInvalidaExcepcion.class, () -> {
+            this.repositorioUsuarioImpl.editarPerfil(usuarioConPasswordCorta);
+        });
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queLancePasswordInvalidaExcepcionCuandoPasswordEsInvalida() {
+        Usuario usuarioConPasswordInvalida = new Usuario();
+        usuarioConPasswordInvalida.setId(this.usuario.getId());
+        usuarioConPasswordInvalida.setEmail("test@example.com");
+        usuarioConPasswordInvalida.setPassword("invalidPass");
+        usuarioConPasswordInvalida.setNombre("Nombre");
+        usuarioConPasswordInvalida.setApellido("Apellido");
+
+        assertThrows(PasswordInvalidaExcepcion.class, () -> {
+            this.repositorioUsuarioImpl.editarPerfil(usuarioConPasswordInvalida);
+        });
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queLanceUsuarioExistenteExcepcionCuandoEmailYaExiste() {
+        Usuario otroUsuario = new Usuario();
+        otroUsuario.setEmail("otro@example.com");
+        otroUsuario.setPassword("newPassword.456");
+        otroUsuario.setNombre("Otro");
+        otroUsuario.setApellido("Usuario");
+        sessionFactory.getCurrentSession().save(otroUsuario);
+
+        Usuario usuarioConEmailExistente = new Usuario();
+        usuarioConEmailExistente.setId(this.usuario.getId());
+        usuarioConEmailExistente.setEmail("otro@example.com");
+        usuarioConEmailExistente.setPassword("newPassword.456");
+        usuarioConEmailExistente.setNombre("Nombre");
+        usuarioConEmailExistente.setApellido("Apellido");
+
+        assertThrows(UsuarioExistenteExcepcion.class, () -> {
+            this.repositorioUsuarioImpl.editarPerfil(usuarioConEmailExistente);
+        });
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
     public void queSePuedaAgregarUnaPropiedadAFavoritos() {
         Propiedad propiedad = new Propiedad();
         propiedad.setNombre("Propiedad 1");
@@ -134,6 +224,20 @@ public class RepositorioUsuarioTest {
         Usuario usuarioConFavoritos = session.get(Usuario.class, this.usuario.getId());
         assertThat(usuarioConFavoritos.getFavoritos(), hasItem(propiedad));
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queLanceCRUDPropiedadExcepcionCuandoPropiedadNoPuedeSerEncontrada() {
+        Long propiedadIdInexistente = 999L;
+
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            this.repositorioUsuarioImpl.agregarFavorito(this.usuario, propiedadIdInexistente);
+        });
+    }
+
+
 
     @Test
     @Transactional
@@ -150,6 +254,33 @@ public class RepositorioUsuarioTest {
         Usuario usuarioSinFavoritos = session.get(Usuario.class, this.usuario.getId());
         assertThat(usuarioSinFavoritos.getFavoritos(), not(hasItem(propiedad)));
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queLanceCRUDPropiedadExcepcionCuandoPropiedadNoPuedeSerEncontradaParaEliminar() {
+        Long propiedadIdInexistente = 999L;
+
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            this.repositorioUsuarioImpl.eliminarFavorito(this.usuario, propiedadIdInexistente);
+        });
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queLanceCRUDPropiedadExcepcionCuandoPropiedadNoEstaEnFavoritosParaEliminar() {
+        Propiedad propiedadNoEnFavoritos = new Propiedad();
+        propiedadNoEnFavoritos.setNombre("Propiedad No En Favoritos");
+        sessionFactory.getCurrentSession().save(propiedadNoEnFavoritos);
+
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            this.repositorioUsuarioImpl.eliminarFavorito(this.usuario, propiedadNoEnFavoritos.getId());
+        });
+    }
+
 
     @Test
     @Transactional
@@ -172,4 +303,31 @@ public class RepositorioUsuarioTest {
 
         assertThat(favoritos, hasItems(propiedad1, propiedad2));
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queLanceUsuarioNoIdentificadoExcepcionCuandoUsuarioNoEstaIdentificado() {
+        Usuario usuarioNoIdentificado = new Usuario();
+        usuarioNoIdentificado.setId(999L);
+
+        assertThrows(UsuarioNoIdentificadoExcepcion.class, () -> {
+            this.repositorioUsuarioImpl.cerrarSesion(usuarioNoIdentificado);
+        });
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queLanceCRUDPropiedadExcepcionCuandoUsuarioNoPuedeSerEncontrado() {
+        Usuario usuarioNoExistente = new Usuario();
+        usuarioNoExistente.setId(999L);
+
+        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            this.repositorioUsuarioImpl.listarFavoritos(usuarioNoExistente);
+        });
+    }
+
 }

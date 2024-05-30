@@ -80,6 +80,7 @@ public class ControladorPropiedad {
         return new ModelAndView("home", model);
     }
 
+
     @RequestMapping(path = "/filtro/ubicacion", method = RequestMethod.POST)
     public ModelAndView filtrarPropiedadesPorUbicacion(@RequestParam("ubicacion") String ubicacion, HttpSession session) {
         ModelMap model = new ModelMap();
