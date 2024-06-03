@@ -54,6 +54,7 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
                 propiedadAlmacenada.setSuperficie(propiedadEditada.getSuperficie());
                 propiedadAlmacenada.setPrecio(propiedadEditada.getPrecio());
                 propiedadAlmacenada.setUbicacion(propiedadEditada.getUbicacion());
+                propiedadAlmacenada.setAceptada(propiedadEditada.isAceptada());
 
                 session.saveOrUpdate(propiedadAlmacenada);
             } else {

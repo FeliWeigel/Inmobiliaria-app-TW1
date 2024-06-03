@@ -157,6 +157,64 @@ public class ControladorPropiedad {
         return new ModelAndView("propiedad", model);
     }
 
+
+    @RequestMapping(path = "/panel-admin", method = RequestMethod.GET)
+    public ModelAndView panelAdmin(HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null || !usuarioAutenticado.getRol().equals("ADMIN")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        try {
+            List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+            model.put("propiedades", propiedades);
+        } catch (Exception e) {
+            model.put("message", "Ha ocurrido un error inesperado");
+        }
+
+        return new ModelAndView("panelAdmin", model);
+    }
+
+    @RequestMapping(path = "/aceptar-propiedad", method = RequestMethod.POST)
+    public ModelAndView aceptarPropiedad(@RequestParam("id") Long propiedadId, HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null || !usuarioAutenticado.getRol().equals("ADMIN")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        try {
+            this.servicioPropiedad.aceptarPropiedad(propiedadId);
+        } catch (CRUDPropiedadExcepcion e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("redirect:/panel-admin", model);
+        }
+
+        return new ModelAndView("redirect:/panel-admin");
+    }
+
+    @RequestMapping(path = "/rechazar-propiedad", method = RequestMethod.POST)
+    public ModelAndView rechazarPropiedad(@RequestParam("id") Long propiedadId, HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null || !usuarioAutenticado.getRol().equals("ADMIN")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        try {
+            this.servicioPropiedad.rechazarPropiedad(propiedadId);
+        } catch (CRUDPropiedadExcepcion e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("redirect:/panel-admin", model);
+        }
+        return new ModelAndView("redirect:/panel-admin");
+    }
+
+
 }
 
 
