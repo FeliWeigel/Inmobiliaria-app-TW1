@@ -65,6 +65,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         if(usuarioAlmacenado == null){
             throw new CRUDPropiedadExcepcion("Error! El usuario no pudo ser encontrado.");
         }
+
         if(validarString.tieneNumeros(usuario.getNombre()) || validarString.tieneNumeros(usuario.getApellido())){
             throw new CredencialesInvalidasExcepcion();
         }

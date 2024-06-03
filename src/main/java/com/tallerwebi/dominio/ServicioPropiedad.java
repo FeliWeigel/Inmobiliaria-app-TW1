@@ -67,4 +67,24 @@ public class ServicioPropiedad {
         throw new CRUDPropiedadExcepcion("No se ha podido aplicar el filtro de ubicacion correctamente, revise los datos enviados.");
     }
 
+
+    public void aceptarPropiedad(Long idPropiedad) {
+        Propiedad propiedad = repositorioPropiedad.buscarPropiedad(idPropiedad);
+        if (propiedad != null) {
+            propiedad.setAceptada(true);
+            repositorioPropiedad.editarPropiedad(propiedad);
+        } else {
+            throw new CRUDPropiedadExcepcion("La propiedad con ID " + idPropiedad + " no existe.");
+        }
+    }
+
+
+    public void rechazarPropiedad(Long idPropiedad) {
+        if (idPropiedad != null) {
+            repositorioPropiedad.eliminarPropiedad(idPropiedad);
+        } else {
+            throw new CRUDPropiedadExcepcion("La propiedad con ID " + idPropiedad + " no existe.");
+        }
+    }
+
 }

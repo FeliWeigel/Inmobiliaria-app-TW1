@@ -1,0 +1,57 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.container {
+    margin: 20px auto;
+    width: 80%;
+}
+
+.propiedad-admin {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.propiedad-admin h3 {
+    margin-top: 0;
+}
+
+.btn-aceptar {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #5cb85c;
+    margin-right: 3em;
+}
+
+.btn-rechazar {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #d9534f;
+    margin-left: 3em;
+}
+
+
+
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
