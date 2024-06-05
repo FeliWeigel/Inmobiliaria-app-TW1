@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -254,6 +255,153 @@ public class ControladorPropiedadTest {
     }
 
 
+    @Test
+    public void queRedirijaAHomeSiUsuarioNoAutenticadoEnPanelAdmin() {
+        when(session.getAttribute("usuario")).thenReturn(null);
+
+        ModelAndView modelAndView = controladorPropiedad.panelAdmin(session);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+    }
+
+    @Test
+    public void queRedirijaAHomeSiUsuarioNoEsAdminEnPanelAdmin() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("USER");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        ModelAndView modelAndView = controladorPropiedad.panelAdmin(session);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+    }
+
+    @Test
+    public void queMuestrePanelAdminSiUsuarioEsAdmin() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("ADMIN");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        List<Propiedad> propiedades = new ArrayList<>();
+        propiedades.add(new Propiedad());
+        when(servicioPropiedad.listarPropiedades()).thenReturn(propiedades);
+
+        ModelAndView modelAndView = controladorPropiedad.panelAdmin(session);
+
+        assertThat(modelAndView.getViewName(), is("panelAdmin"));
+        assertThat(modelAndView.getModel().get("propiedades"), is(propiedades));
+    }
+
+    @Test
+    public void queMuestreMensajeDeErrorEnPanelAdminSiHayExcepcion() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("ADMIN");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        when(servicioPropiedad.listarPropiedades()).thenThrow(new RuntimeException("Error inesperado"));
+
+        ModelAndView modelAndView = controladorPropiedad.panelAdmin(session);
+
+        assertThat(modelAndView.getViewName(), is("panelAdmin"));
+        assertThat(modelAndView.getModel().get("message"), is("Ha ocurrido un error inesperado"));
+    }
+
+
+    @Test
+    public void queRedirijaAHomeSiUsuarioNoAutenticadoEnAceptarPropiedad() {
+        when(session.getAttribute("usuario")).thenReturn(null);
+
+        ModelAndView modelAndView = controladorPropiedad.aceptarPropiedad(1L, session);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+    }
+
+    @Test
+    public void queRedirijaAHomeSiUsuarioNoEsAdminEnAceptarPropiedad() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("USER");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        ModelAndView modelAndView = controladorPropiedad.aceptarPropiedad(1L, session);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+    }
+
+    @Test
+    public void queAceptePropiedadSiUsuarioEsAdmin() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("ADMIN");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        ModelAndView modelAndView = controladorPropiedad.aceptarPropiedad(1L, session);
+
+        verify(servicioPropiedad, times(1)).aceptarPropiedad(1L);
+        assertThat(modelAndView.getViewName(), is("redirect:/panel-admin"));
+    }
+
+    @Test
+    public void queMuestreErrorEnPanelAdminSiExcepcionEnAceptarPropiedad() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("ADMIN");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        doThrow(new CRUDPropiedadExcepcion("Error")).when(servicioPropiedad).aceptarPropiedad(1L);
+
+        ModelAndView modelAndView = controladorPropiedad.aceptarPropiedad(1L, session);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/panel-admin"));
+        assertThat(modelAndView.getModel().get("error"), is("Error"));
+    }
+
+
+    @Test
+    public void queRedirijaAHomeSiUsuarioNoAutenticadoEnRechazarPropiedad() {
+        when(session.getAttribute("usuario")).thenReturn(null);
+
+        ModelAndView modelAndView = controladorPropiedad.rechazarPropiedad(1L, session);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+    }
+
+    @Test
+    public void queRedirijaAHomeSiUsuarioNoEsAdminEnRechazarPropiedad() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("USER");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        ModelAndView modelAndView = controladorPropiedad.rechazarPropiedad(1L, session);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+    }
+
+    @Test
+    public void queRechacePropiedadSiUsuarioEsAdmin() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("ADMIN");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        ModelAndView modelAndView = controladorPropiedad.rechazarPropiedad(1L, session);
+
+        verify(servicioPropiedad, times(1)).rechazarPropiedad(1L);
+        assertThat(modelAndView.getViewName(), is("redirect:/panel-admin"));
+    }
+
+    @Test
+    public void queMuestreErrorEnPanelAdminSiExcepcionEnRechazarPropiedad() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("ADMIN");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        doThrow(new CRUDPropiedadExcepcion("Error")).when(servicioPropiedad).rechazarPropiedad(1L);
+
+        ModelAndView modelAndView = controladorPropiedad.rechazarPropiedad(1L, session);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/panel-admin"));
+        assertThat(modelAndView.getModel().get("error"), is("Error"));
+    }
+
+
+
+
 
 
 
@@ -273,7 +421,6 @@ public class ControladorPropiedadTest {
 
         return propiedades;
     }
-
 
 }
 
