@@ -107,4 +107,21 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
         final Session session = sessionFactory.getCurrentSession();
         return session.createQuery("FROM Propiedad").getResultList();
     }
+
+    @Override
+    public List<Propiedad> listarPropiedadesAceptadas() {
+        final Session session = sessionFactory.getCurrentSession();
+        String query = "FROM Propiedad WHERE aceptada = true";
+        return session.createQuery(query, Propiedad.class).getResultList();
+    }
+
+    @Override
+    public List<Propiedad> listarPropiedadesPendientes() {
+        final Session session = sessionFactory.getCurrentSession();
+        String query = "FROM Propiedad WHERE aceptada = false";
+        return session.createQuery(query, Propiedad.class).getResultList();
+    }
+
+
+
 }

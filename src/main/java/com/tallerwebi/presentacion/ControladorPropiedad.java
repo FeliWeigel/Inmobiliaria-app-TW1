@@ -33,7 +33,7 @@ public class ControladorPropiedad {
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
 
         try {
-            List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+            List<Propiedad> propiedades = servicioPropiedad.listarPropiedadesAceptadas();
             model.put("propiedades", propiedades);
         } catch (Exception e){
             model.put("message", "Ha Ocurrido un Error Inesperado");
@@ -158,8 +158,8 @@ public class ControladorPropiedad {
     }
 
 
-    @RequestMapping(path = "/panel-admin", method = RequestMethod.GET)
-    public ModelAndView panelAdmin(HttpSession session) {
+    @RequestMapping(path = "/panel-admin/propiedades", method = RequestMethod.GET)
+    public ModelAndView panelAdminPropiedades(HttpSession session) {
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
 
@@ -168,14 +168,17 @@ public class ControladorPropiedad {
         }
 
         try {
-            List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
-            model.put("propiedades", propiedades);
+            List<Propiedad> propiedadesPendientes = servicioPropiedad.listarPropiedadesPendientes();
+            List<Propiedad> propiedadesAceptadas = servicioPropiedad.listarPropiedadesAceptadas();
+            model.put("propiedadesPendientes", propiedadesPendientes);
+            model.put("propiedadesAceptadas", propiedadesAceptadas);
         } catch (Exception e) {
             model.put("message", "Ha ocurrido un error inesperado");
         }
 
-        return new ModelAndView("panelAdmin", model);
+        return new ModelAndView("panelAdminPropiedades", model);
     }
+
 
     @RequestMapping(path = "/aceptar-propiedad", method = RequestMethod.POST)
     public ModelAndView aceptarPropiedad(@RequestParam("id") Long propiedadId, HttpSession session) {
@@ -190,11 +193,12 @@ public class ControladorPropiedad {
             this.servicioPropiedad.aceptarPropiedad(propiedadId);
         } catch (CRUDPropiedadExcepcion e) {
             model.put("error", e.getMessage());
-            return new ModelAndView("redirect:/panel-admin", model);
+            return new ModelAndView("redirect:/panel-admin/propiedades", model);
         }
 
-        return new ModelAndView("redirect:/panel-admin");
+        return new ModelAndView("redirect:/panel-admin/propiedades");
     }
+
 
     @RequestMapping(path = "/rechazar-propiedad", method = RequestMethod.POST)
     public ModelAndView rechazarPropiedad(@RequestParam("id") Long propiedadId, HttpSession session) {
@@ -209,10 +213,75 @@ public class ControladorPropiedad {
             this.servicioPropiedad.rechazarPropiedad(propiedadId);
         } catch (CRUDPropiedadExcepcion e) {
             model.put("error", e.getMessage());
-            return new ModelAndView("redirect:/panel-admin", model);
+            return new ModelAndView("redirect:/panel-admin/propiedades", model);
         }
-        return new ModelAndView("redirect:/panel-admin");
+        return new ModelAndView("redirect:/panel-admin/propiedades");
     }
+
+
+
+
+    @RequestMapping(path = "/panel-admin/usuarios", method = RequestMethod.GET)
+    public ModelAndView panelAdminUsuarios(HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null || !usuarioAutenticado.getRol().equals("ADMIN")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        try {
+            List<Usuario> usuariosBloqueados = repositorioUsuario.listarUsuariosBloqueados();
+            List<Usuario> usuariosDesbloqueados = repositorioUsuario.listarUsuariosDesbloqueados();
+            model.put("usuariosBloqueados", usuariosBloqueados);
+            model.put("usuariosDesbloqueados", usuariosDesbloqueados);
+        } catch (Exception e) {
+            model.put("message", "Ha ocurrido un error inesperado");
+        }
+
+        return new ModelAndView("panelAdminUsuarios", model);
+    }
+
+
+    @RequestMapping(path = "/bloquear-usuario", method = RequestMethod.POST)
+    public ModelAndView bloquearUsuario(@RequestParam("id") Long usuarioId, HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null || !usuarioAutenticado.getRol().equals("ADMIN")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        try {
+            this.repositorioUsuario.bloquearUsuario(usuarioId);
+        } catch (CRUDPropiedadExcepcion e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("redirect:/panel-admin/usuarios", model);
+        }
+
+        return new ModelAndView("redirect:/panel-admin/usuarios");
+    }
+
+
+    @RequestMapping(path = "/desbloquear-usuario", method = RequestMethod.POST)
+    public ModelAndView desbloquearUsuario(@RequestParam("id") Long usuarioId, HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null || !usuarioAutenticado.getRol().equals("ADMIN")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        try {
+            this.repositorioUsuario.desbloquearUsuario(usuarioId);
+        } catch (CRUDPropiedadExcepcion e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("redirect:/panel-admin/usuarios", model);
+        }
+        return new ModelAndView("redirect:/panel-admin/usuarios");
+    }
+
+
 
 
 }

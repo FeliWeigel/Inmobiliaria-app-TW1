@@ -64,14 +64,19 @@ public class ControladorLogin {
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
-            request.getSession().setAttribute("usuario", usuarioBuscado);
-            request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
-            return new ModelAndView("redirect:/home");
+            if (usuarioBuscado.getActivo()) {
+                request.getSession().setAttribute("usuario", usuarioBuscado);
+                request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
+                return new ModelAndView("redirect:/home");
+            } else {
+                model.put("error", "El usuario se encuentra bloqueado");
+            }
         } else {
             model.put("error", "Usuario o clave incorrecta");
         }
         return new ModelAndView("login", model);
     }
+
 
     @RequestMapping(path = "/registrarse", method = RequestMethod.POST)
     public ModelAndView registrarse(@ModelAttribute("usuario") Usuario usuario) {

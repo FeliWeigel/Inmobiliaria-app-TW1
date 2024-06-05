@@ -1,13 +1,10 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
-import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +20,7 @@ public class ServicioPropiedadTest {
     private ServicioPropiedad servicioPropiedad;
 
     List<Propiedad> propiedadesMock;
+    List<Propiedad> propiedadesMockAceptadas;
     private SubirImagenServicio imagenServicio;
 
     @BeforeEach
@@ -35,6 +33,7 @@ public class ServicioPropiedadTest {
         propiedadesMock.add(new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1"));
         propiedadesMock.add(new Propiedad(2L, "Casa 2", 3, 2, 5, 250.0, 180000.0, "Ubicacion 2"));
         propiedadesMock.add(new Propiedad(3L, "Casa 3", 1, 1, 2, 120.0, 90000.0, "Ubicacion 3"));
+
     }
 
 
@@ -79,6 +78,28 @@ public class ServicioPropiedadTest {
 
         assertThat(propiedadesListadas, equalTo(propiedadesMock));
     }
+
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesListadasPendientes() {
+
+        when(this.repositorioPropiedad.listarPropiedadesPendientes()).thenReturn(propiedadesMock);
+        List<Propiedad> propiedadesListadas = this.servicioPropiedad.listarPropiedadesPendientes();
+
+        assertThat(propiedadesListadas, equalTo(propiedadesMock));
+    }
+
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesListadasAceptadas() {
+
+        when(this.repositorioPropiedad.listarPropiedadesAceptadas()).thenReturn(propiedadesMock);
+        List<Propiedad> propiedadesListadas = this.servicioPropiedad.listarPropiedadesAceptadas();
+
+        assertThat(propiedadesListadas, equalTo(propiedadesMock));
+    }
+
+
 
 
     @Test
@@ -206,14 +227,14 @@ public class ServicioPropiedadTest {
     public void queNoSePuedaRechazarUnaPropiedadInexistente() {
         Long id = 1L;
 
-        doThrow(new CRUDPropiedadExcepcion("La propiedad con ID " + id + " no existe."))
+        doThrow(new CRUDPropiedadExcepcion("La propiedad no existe."))
                 .when(repositorioPropiedad).eliminarPropiedad(id);
 
         CRUDPropiedadExcepcion exception = assertThrows(CRUDPropiedadExcepcion.class, () -> {
             servicioPropiedad.rechazarPropiedad(id);
         });
 
-        assertThat(exception.getMessage(), containsString("La propiedad con ID " + id + " no existe."));
+        assertThat(exception.getMessage(), containsString("La propiedad no existe."));
         verify(repositorioPropiedad, times(1)).eliminarPropiedad(id);
     }
 

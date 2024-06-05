@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
@@ -176,6 +177,38 @@ public class RepositorioPropiedadTest {
 
         assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesAlmacenadas));
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedanListarPropiedadesAceptadas() {
+        Propiedad propiedad1 = new Propiedad();
+        propiedad1.setAceptada(true);
+        Propiedad propiedad2 = new Propiedad();
+        this.sessionFactory.getCurrentSession().save(propiedad1);
+        this.sessionFactory.getCurrentSession().save(propiedad2);
+
+        List<Propiedad> propiedadesAceptadas = this.repositorioPropiedad.listarPropiedadesAceptadas();
+
+        assertThat(propiedadesAceptadas.size(), equalTo(1));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedanListarPropiedadesPendientes() {
+        Propiedad propiedad1 = new Propiedad();
+        Propiedad propiedad2 = new Propiedad();
+        this.sessionFactory.getCurrentSession().save(propiedad1);
+        this.sessionFactory.getCurrentSession().save(propiedad2);
+
+        List<Propiedad> propiedadesPendientes = this.repositorioPropiedad.listarPropiedadesPendientes();
+
+        assertThat(propiedadesPendientes.size(), equalTo(2));
+    }
+
+
 
 
     private Integer contarPropiedadesEnLaBaseDeDatos(){

@@ -3,12 +3,10 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
-import com.tallerwebi.infraestructura.ServicioLoginImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.Arrays;
@@ -18,7 +16,6 @@ import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.mockito.Mockito.*;
 
 public class ControladorUsuarioTest {
@@ -42,7 +39,7 @@ public class ControladorUsuarioTest {
 		this.propiedades = Arrays.asList(new Propiedad(), new Propiedad());
 
 		when(this.session.getAttribute("usuario")).thenReturn(this.usuario);
-		when(this.servicioPropiedad.listarPropiedades()).thenReturn(this.propiedades);
+		when(this.servicioPropiedad.listarPropiedadesAceptadas()).thenReturn(this.propiedades);
 	}
 
 

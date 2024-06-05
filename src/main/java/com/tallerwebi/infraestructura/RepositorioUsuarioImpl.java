@@ -9,11 +9,13 @@ import com.tallerwebi.dominio.utilidad.ValidarString;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -149,6 +151,8 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         throw new CRUDPropiedadExcepcion("Error! El usuario no ha sido encontrado.");
     }
 
+
+
     @Override
     public void cerrarSesion(Usuario usuario) throws UsuarioNoIdentificadoExcepcion {
         final Session session = sessionFactory.getCurrentSession();
@@ -159,6 +163,47 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
             throw new UsuarioNoIdentificadoExcepcion();
         }
     }
+
+
+    @Override
+    public void bloquearUsuario(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        Usuario usuario = session.get(Usuario.class, id);
+        if (usuario != null) {
+            usuario.setActivo(false);
+            session.update(usuario);
+        }
+    }
+
+
+    @Override
+    public void desbloquearUsuario(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        Usuario usuario = session.get(Usuario.class, id);
+        if (usuario != null) {
+            usuario.setActivo(true);
+            session.update(usuario);
+        }
+    }
+
+
+    @Override
+    public List<Usuario> listarUsuariosDesbloqueados() {
+        Session session = sessionFactory.getCurrentSession();
+        Query<Usuario> query = session.createQuery("FROM Usuario WHERE activo = true", Usuario.class);
+        return query.getResultList();
+    }
+
+
+    @Override
+    public List<Usuario> listarUsuariosBloqueados() {
+        Session session = sessionFactory.getCurrentSession();
+        Query<Usuario> query = session.createQuery("FROM Usuario WHERE activo = false", Usuario.class);
+        return query.getResultList();
+    }
+
+
+
 
 
     private Boolean validarPassword(String password){
@@ -183,6 +228,5 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
         return esMayuscula && esNumero && esCaracterEspecial;
     }
-
 
 }

@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,8 +28,7 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateTestInfraestructuraConfig.class})
@@ -329,5 +329,62 @@ public class RepositorioUsuarioTest {
             this.repositorioUsuarioImpl.listarFavoritos(usuarioNoExistente);
         });
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queListeUsuariosDesbloqueados() {
+        Usuario usuario1 = new Usuario();
+        usuario1.setActivo(true);
+        sessionFactory.getCurrentSession().save(usuario1);
+
+        List<Usuario> usuariosDesbloqueados = repositorioUsuarioImpl.listarUsuariosDesbloqueados();
+
+        assertThat(usuariosDesbloqueados, contains(usuario1));
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBloquearUnUsuarioExistente() {
+        Usuario usuario = new Usuario();
+        usuario.setActivo(true);
+        sessionFactory.getCurrentSession().save(usuario);
+
+        repositorioUsuarioImpl.bloquearUsuario(usuario.getId());
+
+        Usuario usuarioBloqueado = sessionFactory.getCurrentSession().get(Usuario.class, usuario.getId());
+        assertThat(usuarioBloqueado.getActivo(), is(false));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaDesbloquearUnUsuarioExistente() {
+        Usuario usuario = new Usuario();
+        usuario.setActivo(false);
+        sessionFactory.getCurrentSession().save(usuario);
+
+        repositorioUsuarioImpl.desbloquearUsuario(usuario.getId());
+
+        Usuario usuarioDesbloqueado = sessionFactory.getCurrentSession().get(Usuario.class, usuario.getId());
+        assertThat(usuarioDesbloqueado.getActivo(), is(true));
+    }
+
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queListeUsuariosBloqueados() {
+        this.usuario.setActivo(false);
+
+        List<Usuario> usuariosBloqueados = this.repositorioUsuarioImpl.listarUsuariosBloqueados();
+
+        assertThat(usuariosBloqueados.size(), is(1) );
+    }
+
 
 }

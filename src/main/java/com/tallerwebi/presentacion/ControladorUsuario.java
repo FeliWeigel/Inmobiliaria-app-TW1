@@ -2,7 +2,6 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.*;
-import org.dom4j.rule.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -58,7 +57,7 @@ public class ControladorUsuario {
     public ModelAndView agregarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-        List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+        List<Propiedad> propiedades = servicioPropiedad.listarPropiedadesAceptadas();
 
         if (usuarioAutenticado == null){
             return new ModelAndView("redirect:/login");
@@ -87,7 +86,7 @@ public class ControladorUsuario {
     public ModelAndView eliminarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-        List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+        List<Propiedad> propiedades = servicioPropiedad.listarPropiedadesAceptadas();
 
         if (usuarioAutenticado == null){
             return new ModelAndView("redirect:/login");

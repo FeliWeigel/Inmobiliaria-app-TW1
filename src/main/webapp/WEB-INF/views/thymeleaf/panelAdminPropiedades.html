@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador</title>
+
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/panel-admin-propiedades.css}">
+
+    <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+    <a class="button-logo" th:href="@{/home}">
+        <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+    </a>
+    <nav>
+        <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
+            <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
+        </a>
+        <a th:href="@{/favoritos}">
+            <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
+        </a>
+        <a href="#" th:href="@{/perfil}">
+            <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
+        </a>
+    </nav>
+</header>
+
+<div class="admin-links">
+    <a th:href="@{/panel-admin/propiedades}">Propiedades</a>
+    <a th:href="@{/panel-admin/usuarios}">Usuarios</a>
+</div>
+
+<h1>Panel de Administrador - Propiedades</h1>
+
+<div class="container-wrapper">
+    <div class="container">
+        <h2>Propiedades Pendientes</h2>
+        <div th:each="propiedad : ${propiedadesPendientes}">
+            <div class="propiedad-admin">
+                <h3 th:text="${propiedad.nombre}"></h3>
+                <p th:text="'Ubicación: ' + ${propiedad.ubicacion}"></p>
+                <p th:text="'Superficie: ' + ${propiedad.superficie} + ' (mt2)'"></p>
+                <p th:text="'Pisos: ' + ${propiedad.pisos}"></p>
+                <p th:text="'Baños: ' + ${propiedad.banios}"></p>
+                <p th:text="'Habitaciones: ' + ${propiedad.habitaciones}"></p>
+                <p th:text="'Precio: $' + ${propiedad.precio} + ' (por noche)'"></p>
+
+                <div class="form-container">
+                    <form action="#" th:action="@{/aceptar-propiedad}" method="post">
+                        <input type="hidden" name="id" th:value="${propiedad.id}" />
+                        <button type="submit" class="btn-aceptar">Aceptar</button>
+                    </form>
+
+                    <form action="#" th:action="@{/rechazar-propiedad}" method="post">
+                        <input type="hidden" name="id" th:value="${propiedad.id}" />
+                        <button type="submit" class="btn-rechazar">Rechazar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Propiedades Activas</h2>
+        <div th:each="propiedad : ${propiedadesAceptadas}">
+            <div class="propiedad-admin">
+                <h3 th:text="${propiedad.nombre}"></h3>
+                <p th:text="'Ubicación: ' + ${propiedad.ubicacion}"></p>
+                <p th:text="'Superficie: ' + ${propiedad.superficie} + ' (mt2)'"></p>
+                <p th:text="'Pisos: ' + ${propiedad.pisos}"></p>
+                <p th:text="'Baños: ' + ${propiedad.banios}"></p>
+                <p th:text="'Habitaciones: ' + ${propiedad.habitaciones}"></p>
+                <p th:text="'Precio: $' + ${propiedad.precio} + ' (por noche)'"></p>
+
+                <div class="form-container">
+                    <form action="#" th:action="@{/modificar-propiedad}" method="post">
+                        <input type="hidden" name="id" th:value="${propiedad.id}" />
+                        <button type="submit" class="btn-modificar">Modificar</button>
+                    </form>
+
+                    <form action="#" th:action="@{/eliminar-propiedad}" method="post">
+                        <input type="hidden" name="id" th:value="${propiedad.id}" />
+                        <button type="submit" class="btn-eliminar">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
