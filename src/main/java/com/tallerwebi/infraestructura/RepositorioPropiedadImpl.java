@@ -55,7 +55,7 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
                 propiedadAlmacenada.setPrecio(propiedadEditada.getPrecio());
                 propiedadAlmacenada.setUbicacion(propiedadEditada.getUbicacion());
                 propiedadAlmacenada.setAceptada(propiedadEditada.isAceptada());
-
+                propiedadAlmacenada.setRutaImagen(propiedadEditada.getRutaImagen());
                 session.saveOrUpdate(propiedadAlmacenada);
             } else {
                 throw new CRUDPropiedadExcepcion("La propiedad no existe en la base de datos.");

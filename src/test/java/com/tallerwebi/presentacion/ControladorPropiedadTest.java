@@ -37,11 +37,11 @@ public class ControladorPropiedadTest {
 
 
     @Test
-    public void queSeMuestreElHome(){
+    public void queSeMuestreElListadoDePropiedades(){
 
-        ModelAndView mav = this.controladorPropiedad.vistaHome(this.session);
+        ModelAndView mav = this.controladorPropiedad.vistaListadoPropiedades(this.session);
 
-        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
     }
 
 
@@ -50,7 +50,7 @@ public class ControladorPropiedadTest {
 
         when(this.servicioPropiedad.listarPropiedades()).thenThrow(RuntimeException.class);
 
-        ModelAndView mav = this.controladorPropiedad.vistaHome(this.session);
+        ModelAndView mav = this.controladorPropiedad.vistaListadoPropiedades(this.session);
 
         assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
     }
@@ -62,10 +62,10 @@ public class ControladorPropiedadTest {
         List<Propiedad> propiedades = crearPropiedades();
 
         when(servicioPropiedad.listarPropiedades()).thenReturn(propiedades);
-        ModelAndView mav = this.controladorPropiedad.vistaHome(this.session);
+        ModelAndView mav = this.controladorPropiedad.vistaListadoPropiedades(this.session);
         List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
 
-        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
         assertThat(propiedaesDevueltas.size(), equalTo(3));
     }
 
@@ -145,7 +145,7 @@ public class ControladorPropiedadTest {
         ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorPrecio(1000.0, 25000.0, this.session);
         List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
 
-        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
         assertThat(propiedaesDevueltas.size(), equalTo(3));
     }
 
@@ -156,7 +156,7 @@ public class ControladorPropiedadTest {
 
         ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorPrecio(1000.0, 25000.0, this.session);
 
-        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
         assertThat(mav.getModel().get("message"), equalTo("Error al filtrar propiedades por precio"));
     }
 
@@ -167,7 +167,7 @@ public class ControladorPropiedadTest {
 
         ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorPrecio(1000.0, 25000.0, this.session);
 
-        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
         assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
     }
 
@@ -181,7 +181,7 @@ public class ControladorPropiedadTest {
         ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorUbicacion("Ubicacion", this.session);
         List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
 
-        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
         assertThat(propiedaesDevueltas.size(), equalTo(3));
     }
 
@@ -192,7 +192,7 @@ public class ControladorPropiedadTest {
 
         ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorUbicacion("Ciudad", this.session);
 
-        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
         assertThat(mav.getModel().get("message"), equalTo("Error al filtrar propiedades por ubicación"));
     }
 
@@ -203,7 +203,7 @@ public class ControladorPropiedadTest {
 
         ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorUbicacion("Ciudad", this.session);
 
-        assertThat(mav.getViewName(), equalTo("home"));
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
         assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
     }
 

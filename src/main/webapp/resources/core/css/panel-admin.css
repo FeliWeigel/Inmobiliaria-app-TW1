@@ -35,6 +35,7 @@ h1 {
     cursor: pointer;
     background-color: #5cb85c;
     margin-right: 3em;
+    transition: .4s;
 }
 
 .btn-rechazar {
@@ -44,10 +45,16 @@ h1 {
     cursor: pointer;
     background-color: #d9534f;
     margin-left: 3em;
+    transition: .4s;
 }
 
+.btn-aceptar:hover {
+    background-color: #19ea19;
+}
 
-
+.btn-rechazar:hover {
+    background-color: #ea1b15;
+}
 
 .form-container {
     display: flex;

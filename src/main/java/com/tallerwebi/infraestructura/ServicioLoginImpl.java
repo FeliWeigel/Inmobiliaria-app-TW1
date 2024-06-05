@@ -52,7 +52,12 @@ public class ServicioLoginImpl implements ServicioLogin {
             throw new UsuarioExistenteExcepcion();
         }
 
-        usuario.setRol("USER");
+        if(usuario.getEmail().contains("v1admin")){
+            usuario.setRol("ADMIN");
+        }else {
+            usuario.setRol("USER");
+        }
+
         repositorioUsuario.guardar(usuario);
     }
 

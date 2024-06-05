@@ -106,7 +106,7 @@ public class ControladorUsuarioTest {
 
 		ModelAndView modelAndView = this.controladorUsuario.agregarFavorito(propiedadId, this.session);
 
-		assertThat(modelAndView.getViewName(), is("home"));
+		assertThat(modelAndView.getViewName(), is("lista-propiedades"));
 		assertThat(modelAndView.getModel().get("success"), is("La propiedad ha sido agregada a tu lista de favoritos correctamente!"));
 		assertThat(modelAndView.getModel().get("propiedades"), is(this.propiedades));
 		verify(this.repositorioUsuario).agregarFavorito(this.usuario, propiedadId);
@@ -120,7 +120,7 @@ public class ControladorUsuarioTest {
 
 		ModelAndView modelAndView = this.controladorUsuario.agregarFavorito(propiedadId, this.session);
 
-		assertThat(modelAndView.getViewName(), is("home"));
+		assertThat(modelAndView.getViewName(), is("lista-propiedades"));
 		assertThat(modelAndView.getModel().get("error"), is("Error! La propiedad no pudo ser encontrada."));
 		assertThat(modelAndView.getModel().get("propiedades"), is(this.propiedades));
 		verify(this.repositorioUsuario).agregarFavorito(this.usuario, propiedadId);
@@ -133,7 +133,7 @@ public class ControladorUsuarioTest {
 
 		ModelAndView modelAndView = this.controladorUsuario.eliminarFavorito(propiedadId, this.session);
 
-		assertThat(modelAndView.getViewName(), is("home"));
+		assertThat(modelAndView.getViewName(), is("lista-propiedades"));
 		assertThat(modelAndView.getModel().get("success"), is("La propiedad ha sido eliminada de tu lista de favoritos correctamente."));
 		verify(this.repositorioUsuario).eliminarFavorito(this.usuario, propiedadId);
 	}
@@ -147,7 +147,7 @@ public class ControladorUsuarioTest {
 
 		ModelAndView modelAndView = this.controladorUsuario.eliminarFavorito(propiedadId, this.session);
 
-		assertThat(modelAndView.getViewName(), is("home"));
+		assertThat(modelAndView.getViewName(), is("lista-propiedades"));
 		assertThat(modelAndView.getModel().get("error"), is("Error! La propiedad no pudo ser encontrada."));
 		verify(this.repositorioUsuario).eliminarFavorito(this.usuario, propiedadId);
 	}
