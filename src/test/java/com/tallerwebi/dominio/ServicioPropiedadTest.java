@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ServicioPropiedadTest {
     private RepositorioPropiedad repositorioPropiedad;
@@ -150,4 +150,71 @@ public class ServicioPropiedadTest {
             this.servicioPropiedad.agregarPropiedad(propiedad, imageMock);
         });
     }
+
+
+    @Test
+    public void queSePuedaAceptarUnaPropiedadExistente() {
+        Long id = 1L;
+        Propiedad propiedad = new Propiedad();
+        propiedad.setId(id);
+
+        when(repositorioPropiedad.buscarPropiedad(id)).thenReturn(propiedad);
+        servicioPropiedad.aceptarPropiedad(id);
+
+        Integer result = 0;
+        boolean value = propiedad.isAceptada();
+        if (value) {
+            result = 1;
+        }
+
+        verify(repositorioPropiedad, times(1)).buscarPropiedad(id);
+        verify(repositorioPropiedad, times(1)).editarPropiedad(propiedad);
+        assertThat(result, equalTo(1));
+
+    }
+
+
+    @Test
+    public void queNoSePuedaAceptarUnaPropiedadInexistente() {
+        Long id = 1L;
+
+        when(repositorioPropiedad.buscarPropiedad(id)).thenReturn(null);
+
+        CRUDPropiedadExcepcion exception = assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            servicioPropiedad.aceptarPropiedad(id);
+        });
+
+        assertThat(exception.getMessage(), containsString("La propiedad con ID " + id + " no existe."));
+        verify(repositorioPropiedad, times(1)).buscarPropiedad(id);
+        verify(repositorioPropiedad, never()).editarPropiedad(any());
+    }
+
+
+    @Test
+    public void queSePuedaRechazarUnaPropiedadExistente() {
+        Long id = 1L;
+
+        when(repositorioPropiedad.buscarPropiedad(id)).thenReturn(new Propiedad());
+
+        servicioPropiedad.rechazarPropiedad(id);
+
+        verify(repositorioPropiedad, times(1)).eliminarPropiedad(id);
+    }
+
+
+    @Test
+    public void queNoSePuedaRechazarUnaPropiedadInexistente() {
+        Long id = 1L;
+
+        doThrow(new CRUDPropiedadExcepcion("La propiedad con ID " + id + " no existe."))
+                .when(repositorioPropiedad).eliminarPropiedad(id);
+
+        CRUDPropiedadExcepcion exception = assertThrows(CRUDPropiedadExcepcion.class, () -> {
+            servicioPropiedad.rechazarPropiedad(id);
+        });
+
+        assertThat(exception.getMessage(), containsString("La propiedad con ID " + id + " no existe."));
+        verify(repositorioPropiedad, times(1)).eliminarPropiedad(id);
+    }
+
 }

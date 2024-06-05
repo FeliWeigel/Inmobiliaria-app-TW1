@@ -23,6 +23,7 @@ public class Propiedad {
     private EstadoPropiedad estado;
     private String ubicacion;
     private String rutaImagen;
+    private Boolean aceptada; // Nuevo atributo
 
     @ManyToMany(mappedBy = "favoritos")
     private Set<Usuario> usuariosFavoritos = new HashSet<>();
@@ -36,9 +37,11 @@ public class Propiedad {
         this.superficie = superficie;
         this.precio = precio;
         this.ubicacion = ubicacion;
+        this.aceptada = false;
     }
 
     public Propiedad() {
+        this.aceptada = false;
     }
 
     public Long getId() {
@@ -63,8 +66,8 @@ public class Propiedad {
     public Integer getBanios() {
         return banios;
     }
-    public void setBanios(Integer baños) {
-        this.banios = baños;
+    public void setBanios(Integer banios) {
+        this.banios = banios;
     }
     public Integer getHabitaciones() {
         return habitaciones;
@@ -102,6 +105,15 @@ public class Propiedad {
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
     }
+
+    public boolean isAceptada() {
+        return aceptada;
+    }
+
+    public void setAceptada(Boolean aceptada) {
+        this.aceptada = aceptada;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
