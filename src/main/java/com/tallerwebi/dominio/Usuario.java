@@ -18,7 +18,7 @@ public class Usuario {
     private String rol;
     private Boolean activo = false;
 
-    @ManyToMany (fetch = FetchType.EAGER)
+    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "usuario_favoritos",
             joinColumns = @JoinColumn(name = "usuario_id"),

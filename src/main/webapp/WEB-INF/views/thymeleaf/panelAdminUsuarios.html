@@ -47,7 +47,7 @@
 
 
                 <div class="form-container">
-                    <form action="#" th:action="@{/desbloquear-usuario}" method="post">
+                    <form action="#" th:action="@{/panel-admin/desbloquear-usuario}" method="post">
                         <input type="hidden" name="id" th:value="${usuario.id}" />
                         <button type="submit" class="btn-desbloquear">Desbloquear</button>
                     </form>
@@ -65,7 +65,7 @@
                 <p th:text="'Fecha de Nacimiento: ' + ${usuario.fechaNacimiento}"></p>
 
                 <div class="form-container">
-                    <form action="#" th:action="@{/bloquear-usuario}" method="post">
+                    <form action="#" th:action="@{/panel-admin/bloquear-usuario}" method="post">
                         <input type="hidden" name="id" th:value="${usuario.id}" />
                         <button type="submit" class="btn-bloquear">Bloquear</button>
                     </form>

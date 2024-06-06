@@ -249,7 +249,7 @@ public class ControladorPropiedad {
     }
 
 
-    @RequestMapping(path = "/bloquear-usuario", method = RequestMethod.POST)
+    @RequestMapping(path = "/panel-admin/bloquear-usuario", method = RequestMethod.POST)
     public ModelAndView bloquearUsuario(@RequestParam("id") Long usuarioId, HttpSession session) {
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
@@ -269,7 +269,7 @@ public class ControladorPropiedad {
     }
 
 
-    @RequestMapping(path = "/desbloquear-usuario", method = RequestMethod.POST)
+    @RequestMapping(path = "/panel-admin/desbloquear-usuario", method = RequestMethod.POST)
     public ModelAndView desbloquearUsuario(@RequestParam("id") Long usuarioId, HttpSession session) {
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");

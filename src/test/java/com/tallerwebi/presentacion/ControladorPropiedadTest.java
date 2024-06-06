@@ -63,7 +63,7 @@ public class ControladorPropiedadTest {
 
         List<Propiedad> propiedades = crearPropiedades();
 
-        when(servicioPropiedad.listarPropiedades()).thenReturn(propiedades);
+        when(servicioPropiedad.listarPropiedadesAceptadas()).thenReturn(propiedades);
         ModelAndView mav = this.controladorPropiedad.vistaListadoPropiedades(this.session);
         List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
 

@@ -50,12 +50,12 @@
                 <p th:text="'Precio: $' + ${propiedad.precio} + ' (por noche)'"></p>
 
                 <div class="form-container">
-                    <form action="#" th:action="@{/aceptar-propiedad}" method="post">
+                    <form action="#" th:action="@{/panel-admin/aceptar-propiedad}" method="post">
                         <input type="hidden" name="id" th:value="${propiedad.id}" />
                         <button type="submit" class="btn-aceptar">Aceptar</button>
                     </form>
 
-                    <form action="#" th:action="@{/rechazar-propiedad}" method="post">
+                    <form action="#" th:action="@{/panel-admin/rechazar-propiedad}" method="post">
                         <input type="hidden" name="id" th:value="${propiedad.id}" />
                         <button type="submit" class="btn-rechazar">Rechazar</button>
                     </form>
@@ -82,7 +82,7 @@
                         <button type="submit" class="btn-modificar">Modificar</button>
                     </form>
 
-                    <form action="#" th:action="@{/eliminar-propiedad}" method="post">
+                    <form action="#" th:action="@{/panel-admin/rechazar-propiedad}" method="post">
                         <input type="hidden" name="id" th:value="${propiedad.id}" />
                         <button type="submit" class="btn-eliminar">Eliminar</button>
                     </form>
