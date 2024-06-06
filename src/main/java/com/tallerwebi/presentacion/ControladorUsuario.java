@@ -78,7 +78,7 @@ public class ControladorUsuario {
         }
 
         model.put("propiedades", propiedades);
-        return new ModelAndView("home", model);
+        return new ModelAndView("lista-propiedades", model);
     }
 
 
@@ -107,7 +107,7 @@ public class ControladorUsuario {
         }
 
         model.put("propiedades", propiedades);
-        return new ModelAndView("home", model);
+        return new ModelAndView("lista-propiedades", model);
     }
 
 

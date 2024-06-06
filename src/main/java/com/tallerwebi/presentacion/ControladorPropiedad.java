@@ -28,7 +28,13 @@ public class ControladorPropiedad {
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView vistaHome(HttpSession session) {
+    public ModelAndView vistaHome() {
+        ModelMap model = new ModelMap();
+        return new ModelAndView("home", model);
+    }
+
+    @RequestMapping(path = "/lista-propiedades", method = RequestMethod.GET)
+    public ModelAndView vistaListadoPropiedades(HttpSession session) {
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
 
@@ -48,7 +54,7 @@ public class ControladorPropiedad {
             }
         }
 
-        return new ModelAndView("home", model);
+        return new ModelAndView("lista-propiedades", model);
     }
 
     @RequestMapping(path = "/filtro/precio", method = RequestMethod.POST)
@@ -77,7 +83,7 @@ public class ControladorPropiedad {
             }
         }
 
-        return new ModelAndView("home", model);
+        return new ModelAndView("lista-propiedades", model);
     }
 
 
@@ -105,7 +111,7 @@ public class ControladorPropiedad {
             }
         }
 
-        return new ModelAndView("home", model);
+        return new ModelAndView("lista-propiedades", model);
     }
 
 
@@ -180,7 +186,7 @@ public class ControladorPropiedad {
     }
 
 
-    @RequestMapping(path = "/aceptar-propiedad", method = RequestMethod.POST)
+    @RequestMapping(path = "/panel-admin/aceptar-propiedad", method = RequestMethod.POST)
     public ModelAndView aceptarPropiedad(@RequestParam("id") Long propiedadId, HttpSession session) {
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
@@ -200,7 +206,7 @@ public class ControladorPropiedad {
     }
 
 
-    @RequestMapping(path = "/rechazar-propiedad", method = RequestMethod.POST)
+    @RequestMapping(path = "/panel-admin/rechazar-propiedad", method = RequestMethod.POST)
     public ModelAndView rechazarPropiedad(@RequestParam("id") Long propiedadId, HttpSession session) {
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");

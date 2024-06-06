@@ -19,14 +19,10 @@ public class Propiedad {
     private Integer habitaciones;
     private Double superficie;
     private Double precio;
-
     private EstadoPropiedad estado;
     private String ubicacion;
     private String rutaImagen;
     private Boolean aceptada; // Nuevo atributo
-
-    @ManyToMany(mappedBy = "favoritos")
-    private Set<Usuario> usuariosFavoritos = new HashSet<>();
 
     public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
         this.id = id;
@@ -39,6 +35,9 @@ public class Propiedad {
         this.ubicacion = ubicacion;
         this.aceptada = false;
     }
+
+    @ManyToMany(mappedBy = "favoritos")
+    private Set<Usuario> usuariosFavoritos = new HashSet<>();
 
     public Propiedad() {
         this.aceptada = false;

@@ -137,7 +137,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     }
 
-
     @Override
     @Transactional
     public Set<Propiedad> listarFavoritos(Usuario usuario) {
