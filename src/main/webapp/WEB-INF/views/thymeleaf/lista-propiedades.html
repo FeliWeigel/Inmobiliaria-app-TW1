@@ -18,6 +18,9 @@
             <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
         </a>
         <nav>
+            <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
+                <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
+            </a>
             <a th:href="@{/favoritos}">
                 <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
             </a>

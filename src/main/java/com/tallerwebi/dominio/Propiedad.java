@@ -39,6 +39,13 @@ public class Propiedad {
     @ManyToMany(mappedBy = "favoritos")
     private Set<Usuario> usuariosFavoritos = new HashSet<>();
 
+    @PreRemove
+    private void quitarPropiedadDeUsuarios() {
+        for (Usuario usuario : usuariosFavoritos) {
+            usuario.getFavoritos().remove(this);
+        }
+    }
+
     public Propiedad() {
         this.aceptada = false;
     }

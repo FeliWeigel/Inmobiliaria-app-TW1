@@ -12,48 +12,51 @@ h1 {
     color: #333;
 }
 
-.container {
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+.container-usuarios {
+    display: flex;
+    justify-content: space-between;
     margin: 20px auto;
     width: 80%;
 }
 
-.propiedad-admin {
+.container {
+    width: 48%;
+}
+
+.usuario-admin {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
 }
 
-.propiedad-admin h3 {
+.usuario-admin h3 {
     margin-top: 0;
 }
 
-.btn-aceptar {
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    background-color: #5cb85c;
-    margin-right: 3em;
-    transition: .4s;
-}
-
-.btn-rechazar {
+.btn-bloquear {
     color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
     background-color: #d9534f;
-    margin-left: 3em;
+    margin-right: 3em;
     transition: .4s;
 }
 
-.btn-aceptar:hover {
-    background-color: #19ea19;
-}
-
-.btn-rechazar:hover {
-    background-color: #ea1b15;
+.btn-desbloquear {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #5cb85c;
+    margin-left: 3em;
+    transition: .4s;
 }
 
 .form-container {
@@ -61,4 +64,25 @@ h1 {
     justify-content: center;
     align-items: center;
     flex-direction: row;
+}
+
+.admin-links {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.admin-links a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.admin-links a:hover {
+    background-color: #f0f0f0;
+    color: #000;
 }

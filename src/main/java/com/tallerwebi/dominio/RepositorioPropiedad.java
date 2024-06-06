@@ -11,4 +11,8 @@ public interface RepositorioPropiedad {
     void editarPropiedad(Propiedad propiedad);
     List<Propiedad> listarPorRangoPrecio(Double min, Double max);
     List<Propiedad> listarPorUbicacion(String ubicacion);
+
+    List<Propiedad> listarPropiedadesAceptadas();
+
+    List<Propiedad> listarPropiedadesPendientes();
 }

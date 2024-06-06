@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador</title>
+
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/panel-admin-usuarios.css}">
+
+    <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+    <a class="button-logo" th:href="@{/home}">
+        <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+    </a>
+    <nav>
+        <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
+            <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
+        </a>
+        <a th:href="@{/favoritos}">
+            <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
+        </a>
+        <a href="#" th:href="@{/perfil}">
+            <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
+        </a>
+    </nav>
+</header>
+
+<div class="admin-links">
+    <a th:href="@{/panel-admin/propiedades}">Propiedades</a>
+    <a th:href="@{/panel-admin/usuarios}">Usuarios</a>
+</div>
+
+<h1>Panel de Administrador - Usuarios</h1>
+
+<div class="container-usuarios">
+    <div class="container">
+        <h2>Usuarios Bloqueados</h2>
+        <div th:each="usuario : ${usuariosBloqueados}">
+            <div class="usuario-admin">
+                <h3 th:text="${usuario.nombre} + ' ' + ${usuario.apellido}"></h3>
+                <p th:text="'Email: ' + ${usuario.email}"></p>
+                <p th:text="'Fecha de Nacimiento: ' + ${usuario.fechaNacimiento}"></p>
+
+
+                <div class="form-container">
+                    <form action="#" th:action="@{/panel-admin/desbloquear-usuario}" method="post">
+                        <input type="hidden" name="id" th:value="${usuario.id}" />
+                        <button type="submit" class="btn-desbloquear">Desbloquear</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Usuarios Desbloqueados</h2>
+        <div th:each="usuario : ${usuariosDesbloqueados}">
+            <div class="usuario-admin">
+                <h3 th:text="${usuario.nombre} + ' ' + ${usuario.apellido}"></h3>
+                <p th:text="'Email: ' + ${usuario.email}"></p>
+                <p th:text="'Fecha de Nacimiento: ' + ${usuario.fechaNacimiento}"></p>
+
+                <div class="form-container">
+                    <form action="#" th:action="@{/panel-admin/bloquear-usuario}" method="post">
+                        <input type="hidden" name="id" th:value="${usuario.id}" />
+                        <button type="submit" class="btn-bloquear">Bloquear</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

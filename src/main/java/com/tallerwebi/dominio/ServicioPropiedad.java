@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,6 +53,16 @@ public class ServicioPropiedad {
     }
 
 
+    public List<Propiedad> listarPropiedadesPendientes() {
+        return this.repositorioPropiedad.listarPropiedadesPendientes();
+    }
+
+
+    public List<Propiedad> listarPropiedadesAceptadas() {
+        return repositorioPropiedad.listarPropiedadesAceptadas();
+    }
+
+
     public List<Propiedad> listarPropiedadesPorPrecio(Double min, Double max){
         if(min >= 0.0 && max >= 0.0){
             return this.repositorioPropiedad.listarPorRangoPrecio(min, max);
@@ -83,7 +94,7 @@ public class ServicioPropiedad {
         if (idPropiedad != null) {
             repositorioPropiedad.eliminarPropiedad(idPropiedad);
         } else {
-            throw new CRUDPropiedadExcepcion("La propiedad con ID " + idPropiedad + " no existe.");
+            throw new CRUDPropiedadExcepcion("La propiedad no existe.");
         }
     }
 

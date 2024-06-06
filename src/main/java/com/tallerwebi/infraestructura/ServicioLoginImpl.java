@@ -58,6 +58,7 @@ public class ServicioLoginImpl implements ServicioLogin {
             usuario.setRol("USER");
         }
 
+        usuario.setActivo(true);
         repositorioUsuario.guardar(usuario);
     }
 

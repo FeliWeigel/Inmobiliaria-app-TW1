@@ -57,7 +57,7 @@ public class ControladorUsuario {
     public ModelAndView agregarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-        List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+        List<Propiedad> propiedades = servicioPropiedad.listarPropiedadesAceptadas();
 
         if (usuarioAutenticado == null){
             return new ModelAndView("redirect:/login");
@@ -86,7 +86,7 @@ public class ControladorUsuario {
     public ModelAndView eliminarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-        List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+        List<Propiedad> propiedades = servicioPropiedad.listarPropiedadesAceptadas();
 
         if (usuarioAutenticado == null){
             return new ModelAndView("redirect:/login");
