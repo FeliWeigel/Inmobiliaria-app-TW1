@@ -55,6 +55,7 @@
 
 .prop-estado {
     position: absolute;
+    font-size: .85rem;
     top: .5rem;
     right: 0;
     background: #022d4f;

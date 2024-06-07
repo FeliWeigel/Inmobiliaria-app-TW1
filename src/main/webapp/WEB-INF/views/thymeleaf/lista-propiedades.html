@@ -13,14 +13,16 @@
 </head>
 <body>
 
-    <header>
+    <header style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
         <a class="button-logo" th:href="@{/home}">
             <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
         </a>
         <nav>
-            <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
-                <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
-            </a>
+            <div th:if="${usuario}">
+                <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
+                    <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
+                </a>
+            </div>
             <a th:href="@{/favoritos}">
                 <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
             </a>
@@ -52,7 +54,7 @@
                 <input class="filtro-ubicacion" type="text" name="ubicacion" placeholder="Ubicacion" required>
                 <button class="filtro-btn" type="submit">Aplicar filtro</button>
             </form>
-            <a style="color: #011d33; font-size: 1rem" th:href="@{/home}">
+            <a style="color: #011d33; font-size: 1rem" th:href="@{/lista-propiedades}">
                 (Deshacer filtros)
             </a>
         </div>
@@ -62,7 +64,7 @@
                 <div th:each="propiedad : ${propiedades}">
                     <div th:if="${propiedad.aceptada}">
                         <a class="item" th:href="@{'/propiedad/' + ${propiedad.id}}" >
-                            <p class="prop-estado">En venta</p>
+                            <p class="prop-estado">EN <span th:text="${propiedad.estado}"></span></p>
                             <img class="prop-img" th:src="@{'/img/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}" alt="propiedad">
                             <div style="display: flex; gap: .5rem; align-items: center; justify-content: space-between; padding-top: 7px">
                                 <h5 class="prop-nombre" th:text="${propiedad.nombre}"></h5>
@@ -109,7 +111,7 @@
                                     <p th:text="':' + ${propiedad.habitaciones}"></p>
                                 </div>
                             </div>
-                            <h4 th:text="'$' + ${propiedad.precio} + ' (por noche)'" class="prop-precio"></h4>
+                            <h4 th:text="'$' + ${propiedad.precio} + (${propiedad.estado.toString() == 'ALQUILER' ? '(AR$ por mes)' : ' valor total(USD)'})" class="prop-precio"></h4>
                         </a>
                     </div>
                 </div>
@@ -120,7 +122,7 @@
         <p id="successMessage" class="fav-alert-success" th:if="${success != null}" th:text="${success}"></p>
     </main>
 
-    <footer>
+    <footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
         <div class="social">
             <a href="https://www.instagram.com">
                 <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>

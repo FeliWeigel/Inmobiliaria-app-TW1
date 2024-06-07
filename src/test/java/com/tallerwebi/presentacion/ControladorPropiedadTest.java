@@ -7,7 +7,6 @@ import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -80,7 +79,7 @@ public class ControladorPropiedadTest {
 
         when(this.servicioPropiedad.buscarPropiedad(idMock)).thenReturn(propiedadMock);
 
-        ModelAndView mav = this.controladorPropiedad.verPropiedad(idMock);
+        ModelAndView mav = this.controladorPropiedad.verPropiedad(idMock, session);
 
         assertThat(mav.getViewName(), equalTo("propiedad"));
         assertThat(mav.getModel().get("messageSuccess"), equalTo("Detalles de la Propiedad."));
@@ -96,7 +95,7 @@ public class ControladorPropiedadTest {
 
         when(this.servicioPropiedad.buscarPropiedad(idMock)).thenReturn(propiedadMock);
 
-        Propiedad propiedadDevuelta = (Propiedad) this.controladorPropiedad.verPropiedad(idMock).getModel().get("propiedad");
+        Propiedad propiedadDevuelta = (Propiedad) this.controladorPropiedad.verPropiedad(idMock, session).getModel().get("propiedad");
 
         assertThat(propiedadDevuelta.getNombre(), equalToIgnoringCase("Casa 1"));
         assertThat(propiedadDevuelta.getPisos(), equalTo(2));
@@ -116,7 +115,7 @@ public class ControladorPropiedadTest {
 
         when(this.servicioPropiedad.buscarPropiedad(idInexistente)).thenThrow(new CRUDPropiedadExcepcion("La Propiedad Buscada no Existe."));
 
-        ModelAndView mav = this.controladorPropiedad.verPropiedad(idInexistente);
+        ModelAndView mav = this.controladorPropiedad.verPropiedad(idInexistente, session);
         String error = mav.getModel().get("messageError").toString();
 
         assertThat(mav.getViewName(), equalToIgnoringCase("propiedad"));
@@ -131,7 +130,7 @@ public class ControladorPropiedadTest {
 
         when(this.servicioPropiedad.buscarPropiedad(idPropiedadInexistente)).thenThrow(new RuntimeException());
 
-        ModelAndView mav = this.controladorPropiedad.verPropiedad(idPropiedadInexistente);
+        ModelAndView mav = this.controladorPropiedad.verPropiedad(idPropiedadInexistente, session);
         String error = mav.getModel().get("messageError").toString();
 
         assertThat(mav.getViewName(), equalToIgnoringCase("propiedad"));

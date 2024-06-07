@@ -54,6 +54,7 @@ public class ServicioLoginImpl implements ServicioLogin {
 
         if(usuario.getEmail().contains("v1admin")){
             usuario.setRol("ADMIN");
+            usuario.setActivo(Boolean.TRUE);
         }else {
             usuario.setRol("USER");
         }

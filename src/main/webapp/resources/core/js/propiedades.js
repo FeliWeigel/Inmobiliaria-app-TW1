@@ -11,15 +11,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 5000)
 })
 
-/*function manejadorFavorito(){
-    let iconoVacio = document.getElementById('fav-vacio')
-    let iconoRelleno = document.getElementById('fav-relleno')
-
-    if(iconoVacio.style.display !== 'none'){
-        iconoVacio.style.display = 'none'
-        iconoRelleno.style.display = 'block'
-    }else {
-        iconoRelleno.style.display = 'none'
-        iconoVacio.style.display = 'block'
+const inputAlquiler = document.getElementById('input-alquiler')
+const inputVenta = document.getElementById('input-venta')
+const inputPrecio = document.getElementById('precio')
+const actualizarPlaceholder = () => {
+    if(inputAlquiler.checked){
+        inputPrecio.setAttribute('placeholder', '$(ARS)')
+    }else if(inputVenta.checked){
+        inputPrecio.setAttribute('placeholder', '$(USD)')
     }
-}*/
+}
+inputAlquiler.addEventListener("change", actualizarPlaceholder)
+inputVenta.addEventListener("change", actualizarPlaceholder)
+window.addEventListener("load", () => {
+    inputAlquiler.checked = true
+    actualizarPlaceholder()
+})

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
@@ -28,8 +29,11 @@ public class ControladorPropiedad {
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView vistaHome() {
+    public ModelAndView vistaHome(HttpSession session) {
         ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        model.put("usuario", usuarioAutenticado);
         return new ModelAndView("home", model);
     }
 
@@ -41,6 +45,7 @@ public class ControladorPropiedad {
         try {
             List<Propiedad> propiedades = servicioPropiedad.listarPropiedadesAceptadas();
             model.put("propiedades", propiedades);
+            model.put("usuario", usuarioAutenticado);
         } catch (Exception e){
             model.put("message", "Ha Ocurrido un Error Inesperado");
         }
@@ -68,6 +73,7 @@ public class ControladorPropiedad {
         try {
             List<Propiedad> propiedadesFiltradas = servicioPropiedad.listarPropiedadesPorPrecio(min, max);
             model.put("propiedades", propiedadesFiltradas);
+            model.put("usuario", usuarioAutenticado);
         }catch(CRUDPropiedadExcepcion e){
             model.put("message", e.getMessage());
         }catch (Exception e){
@@ -95,6 +101,7 @@ public class ControladorPropiedad {
         try {
             List<Propiedad> propiedadesFiltradas = servicioPropiedad.listarPropiedadesPorUbicacion(ubicacion);
             model.put("propiedades", propiedadesFiltradas);
+            model.put("usuario", usuarioAutenticado);
         }catch(CRUDPropiedadExcepcion e){
             model.put("message", e.getMessage());
         }
@@ -143,13 +150,14 @@ public class ControladorPropiedad {
 
 
     @GetMapping("/propiedad/{id}")
-    public ModelAndView verPropiedad(@PathVariable Long id) {
+    public ModelAndView verPropiedad(@PathVariable Long id, HttpSession session) {
         ModelMap model = new ModelMap();
-
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
         try {
             Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
             model.put("messageSuccess", "Detalles de la Propiedad.");
             model.put("propiedad", propiedad);
+            model.put("usuario", usuarioAutenticado);
         } catch (CRUDPropiedadExcepcion e) {
             model.put("messageError", e.getMessage());
             model.put("propiedad", null);
