@@ -504,6 +504,18 @@ public class ControladorPropiedadTest {
         assertThat(modelAndView.getModel().get("error"), is("Error al desbloquear usuario"));
     }
 
+    @Test
+    public void queElAdminPuedaEliminarUnaPropiedad() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("ADMIN");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        ModelAndView modelAndView = controladorPropiedad.rechazarPropiedad(1L, session);
+
+        verify(servicioPropiedad, times(1)).rechazarPropiedad(1L);
+        assertThat(modelAndView.getViewName(), is("redirect:/panel-admin/propiedades"));
+    }
+
 
 
 

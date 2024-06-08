@@ -88,6 +88,12 @@
                                         ></i>
                                     </button>
                                 </form>
+                                <form th:unless="${favoritos}" th:action="@{'/login/'}">
+                                    <button type="submit" style="background: none; border: none;">
+                                        <i class="fa-regular fa-heart" style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"></i>
+                                    </button>
+                                </form>
+
                             </div>
                             <div class="prop-desc-item">
                                 <i style="margin-right: .5rem" class="fa-solid fa-location-dot"></i>
