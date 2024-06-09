@@ -20,6 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 public class ControladorPropiedadTest {
@@ -517,7 +518,46 @@ public class ControladorPropiedadTest {
     }
 
 
+    @Test
+    public void testModificarPropiedad() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("ADMIN");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+        Propiedad propiedad = new Propiedad();
+        propiedad.setId(1L);
 
+        ModelAndView modelAndView = controladorPropiedad.modificarPropiedad(propiedad, session);
+        assertThat("redirect:/panel-admin/propiedades", equalTo(modelAndView.getViewName()));
+        verify(servicioPropiedad, times(1)).modificarPropiedad(propiedad);
+    }
+
+    @Test
+    public void testModificarPropiedadThrowsException() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("ADMIN");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+        Propiedad propiedad = new Propiedad();
+        propiedad.setId(1L);
+        doThrow(new CRUDPropiedadExcepcion("Error")).when(servicioPropiedad).modificarPropiedad(propiedad);
+
+        ModelAndView modelAndView = controladorPropiedad.modificarPropiedad(propiedad, session);
+        assertThat("redirect:/panel-admin/propiedades",equalTo(modelAndView.getViewName()));
+        assertNotNull(modelAndView.getModel().get("error"));
+    }
+
+    @Test
+    public void testModificarPropiedadNoAdmin() {
+        Usuario usuarioNormal = new Usuario();
+        usuarioNormal.setRol("USER");
+        session.setAttribute("usuario", usuarioNormal);
+
+        Propiedad propiedad = new Propiedad();
+        propiedad.setId(1L);
+
+        ModelAndView modelAndView = controladorPropiedad.modificarPropiedad(propiedad, session);
+        verify(servicioPropiedad, never()).modificarPropiedad(any());
+        assertThat("redirect:/home", equalTo(modelAndView.getViewName()));
+    }
 
 
 

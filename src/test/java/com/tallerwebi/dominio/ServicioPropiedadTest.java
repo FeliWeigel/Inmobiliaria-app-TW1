@@ -238,4 +238,18 @@ public class ServicioPropiedadTest {
         verify(repositorioPropiedad, times(1)).eliminarPropiedad(id);
     }
 
+
+    @Test
+    public void testModificarPropiedad() {
+        Propiedad propiedad = new Propiedad();
+        propiedad.setBanios(2);
+        propiedad.setId(1L);
+
+        propiedad.setBanios(4);
+        servicioPropiedad.modificarPropiedad(propiedad);
+
+        verify(this.repositorioPropiedad, times(1)).editarPropiedad(propiedad);
+        assertThat(propiedad.getBanios(), equalTo(4));
+    }
+
 }
