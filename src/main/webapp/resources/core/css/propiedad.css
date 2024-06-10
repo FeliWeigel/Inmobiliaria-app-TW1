@@ -122,7 +122,9 @@ p {
 }
 
 .galeria-img-principal {
-    width: 70%;
+    width: 375px;
+    height: 250px;
+    object-fit: cover;
 }
 
 .galeria-img-sec {
