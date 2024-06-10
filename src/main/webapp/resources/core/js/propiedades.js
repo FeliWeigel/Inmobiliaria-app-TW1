@@ -1,5 +1,6 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", () => {
+    // agregar favoritos propiedad
     let successMessage = document.getElementById("successMessage")
     if(successMessage){
         successMessage.style.opacity = '1'
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 5000)
 })
 
+// agregar propiedad
 const inputAlquiler = document.getElementById('input-alquiler')
 const inputVenta = document.getElementById('input-venta')
 const inputPrecio = document.getElementById('precio')

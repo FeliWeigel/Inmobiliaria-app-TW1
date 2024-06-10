@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de la Propiedad</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
     <link rel="stylesheet" th:href="@{/css/propiedad.css}"/>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
     <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" th:href="@{/css/index.css}">
 </head>
 <body>
 
@@ -34,23 +34,38 @@
     <div th:if="${messageError != null}" style="height: 90vh;display: flex;align-items: center;justify-content: center;">
         <p style="font-size: 2.3rem" th:text="${messageError}"></p>
     </div>
-    <main th:if="${propiedad != null}" class="detalles-propiedad">
+    <main class="detalles-propiedad">
         <div class="img-container">
-            <img th:src="@{/img/casa-2.jpg}" class="img-propiedad" alt="casa-img">
-            <!-- <button class="alquilar-btn">Alquilar</button> -->
+            <!-- <img th:src="@{/img/casa-2.jpg}" class="img-propiedad" alt="casa-img"> -->
+            <img th:src="@{'/img/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}" class="img-propiedad" alt="casa-img">
+            <div class="alquilar-content">
+                <h2 th:text="${propiedad.nombre}">Casa lujosa en La Matanza</h2>
+                <button th:text="${propiedad.estado.toString() == 'ALQUILER' ? 'Alquilar' : 'Comprar'}" class="alquilar-btn"></button>
+            </div>
         </div>
 
         <div class="propiedad">
             <h1 class="message" th:if="${messageSuccess != null}" th:text="${messageSuccess}">Detalles de la Propiedad</h1>
-            <h3 class="nombre" th:text="${propiedad.nombre}"></h3>
-            <p class="propiedad-estado">En <span th:text="${propiedad.estado}"></span></p>
-            <p><i style="margin-right: .5rem" class="fa-solid fa-location-dot"></i>Ubicacion: <span th:text="${propiedad.ubicacion}"></span></p>
-            <p><i style="margin-right: .5rem" class="fa-solid fa-layer-group"></i>Pisos: <span th:text="${propiedad.pisos}"></span></p>
-            <p><i style="margin-right: .5rem" class="fa-solid fa-bath"></i>Baños: <span th:text="${propiedad.banios}"></span></p>
-            <p><i style="margin-right: .5rem" class="fa-solid fa-person-shelter"></i>Habitaciones: <span th:text="${propiedad.habitaciones}"></span></p>
-            <p><i style="margin-right: .5rem" class="fa-brands fa-codepen"></i>Superficie: <span th:text="${propiedad.superficie}"></span> (m2)</p>
+            <div class="propiedad-content">
+                <div class="propiedad-info">
+                    <p class="propiedad-estado">En <span th:text="${propiedad.estado}"></span></p>
+                    <p><i style="margin-right: .5rem" class="fa-solid fa-location-dot"></i>Ubicacion: <span th:text="${propiedad.ubicacion}"></span></p>
+                    <p><i style="margin-right: .5rem" class="fa-solid fa-layer-group"></i>Pisos: <span th:text="${propiedad.pisos}"></span></p>
+                    <p><i style="margin-right: .5rem" class="fa-solid fa-bath"></i>Baños: <span th:text="${propiedad.banios}"></span></p>
+                    <p><i style="margin-right: .5rem" class="fa-solid fa-person-shelter"></i>Habitaciones: <span th:text="${propiedad.habitaciones}"></span></p>
+                    <p><i style="margin-right: .5rem" class="fa-brands fa-codepen"></i>Superficie: <span th:text="${propiedad.superficie}"></span></p>
+                </div>
+                <div class="propiedad-galeria">
+                    <img id="img-principal" class="galeria-img-principal" th:src="@{'/img/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}">
+                    <div class="galeria-seleccion">
+                        <div th:each="imagen : ${imagenes}">
+                            <img onclick="seleccionarImagen(this)" class="galeria-img-sec" th:src="@{'/img/' + ${propiedad.id} + '/' + ${imagen}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <h5 class="prop-det-price" th:text="${propiedad.precio} + '$ (Por Noche)'"></h5>
+        <h5 class="prop-det-price" th:text="'$' + ${propiedad.precio} + '(AR$ por mes)'"></h5>
     </main>
 
 
@@ -64,6 +79,8 @@
             </a>
         </div>
     </footer>
+
+    <script th:src="@{/js/detalle-propiedad.js}"></script>
 
 </body>
 </html>

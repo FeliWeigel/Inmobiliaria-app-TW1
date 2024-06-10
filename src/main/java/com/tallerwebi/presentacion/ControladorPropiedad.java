@@ -13,7 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +24,7 @@ public class ControladorPropiedad {
 
     private final ServicioPropiedad servicioPropiedad;
     private final RepositorioUsuario repositorioUsuario;
+    private final String CARPETA_IMAGENES = "src/main/webapp/resources/core/img/";
 
     public ControladorPropiedad(ServicioPropiedad servicioPropiedad, RepositorioUsuario repositorioUsuario) {
         this.servicioPropiedad = servicioPropiedad;
@@ -60,6 +63,43 @@ public class ControladorPropiedad {
         }
 
         return new ModelAndView("lista-propiedades", model);
+    }
+
+    @GetMapping("/propiedad/{id}")
+    public ModelAndView verPropiedad(@PathVariable Long id, HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        String pathImagenes = CARPETA_IMAGENES + id; // Obtengo la direccion donde deberian estar almacenadas las imagenes referidas a la propiedad
+        File carpetaImagenes = new File(pathImagenes); // Obtengo la carpeta
+        File[] listOfFiles = carpetaImagenes.listFiles(); // Transformo el contenido de la carpeta a una lista de archivos(en este caso de imagen)
+        List<String> imagenes = new ArrayList<>(); // Creo un array donde iran almacenadas todas las referencias a las imagenes que queremos mostrar
+
+        if(listOfFiles != null){
+            for(File image : listOfFiles){
+                if(image.isFile()){
+                    imagenes.add(image.getName());
+                }
+            }
+        }
+
+        try {
+            Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
+            model.put("messageSuccess", "Detalles de la Propiedad.");
+            model.put("propiedad", propiedad);
+            model.put("usuario", usuarioAutenticado);
+            model.put("imagenes", imagenes);
+        } catch (CRUDPropiedadExcepcion e) {
+            model.put("messageError", e.getMessage());
+            model.put("propiedad", null);
+            return new ModelAndView("propiedad", model);
+        } catch (Exception e) {
+            model.put("messageError", "Error al encontrar la propiedad seleccionada.");
+            model.put("propiedad", null);
+            return new ModelAndView("propiedad", model);
+        }
+
+        return new ModelAndView("propiedad", model);
     }
 
     @RequestMapping(path = "/filtro/precio", method = RequestMethod.POST)
@@ -147,30 +187,6 @@ public class ControladorPropiedad {
         model.put("success", "La Propiedad ha sido agregada con exito!");
         return new ModelAndView("nuevaPropiedad", model);
     }
-
-
-    @GetMapping("/propiedad/{id}")
-    public ModelAndView verPropiedad(@PathVariable Long id, HttpSession session) {
-        ModelMap model = new ModelMap();
-        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-        try {
-            Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
-            model.put("messageSuccess", "Detalles de la Propiedad.");
-            model.put("propiedad", propiedad);
-            model.put("usuario", usuarioAutenticado);
-        } catch (CRUDPropiedadExcepcion e) {
-            model.put("messageError", e.getMessage());
-            model.put("propiedad", null);
-            return new ModelAndView("propiedad", model);
-        } catch (Exception e) {
-            model.put("messageError", "Error al encontrar la propiedad seleccionada.");
-            model.put("propiedad", null);
-            return new ModelAndView("propiedad", model);
-        }
-
-        return new ModelAndView("propiedad", model);
-    }
-
 
     @RequestMapping(path = "/panel-admin/propiedades", method = RequestMethod.GET)
     public ModelAndView panelAdminPropiedades(HttpSession session) {
