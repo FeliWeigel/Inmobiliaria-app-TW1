@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Modificar propiedad</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/modificar-propiedad.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+
+    <script src="https://kit.fontawesome.com/f3e8220cf2.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<header style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
+    <a class="button-logo" th:href="@{/home}">
+        <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+    </a>
+    <nav>
+        <div th:if="${usuario}">
+            <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
+                <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
+            </a>
+        </div>
+        <a th:href="@{/favoritos}">
+            <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
+        </a>
+        <a href="#" th:href="@{/perfil}">
+            <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
+        </a>
+    </nav>
+</header>
+<main>
+    <div class="bg-overlay"></div>
+    <img class="agregar-bg" th:src="@{/img/agregar-bg.png}"/>
+    <div class="agregar-contenido">
+        <div class="agregar-textos">
+            <h3>Modifica los datos de tu propiedad</h3>
+            <p>Actualiza los datos de la propiedad y guarda los cambios para que se reflejen en la publicación.</p>
+        </div>
+        <form style="z-index: 1000" th:action="@{/panel-admin/modificar-propiedad}" method="POST" th:object="${propiedad}">
+            <h3>Datos de la propiedad</h3>
+
+            <input type="hidden" th:field="*{id}"/>
+            <input type="hidden" th:field="*{rutaImagen}"/>
+            <input type="hidden" th:field="*{aceptada}"/>
+
+            <label for="nombre">Nombre</label>
+            <input th:field="*{nombre}" id="nombre" type="text" required/>
+
+            <label for="ubicacion">Ubicación</label>
+            <input th:field="*{ubicacion}" id="ubicacion" type="text" required/>
+
+            <div class="form-flex">
+                <div>
+                    <label for="pisos">Pisos</label>
+                    <input th:field="*{pisos}" id="pisos" type="number" required/>
+                </div>
+                <div>
+                    <label for="banios">Baños</label>
+                    <input th:field="*{banios}" id="banios" type="number" required/>
+                </div>
+                <div>
+                    <label for="superficie">Superficie (m2)</label>
+                    <input th:field="*{superficie}" id="superficie" type="number" required/>
+                </div>
+            </div>
+
+            <div class="form-flex">
+                <div>
+                    <label for="precio">Precio</label>
+                    <input th:field="*{precio}" id="precio" type="number" max="1000000" required/>
+                </div>
+                <div>
+                    <label for="habitaciones">Habitaciones</label>
+                    <input th:field="*{habitaciones}" id="habitaciones" type="number" required/>
+                </div>
+                <div style="margin-left: .5rem">
+                    <label>Estado:</label>
+                    <div style="display: flex; flex-direction: row; align-items: center; font-size: .9rem">
+                        En alquiler
+                        <input id="input-alquiler" type="radio" value="ALQUILER" name="estado" th:field="*{estado}" th:checked="${propiedad.estado == 'ALQUILER'}">
+                    </div>
+                    <div style="display: flex; flex-direction: row; align-items: center; font-size: .9rem">
+                        En venta
+                        <input id="input-venta" type="radio" value="VENTA" name="estado" th:field="*{estado}" th:checked="${propiedad.estado == 'VENTA'}">
+                    </div>
+                </div>
+            </div>
+
+            <p
+                    class="alert"
+                    th:if="${error != null}"
+                    th:text="${error}"
+            >
+            </p>
+
+            <p
+                    class="success"
+                    th:if="${success != null}"
+                    th:text="${success}"
+            >
+            </p>
+            <button type="submit">Guardar cambios</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>
+
+

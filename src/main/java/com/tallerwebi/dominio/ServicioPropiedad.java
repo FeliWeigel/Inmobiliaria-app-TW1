@@ -98,4 +98,14 @@ public class ServicioPropiedad {
         }
     }
 
+
+    public void modificarPropiedad(Propiedad propiedadEditada) {
+        if (propiedadEditada != null) {
+            repositorioPropiedad.editarPropiedad(propiedadEditada);
+        } else {
+            throw new CRUDPropiedadExcepcion("Propiedad inexistente");
+        }
+    }
+
+
 }

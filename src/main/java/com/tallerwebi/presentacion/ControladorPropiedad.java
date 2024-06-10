@@ -233,6 +233,44 @@ public class ControladorPropiedad {
     }
 
 
+    @RequestMapping(path = "/panel-admin/modificar-propiedad", method = RequestMethod.POST)
+    public ModelAndView modificarPropiedad(@ModelAttribute("propiedad") Propiedad propiedad, HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null || !usuarioAutenticado.getRol().equals("ADMIN")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        try {
+            this.servicioPropiedad.modificarPropiedad(propiedad);
+        } catch (CRUDPropiedadExcepcion e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("redirect:/panel-admin/propiedades", model);
+        }
+        return new ModelAndView("redirect:/panel-admin/propiedades");
+    }
+
+
+    @RequestMapping(path = "/panel-admin/modificar-propiedad/{id}", method = RequestMethod.GET)
+    public ModelAndView mostrarFormularioModificarPropiedad(@PathVariable("id") Long id, HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null || !usuarioAutenticado.getRol().equals("ADMIN")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        Propiedad propiedad = this.servicioPropiedad.buscarPropiedad(id);
+        if (propiedad != null) {
+            model.put("propiedad", propiedad);
+            return new ModelAndView("modificarPropiedad", model);
+        } else {
+            model.put("error", "La propiedad no existe.");
+            return new ModelAndView("redirect:/panel-admin/propiedades", model);
+        }
+    }
+
 
 
     @RequestMapping(path = "/panel-admin/usuarios", method = RequestMethod.GET)

@@ -77,10 +77,11 @@
                 <p th:text="'Precio: $' + ${propiedad.precio} + ' (por noche)'"></p>
 
                 <div class="form-container">
-                    <form action="#" th:action="@{/modificar-propiedad}" method="post">
+                    <form th:action="@{/panel-admin/modificar-propiedad/{id}(id=${propiedad.id})}" method="get">
                         <input type="hidden" name="id" th:value="${propiedad.id}" />
                         <button type="submit" class="btn-modificar">Modificar</button>
                     </form>
+
 
                     <form action="#" th:action="@{/panel-admin/rechazar-propiedad}" method="post">
                         <input type="hidden" name="id" th:value="${propiedad.id}" />
