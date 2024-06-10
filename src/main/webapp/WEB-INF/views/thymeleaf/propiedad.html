@@ -36,8 +36,7 @@
     </div>
     <main class="detalles-propiedad">
         <div class="img-container">
-            <!-- <img th:src="@{/img/casa-2.jpg}" class="img-propiedad" alt="casa-img"> -->
-            <img th:src="@{'/img/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}" class="img-propiedad" alt="casa-img">
+            <img th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}" class="img-propiedad" alt="casa-img">
             <div class="alquilar-content">
                 <h2 th:text="${propiedad.nombre}">Casa lujosa en La Matanza</h2>
                 <button th:text="${propiedad.estado.toString() == 'ALQUILER' ? 'Alquilar' : 'Comprar'}" class="alquilar-btn"></button>
@@ -56,10 +55,10 @@
                     <p><i style="margin-right: .5rem" class="fa-brands fa-codepen"></i>Superficie: <span th:text="${propiedad.superficie}"></span></p>
                 </div>
                 <div class="propiedad-galeria">
-                    <img id="img-principal" class="galeria-img-principal" th:src="@{'/img/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}">
+                    <img id="img-principal" class="galeria-img-principal" th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}">
                     <div class="galeria-seleccion">
                         <div th:each="imagen : ${imagenes}">
-                            <img onclick="seleccionarImagen(this)" class="galeria-img-sec" th:src="@{'/img/' + ${propiedad.id} + '/' + ${imagen}}">
+                            <img onclick="seleccionarImagen(this)" class="galeria-img-sec" th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${imagen}}">
                         </div>
                     </div>
                 </div>

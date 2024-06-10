@@ -36,7 +36,7 @@
             <div th:each="propiedad : ${listaFavoritos}">
                 <a class="item" th:href="@{'/propiedad/' + ${propiedad.id}}" >
                     <p class="prop-estado">EN <span th:text="${propiedad.estado}"></span></p>
-                    <img class="prop-img" th:src="@{'/img/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}" alt="propiedad">
+                    <img class="prop-img" th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}" alt="propiedad">
                     <div style="display: flex; gap: .5rem; align-items: center; justify-content: space-between; padding-top: 7px">
                         <h5 class="prop-nombre" th:text="${propiedad.nombre}"></h5>
                         <form

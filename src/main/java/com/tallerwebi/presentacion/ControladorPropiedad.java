@@ -24,7 +24,7 @@ public class ControladorPropiedad {
 
     private final ServicioPropiedad servicioPropiedad;
     private final RepositorioUsuario repositorioUsuario;
-    private final String CARPETA_IMAGENES = "src/main/webapp/resources/core/img/";
+    private final String CARPETA_IMAGENES = "src/main/webapp/resources/core/img/propiedades/";
 
     public ControladorPropiedad(ServicioPropiedad servicioPropiedad, RepositorioUsuario repositorioUsuario) {
         this.servicioPropiedad = servicioPropiedad;

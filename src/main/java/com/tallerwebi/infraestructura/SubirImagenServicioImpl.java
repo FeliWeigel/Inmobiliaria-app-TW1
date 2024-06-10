@@ -22,7 +22,7 @@ public class SubirImagenServicioImpl implements SubirImagenServicio {
 
     @Autowired
     private ServletContext servletContext;
-    private final String CARPETA_PROPIEDADES = "src/main/webapp/resources/core/img";
+    private final String CARPETA_PROPIEDADES = "src/main/webapp/resources/core/img/propiedades";
     private final String CARPETA_USUARIOS = "src/main/webapp/resources/core/img/usuarios";
     private final RepositorioPropiedad repositorioPropiedad;
     private final RepositorioUsuario repositorioUsuario;
