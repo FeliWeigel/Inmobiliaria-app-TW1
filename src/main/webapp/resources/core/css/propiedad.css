@@ -13,6 +13,7 @@ body {
 
 .detalles-propiedad {
     height: auto;
+    position: relative;
 }
 
 .message {
@@ -176,6 +177,22 @@ p {
     color: #fff;
     padding: 5px;
     display: inline;
+}
+
+.back-btn {
+    font-size: 1.6rem;
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    padding: 10px;
+    color: #fff;
+    transition: .4s;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    transform: translateY(-.3rem);
 }
 
 
