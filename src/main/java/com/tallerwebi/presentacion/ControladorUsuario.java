@@ -4,13 +4,12 @@ import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,10 +18,12 @@ import java.util.Set;
 public class ControladorUsuario {
     private final RepositorioUsuario repositorioUsuario;
     private final ServicioPropiedad servicioPropiedad;
+    private final SubirImagenServicio imagenServicio;
 
-    public ControladorUsuario(RepositorioUsuario repositorioUsuario, ServicioPropiedad servicioPropiedad) {
+    public ControladorUsuario(RepositorioUsuario repositorioUsuario, ServicioPropiedad servicioPropiedad, SubirImagenServicio imagenServicio) {
         this.repositorioUsuario = repositorioUsuario;
         this.servicioPropiedad = servicioPropiedad;
+        this.imagenServicio = imagenServicio;
     }
 
     @RequestMapping(path = "/favoritos", method = RequestMethod.GET)
@@ -124,6 +125,22 @@ public class ControladorUsuario {
         return new ModelAndView("perfil", model);
     }
 
+    @RequestMapping(path = "/perfil/editar/foto-perfil", method = RequestMethod.POST)
+    public ModelAndView nuevaFotoPerfil(@RequestParam("foto")MultipartFile foto, HttpSession session) throws IOException {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if(usuarioAutenticado == null){
+            return new ModelAndView("redirect:/login");
+        }
+
+        imagenServicio.subirImagenUsuario(usuarioAutenticado.getId(), foto);
+        Usuario usuarioActualizado = repositorioUsuario.buscarPorId(usuarioAutenticado.getId());
+        session.setAttribute("usuario", usuarioActualizado);
+        model.put("usuario", usuarioActualizado);
+
+        return new ModelAndView("perfil", model);
+    }
 
     @RequestMapping(path = "/editar-perfil", method = RequestMethod.POST)
     public ModelAndView perfil(@ModelAttribute("usuario") Usuario usuario, HttpSession session) throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {

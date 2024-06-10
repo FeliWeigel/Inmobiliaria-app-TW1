@@ -1,8 +1,9 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.RepositorioPropiedad;
-import com.tallerwebi.dominio.SubirImagenServicio;
+import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
+import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
+import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -21,16 +22,19 @@ public class SubirImagenServicioImpl implements SubirImagenServicio {
 
     @Autowired
     private ServletContext servletContext;
-    private final String CARPETA = "src/main/webapp/resources/core/img";
+    private final String CARPETA_PROPIEDADES = "src/main/webapp/resources/core/img";
+    private final String CARPETA_USUARIOS = "src/main/webapp/resources/core/img/usuarios";
     private final RepositorioPropiedad repositorioPropiedad;
+    private final RepositorioUsuario repositorioUsuario;
 
-    public SubirImagenServicioImpl(RepositorioPropiedad repositorioPropiedad) {
+    public SubirImagenServicioImpl(RepositorioPropiedad repositorioPropiedad, RepositorioUsuario repositorioUsuario) {
         this.repositorioPropiedad = repositorioPropiedad;
+        this.repositorioUsuario = repositorioUsuario;
     }
 
 
     @Override
-    public String subirImagen(Long propiedadId, MultipartFile imagen) throws IOException {
+    public String subirImagenPropiedad(Long propiedadId, MultipartFile imagen) throws IOException {
         Propiedad propiedad = repositorioPropiedad.buscarPropiedad(propiedadId);
 
         if(propiedad == null){
@@ -40,7 +44,7 @@ public class SubirImagenServicioImpl implements SubirImagenServicio {
             throw new IOException("Error! No se ha proporcionado una imagen de la propiedad.");
         }
 
-        Path carpetaDestino = Paths.get(CARPETA, String.valueOf(propiedadId));
+        Path carpetaDestino = Paths.get(CARPETA_PROPIEDADES, String.valueOf(propiedadId));
         if (!Files.exists(carpetaDestino)) {
             try {
                 Files.createDirectories(carpetaDestino);
@@ -62,6 +66,40 @@ public class SubirImagenServicioImpl implements SubirImagenServicio {
             // Devolver la ruta del archivo guardado
             return path.toString();
         } catch (IOException e) {
+            throw new IOException("Error al subir archivo de la imagen.");
+        }
+    }
+
+    @Override
+    public String subirImagenUsuario(Long usuarioId, MultipartFile imagen) throws IOException {
+        Usuario usuario = repositorioUsuario.buscarPorId(usuarioId);
+
+        if(usuario == null){
+            throw new IOException("Error! El usuario no existe.");
+        }
+        if (imagen.isEmpty()) {
+            throw new IOException("Error! No se ha proporcionado una imagen de perfil.");
+        }
+
+        Path carpetaDestino = Paths.get(CARPETA_USUARIOS, String.valueOf(usuarioId));
+        if (!Files.exists(carpetaDestino)) {
+            try {
+                Files.createDirectories(carpetaDestino);
+            } catch (IOException e) {
+                throw new IOException("Error al crear la carpeta de destino para el usuario: " + usuarioId);
+            }
+        }
+
+        try {
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(imagen.getOriginalFilename()));
+            Path path = carpetaDestino.resolve(fileName);
+            Files.copy(imagen.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+            usuario.setFotoPerfil(fileName);
+            repositorioUsuario.editarPerfil(usuario);
+
+            return path.toString();
+        } catch (IOException | CredencialesInvalidasExcepcion | PasswordInvalidaExcepcion | UsuarioExistenteExcepcion e) {
             throw new IOException("Error al subir archivo de la imagen.");
         }
     }

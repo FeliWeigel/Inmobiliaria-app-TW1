@@ -17,6 +17,7 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
+    private String fotoPerfil;
 
     @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
@@ -87,5 +88,13 @@ public class Usuario {
 
     public void setFavoritos(Set<Propiedad> favoritos) {
         this.favoritos = favoritos;
+    }
+
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
     }
 }

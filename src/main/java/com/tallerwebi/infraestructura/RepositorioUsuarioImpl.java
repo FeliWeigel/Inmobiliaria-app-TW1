@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 @Repository("RepositorioUsuario")
 @Transactional
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
-
     private final SessionFactory sessionFactory;
     private final RepositorioPropiedad repositorioPropiedad;
 
@@ -42,12 +41,10 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .uniqueResult();
     }
 
-
     @Override
     public void guardar(Usuario usuario) {
         sessionFactory.getCurrentSession().save(usuario);
     }
-
 
     @Override
     public Usuario buscarPorEmail(String email) {
@@ -56,7 +53,12 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .uniqueResult();
     }
 
-
+    @Override
+    public Usuario buscarPorId(Long id) {
+        return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+                .add(Restrictions.eq("id", id))
+                .uniqueResult();
+    }
 
     @Override
     public void editarPerfil(Usuario usuario) throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, UsuarioExistenteExcepcion {
@@ -88,9 +90,11 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         usuarioAlmacenado.setPassword(usuario.getPassword());
         usuarioAlmacenado.setNombre(usuario.getNombre());
         usuarioAlmacenado.setApellido(usuario.getApellido());
+        usuarioAlmacenado.setFotoPerfil(usuario.getFotoPerfil());
 
         session.update(usuarioAlmacenado);
     }
+
 
 
     @Override
@@ -115,7 +119,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
             throw new CRUDPropiedadExcepcion("Error! La propiedad forma parte de la lista de favoritos.");
         }
     }
-
 
     @Override
     @Transactional
@@ -150,8 +153,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         throw new CRUDPropiedadExcepcion("Error! El usuario no ha sido encontrado.");
     }
 
-
-
     @Override
     public void cerrarSesion(Usuario usuario) throws UsuarioNoIdentificadoExcepcion {
         final Session session = sessionFactory.getCurrentSession();
@@ -163,7 +164,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
     }
 
-
     @Override
     public void bloquearUsuario(Long id) {
         Session session = sessionFactory.getCurrentSession();
@@ -173,7 +173,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
             session.update(usuario);
         }
     }
-
 
     @Override
     public void desbloquearUsuario(Long id) {
@@ -185,7 +184,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
     }
 
-
     @Override
     public List<Usuario> listarUsuariosDesbloqueados() {
         Session session = sessionFactory.getCurrentSession();
@@ -193,17 +191,12 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         return query.getResultList();
     }
 
-
     @Override
     public List<Usuario> listarUsuariosBloqueados() {
         Session session = sessionFactory.getCurrentSession();
         Query<Usuario> query = session.createQuery("FROM Usuario WHERE activo = false", Usuario.class);
         return query.getResultList();
     }
-
-
-
-
 
     private Boolean validarPassword(String password){
         boolean esMayuscula = false, esNumero = false, esCaracterEspecial = false;

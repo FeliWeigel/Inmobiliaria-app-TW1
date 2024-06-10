@@ -26,12 +26,13 @@ public class ControladorUsuarioTest {
 	private HttpSession session;
 	private Usuario usuario;
 	private List<Propiedad> propiedades;
+	private SubirImagenServicio imagenServicio;
 
 	@BeforeEach
 	public void init() {
 		this.repositorioUsuario = mock(RepositorioUsuarioImpl.class);
 		this.servicioPropiedad = mock(ServicioPropiedad.class);
-		this.controladorUsuario = new ControladorUsuario(this.repositorioUsuario, this.servicioPropiedad);
+		this.controladorUsuario = new ControladorUsuario(this.repositorioUsuario, this.servicioPropiedad, this.imagenServicio);
 		this.session = mock(HttpSession.class);
 
 		this.usuario = new Usuario();

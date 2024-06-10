@@ -6,22 +6,52 @@ body{
     flex-direction: column;
 }
 
-main{
-    height: auto;
-    width: 37vw;
-    margin: 20px auto;
-    padding: 20px 30px;
-    align-self: center;
-    justify-self: center;
-    background-color: #f8f1f1;
-    border-radius: 20px;
-    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+.perfil {
+    display: flex;
+    align-items: center;
+    padding: 1.3rem 3rem;
+    justify-content: center;
 }
 
-form {
+.perfil-img-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 45%;
+}
+
+.perfil-img {
+    overflow: hidden;
+    border-radius: 50%;
+    width: 180px;
+    height: 164px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    box-shadow: 0px 0px 7px 0px #011d33;
+}
+
+.perfil-img-btn {
+    display: block;
+    margin: 0 auto;
+}
+
+.input-img {
+    border: none;
+    padding: 10px 0;
+}
+
+.perfil-info {
+    width: 40%;
+}
+
+.perfil-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f8f1f1;
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 1.2rem 1.5rem 1.4rem 1.5rem;
 }
 
 form *{

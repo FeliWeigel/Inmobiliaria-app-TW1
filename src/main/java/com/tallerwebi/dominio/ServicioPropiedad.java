@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,7 +39,7 @@ public class ServicioPropiedad {
         repositorioPropiedad.agregarPropiedad(propiedad);
 
         try {
-            imagenServicio.subirImagen(propiedad.getId(), imagen);
+            imagenServicio.subirImagenPropiedad(propiedad.getId(), imagen);
         } catch (IOException e) {
             repositorioPropiedad.eliminarPropiedad(propiedad.getId());
             throw new IOException(e.getMessage());
