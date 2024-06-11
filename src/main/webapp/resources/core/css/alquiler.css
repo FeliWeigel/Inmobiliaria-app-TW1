@@ -1,0 +1,12 @@
+.alquiler-container {
+    height: 100vh;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+h2 {
+    margin-bottom: 1.5rem;
+}

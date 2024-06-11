@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,7 +40,8 @@
             <img th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}" class="img-propiedad" alt="casa-img">
             <div class="alquilar-content">
                 <h2 th:text="${propiedad.nombre}">Casa lujosa en La Matanza</h2>
-                <button th:text="${propiedad.estado.toString() == 'ALQUILER' ? 'Alquilar' : 'Comprar'}" class="alquilar-btn"></button>
+                <a th:if="${propiedad.estado.toString() == 'ALQUILER'}" th:href="@{'/propiedad/' + ${propiedad.id} + '/alquiler'}" class="alquilar-btn">Alquilar propiedad</a>
+                <a th:unless="${propiedad.estado.toString() == 'ALQUILER'}" th:href="@{'/propiedad/' + ${propiedad.id} + '/compra'}" class="alquilar-btn">Adquirir propiedad</a>
             </div>
         </div>
 

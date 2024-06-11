@@ -209,6 +209,14 @@ public class ControladorPropiedad {
         return new ModelAndView("panelAdminPropiedades", model);
     }
 
+    @RequestMapping(path = "/propiedad/{id}/alquiler", method = RequestMethod.GET)
+    public ModelAndView vistaAlquilerPropiedad(HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        model.put("usuario", usuarioAutenticado);
+        return new ModelAndView("alquiler", model);
+    }
 
     @RequestMapping(path = "/panel-admin/aceptar-propiedad", method = RequestMethod.POST)
     public ModelAndView aceptarPropiedad(@RequestParam("id") Long propiedadId, HttpSession session) {
