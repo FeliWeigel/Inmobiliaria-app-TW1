@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
         mode: "range",
         dateFormat: "Y-m-d",
         inline: true,
+        locale: {
+            rangeSeparator: ' a: '
+        },
         onChange: function(selectedDates) {
             if (selectedDates.length === 2) {
                 const startDate = selectedDates[0];
