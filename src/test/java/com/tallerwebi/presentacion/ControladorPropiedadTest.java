@@ -1,9 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.ServicioPropiedad;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,15 +23,15 @@ import static org.mockito.Mockito.*;
 public class ControladorPropiedadTest {
     private ControladorPropiedad controladorPropiedad;
     private ServicioPropiedad servicioPropiedad;
-    private RepositorioUsuario repositorioUsuario;
+    private ServicioUsuario servicioUsuario;
     private HttpSession session;
 
     @BeforeEach
     public void init(){
         this.servicioPropiedad = mock(ServicioPropiedad.class);
         this.session = mock(HttpSession.class);
-        this.repositorioUsuario = mock(RepositorioUsuario.class);
-        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, repositorioUsuario);
+        this.servicioUsuario = mock(ServicioUsuario.class);
+        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, servicioUsuario);
     }
 
 
@@ -416,11 +413,11 @@ public class ControladorPropiedadTest {
 
         List<Usuario> usuariosBloqueados = new ArrayList<>();
         usuariosBloqueados.add(new Usuario());
-        when(this.repositorioUsuario.listarUsuariosBloqueados()).thenReturn(usuariosBloqueados);
+        when(this.servicioUsuario.listarUsuariosBloqueados()).thenReturn(usuariosBloqueados);
 
         List<Usuario> usuariosDesbloqueados = new ArrayList<>();
         usuariosDesbloqueados.add(new Usuario());
-        when(this.repositorioUsuario.listarUsuariosDesbloqueados()).thenReturn(usuariosDesbloqueados);
+        when(this.servicioUsuario.listarUsuariosDesbloqueados()).thenReturn(usuariosDesbloqueados);
 
         ModelAndView modelAndView = controladorPropiedad.panelAdminUsuarios(session);
 
@@ -440,7 +437,7 @@ public class ControladorPropiedadTest {
 
         ModelAndView modelAndView = controladorPropiedad.bloquearUsuario(usuarioId, session);
 
-        verify(repositorioUsuario, times(1)).bloquearUsuario(usuarioId);
+        verify(servicioUsuario, times(1)).bloquearUsuario(usuarioId);
         assertThat(modelAndView.getViewName(), is("redirect:/panel-admin/usuarios"));
     }
 
@@ -454,7 +451,7 @@ public class ControladorPropiedadTest {
 
         ModelAndView modelAndView = controladorPropiedad.desbloquearUsuario(usuarioId, session);
 
-        verify(repositorioUsuario, times(1)).desbloquearUsuario(usuarioId);
+        verify(servicioUsuario, times(1)).desbloquearUsuario(usuarioId);
         assertThat(modelAndView.getViewName(), is("redirect:/panel-admin/usuarios"));
     }
 
@@ -481,7 +478,7 @@ public class ControladorPropiedadTest {
 
         Long usuarioId = 1L;
 
-        doThrow(new CRUDPropiedadExcepcion("Error al bloquear usuario")).when(repositorioUsuario).bloquearUsuario(usuarioId);
+        doThrow(new CRUDPropiedadExcepcion("Error al bloquear usuario")).when(servicioUsuario).bloquearUsuario(usuarioId);
 
         ModelAndView modelAndView = controladorPropiedad.bloquearUsuario(usuarioId, session);
 
@@ -497,7 +494,7 @@ public class ControladorPropiedadTest {
 
         Long usuarioId = 1L;
 
-        doThrow(new CRUDPropiedadExcepcion("Error al desbloquear usuario")).when(repositorioUsuario).desbloquearUsuario(usuarioId);
+        doThrow(new CRUDPropiedadExcepcion("Error al desbloquear usuario")).when(servicioUsuario).desbloquearUsuario(usuarioId);
 
         ModelAndView modelAndView = controladorPropiedad.desbloquearUsuario(usuarioId, session);
 

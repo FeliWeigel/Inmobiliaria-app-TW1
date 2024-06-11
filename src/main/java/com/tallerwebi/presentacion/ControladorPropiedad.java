@@ -1,9 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.ServicioPropiedad;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,12 +20,12 @@ import java.util.Set;
 public class ControladorPropiedad {
 
     private final ServicioPropiedad servicioPropiedad;
-    private final RepositorioUsuario repositorioUsuario;
+    private final ServicioUsuario servicioUsuario;
     private final String CARPETA_IMAGENES = "src/main/webapp/resources/core/img/propiedades/";
 
-    public ControladorPropiedad(ServicioPropiedad servicioPropiedad, RepositorioUsuario repositorioUsuario) {
+    public ControladorPropiedad(ServicioPropiedad servicioPropiedad, ServicioUsuario servicioUsuario) {
         this.servicioPropiedad = servicioPropiedad;
-        this.repositorioUsuario = repositorioUsuario;
+        this.servicioUsuario = servicioUsuario;
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -55,7 +52,7 @@ public class ControladorPropiedad {
 
         if(usuarioAutenticado != null){
             try{
-                Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+                Set<Propiedad> favoritos =  servicioUsuario.listarFavoritos(usuarioAutenticado);
                 model.put("favoritos", favoritos);
             }catch(CRUDPropiedadExcepcion e){
                 model.put("error", e.getMessage());
@@ -122,7 +119,7 @@ public class ControladorPropiedad {
 
         if(usuarioAutenticado != null){
             try{
-                Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+                Set<Propiedad> favoritos =  servicioUsuario.listarFavoritos(usuarioAutenticado);
                 model.put("favoritos", favoritos);
             }catch(CRUDPropiedadExcepcion e){
                 model.put("error", e.getMessage());
@@ -151,7 +148,7 @@ public class ControladorPropiedad {
 
         if(usuarioAutenticado != null){
             try{
-                Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+                Set<Propiedad> favoritos =  servicioUsuario.listarFavoritos(usuarioAutenticado);
                 model.put("favoritos", favoritos);
             }catch(CRUDPropiedadExcepcion e){
                 model.put("error", e.getMessage());
@@ -307,8 +304,8 @@ public class ControladorPropiedad {
         }
 
         try {
-            List<Usuario> usuariosBloqueados = repositorioUsuario.listarUsuariosBloqueados();
-            List<Usuario> usuariosDesbloqueados = repositorioUsuario.listarUsuariosDesbloqueados();
+            List<Usuario> usuariosBloqueados = servicioUsuario.listarUsuariosBloqueados();
+            List<Usuario> usuariosDesbloqueados = servicioUsuario.listarUsuariosDesbloqueados();
             model.put("usuariosBloqueados", usuariosBloqueados);
             model.put("usuariosDesbloqueados", usuariosDesbloqueados);
         } catch (Exception e) {
@@ -329,7 +326,7 @@ public class ControladorPropiedad {
         }
 
         try {
-            this.repositorioUsuario.bloquearUsuario(usuarioId);
+            this.servicioUsuario.bloquearUsuario(usuarioId);
         } catch (CRUDPropiedadExcepcion e) {
             model.put("error", e.getMessage());
             return new ModelAndView("redirect:/panel-admin/usuarios", model);
@@ -349,7 +346,7 @@ public class ControladorPropiedad {
         }
 
         try {
-            this.repositorioUsuario.desbloquearUsuario(usuarioId);
+            this.servicioUsuario.desbloquearUsuario(usuarioId);
         } catch (CRUDPropiedadExcepcion e) {
             model.put("error", e.getMessage());
             return new ModelAndView("redirect:/panel-admin/usuarios", model);

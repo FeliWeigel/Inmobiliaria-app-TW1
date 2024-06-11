@@ -2,7 +2,6 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.*;
-import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.*;
 
 public class ControladorUsuarioTest {
 
-	private RepositorioUsuarioImpl repositorioUsuario;
+	private ServicioUsuario servicioUsuario;
 	private ServicioPropiedad servicioPropiedad;
 	private ControladorUsuario controladorUsuario;
 	private HttpSession session;
@@ -30,9 +29,9 @@ public class ControladorUsuarioTest {
 
 	@BeforeEach
 	public void init() {
-		this.repositorioUsuario = mock(RepositorioUsuarioImpl.class);
+		this.servicioUsuario = mock(ServicioUsuario.class);
 		this.servicioPropiedad = mock(ServicioPropiedad.class);
-		this.controladorUsuario = new ControladorUsuario(this.repositorioUsuario, this.servicioPropiedad, this.imagenServicio);
+		this.controladorUsuario = new ControladorUsuario(this.servicioUsuario, this.servicioPropiedad, this.imagenServicio);
 		this.session = mock(HttpSession.class);
 
 		this.usuario = new Usuario();
@@ -53,7 +52,7 @@ public class ControladorUsuarioTest {
 
 		Set<Propiedad> favoritos = new HashSet<>(Arrays.asList(propiedad1, propiedad2));
 
-		when(this.repositorioUsuario.listarFavoritos(this.usuario)).thenReturn(favoritos);
+		when(this.servicioUsuario.listarFavoritos(this.usuario)).thenReturn(favoritos);
 
 		ModelAndView modelAndView = this.controladorUsuario.vistaFavoritos(this.session);
 
@@ -67,7 +66,7 @@ public class ControladorUsuarioTest {
 	public void queMuestreMensajeCuandoNoHayFavoritos() {
 		Set<Propiedad> favoritos = new HashSet<>();
 
-		when(this.repositorioUsuario.listarFavoritos(this.usuario)).thenReturn(favoritos);
+		when(this.servicioUsuario.listarFavoritos(this.usuario)).thenReturn(favoritos);
 
 		ModelAndView modelAndView = this.controladorUsuario.vistaFavoritos(this.session);
 
@@ -78,7 +77,7 @@ public class ControladorUsuarioTest {
 
 	@Test
 	public void queMuestreErrorCuandoCRUDPropiedadExcepcion() {
-		when(this.repositorioUsuario.listarFavoritos(this.usuario)).thenThrow(new CRUDPropiedadExcepcion("Error! La propiedad no pudo ser encontrada."));
+		when(this.servicioUsuario.listarFavoritos(this.usuario)).thenThrow(new CRUDPropiedadExcepcion("Error! La propiedad no pudo ser encontrada."));
 
 		ModelAndView modelAndView = this.controladorUsuario.vistaFavoritos(this.session);
 
@@ -89,7 +88,7 @@ public class ControladorUsuarioTest {
 
 	@Test
 	public void queMuestreErrorGeneralCuandoExcepcion() {
-		when(this.repositorioUsuario.listarFavoritos(this.usuario)).thenThrow(new RuntimeException("Error inesperado"));
+		when(this.servicioUsuario.listarFavoritos(this.usuario)).thenThrow(new RuntimeException("Error inesperado"));
 
 		ModelAndView modelAndView = this.controladorUsuario.vistaFavoritos(this.session);
 
@@ -107,21 +106,21 @@ public class ControladorUsuarioTest {
 		assertThat(modelAndView.getViewName(), is("lista-propiedades"));
 		assertThat(modelAndView.getModel().get("success"), is("La propiedad ha sido agregada a tu lista de favoritos correctamente!"));
 		assertThat(modelAndView.getModel().get("propiedades"), is(this.propiedades));
-		verify(this.repositorioUsuario).agregarFavorito(this.usuario, propiedadId);
+		verify(this.servicioUsuario).agregarFavorito(this.usuario, propiedadId);
 	}
 
 	@Test
 	public void queMuestreErrorCuandoCRUDPropiedadExcepcionAlAgregar() {
 		Long propiedadId = 1L;
 
-		doThrow(new CRUDPropiedadExcepcion("Error! La propiedad no pudo ser encontrada.")).when(this.repositorioUsuario).agregarFavorito(this.usuario, propiedadId);
+		doThrow(new CRUDPropiedadExcepcion("Error! La propiedad no pudo ser encontrada.")).when(this.servicioUsuario).agregarFavorito(this.usuario, propiedadId);
 
 		ModelAndView modelAndView = this.controladorUsuario.agregarFavorito(propiedadId, this.session);
 
 		assertThat(modelAndView.getViewName(), is("lista-propiedades"));
 		assertThat(modelAndView.getModel().get("error"), is("Error! La propiedad no pudo ser encontrada."));
 		assertThat(modelAndView.getModel().get("propiedades"), is(this.propiedades));
-		verify(this.repositorioUsuario).agregarFavorito(this.usuario, propiedadId);
+		verify(this.servicioUsuario).agregarFavorito(this.usuario, propiedadId);
 	}
 
 
@@ -133,7 +132,7 @@ public class ControladorUsuarioTest {
 
 		assertThat(modelAndView.getViewName(), is("lista-propiedades"));
 		assertThat(modelAndView.getModel().get("success"), is("La propiedad ha sido eliminada de tu lista de favoritos correctamente."));
-		verify(this.repositorioUsuario).eliminarFavorito(this.usuario, propiedadId);
+		verify(this.servicioUsuario).eliminarFavorito(this.usuario, propiedadId);
 	}
 
 
@@ -141,13 +140,13 @@ public class ControladorUsuarioTest {
 	public void queMuestreErrorCuandoCRUDPropiedadExcepcionAlEliminar() {
 		Long propiedadId = 1L;
 
-		doThrow(new CRUDPropiedadExcepcion("Error! La propiedad no pudo ser encontrada.")).when(this.repositorioUsuario).eliminarFavorito(this.usuario, propiedadId);
+		doThrow(new CRUDPropiedadExcepcion("Error! La propiedad no pudo ser encontrada.")).when(this.servicioUsuario).eliminarFavorito(this.usuario, propiedadId);
 
 		ModelAndView modelAndView = this.controladorUsuario.eliminarFavorito(propiedadId, this.session);
 
 		assertThat(modelAndView.getViewName(), is("lista-propiedades"));
 		assertThat(modelAndView.getModel().get("error"), is("Error! La propiedad no pudo ser encontrada."));
-		verify(this.repositorioUsuario).eliminarFavorito(this.usuario, propiedadId);
+		verify(this.servicioUsuario).eliminarFavorito(this.usuario, propiedadId);
 	}
 
 
@@ -181,7 +180,7 @@ public class ControladorUsuarioTest {
 
 	@Test
 	public void queMuestreErrorCuandoPasswordEsInvalidaAlEditarPerfil() throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion, UsuarioExistenteExcepcion {
-		doThrow(new PasswordInvalidaExcepcion()).when(repositorioUsuario).editarPerfil(usuario);
+		doThrow(new PasswordInvalidaExcepcion()).when(servicioUsuario).editarPerfil(usuario);
 
 		ModelAndView modelAndView = this.controladorUsuario.perfil(this.usuario, this.session);
 
@@ -192,7 +191,7 @@ public class ControladorUsuarioTest {
 
 	@Test
 	public void queMuestreErrorCuandoCredencialesSonInvalidasAlEditarPerfil() throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion, UsuarioExistenteExcepcion {
-		doThrow(new CredencialesInvalidasExcepcion()).when(repositorioUsuario).editarPerfil(usuario);
+		doThrow(new CredencialesInvalidasExcepcion()).when(servicioUsuario).editarPerfil(usuario);
 
 		ModelAndView modelAndView = this.controladorUsuario.perfil(this.usuario, this.session);
 
@@ -202,7 +201,7 @@ public class ControladorUsuarioTest {
 
 	@Test
 	public void queMuestreErrorCuandoEmailEstaAsociadoAOtraCuentaAlEditarPerfil() throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion, UsuarioExistenteExcepcion {
-		doThrow(new UsuarioExistenteExcepcion()).when(repositorioUsuario).editarPerfil(usuario);
+		doThrow(new UsuarioExistenteExcepcion()).when(servicioUsuario).editarPerfil(usuario);
 
 		ModelAndView modelAndView = this.controladorUsuario.perfil(this.usuario, this.session);
 

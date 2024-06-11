@@ -16,12 +16,12 @@ import java.util.Set;
 
 @Controller
 public class ControladorUsuario {
-    private final RepositorioUsuario repositorioUsuario;
+    private final ServicioUsuario servicioUsuario;
     private final ServicioPropiedad servicioPropiedad;
     private final SubirImagenServicio imagenServicio;
 
-    public ControladorUsuario(RepositorioUsuario repositorioUsuario, ServicioPropiedad servicioPropiedad, SubirImagenServicio imagenServicio) {
-        this.repositorioUsuario = repositorioUsuario;
+    public ControladorUsuario(ServicioUsuario servicioUsuario, ServicioPropiedad servicioPropiedad, SubirImagenServicio imagenServicio) {
+        this.servicioUsuario = servicioUsuario;
         this.servicioPropiedad = servicioPropiedad;
         this.imagenServicio = imagenServicio;
     }
@@ -37,7 +37,7 @@ public class ControladorUsuario {
         }
 
         try {
-            favoritos = repositorioUsuario.listarFavoritos(usuarioAutenticado);
+            favoritos = servicioUsuario.listarFavoritos(usuarioAutenticado);
             model.put("listaFavoritos", favoritos);
         }catch(CRUDPropiedadExcepcion e){
             model.put("error", e.getMessage());
@@ -65,14 +65,14 @@ public class ControladorUsuario {
         }
 
         try {
-            repositorioUsuario.agregarFavorito(usuarioAutenticado, propiedadId);
+            servicioUsuario.agregarFavorito(usuarioAutenticado, propiedadId);
             model.put("success", "La propiedad ha sido agregada a tu lista de favoritos correctamente!");
         }catch(CRUDPropiedadExcepcion e){
             model.put("error", e.getMessage());
         }
 
         try{
-            Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+            Set<Propiedad> favoritos =  servicioUsuario.listarFavoritos(usuarioAutenticado);
             model.put("favoritos", favoritos);
         }catch(CRUDPropiedadExcepcion e){
             model.put("error", e.getMessage());
@@ -94,14 +94,14 @@ public class ControladorUsuario {
         }
 
         try {
-            repositorioUsuario.eliminarFavorito(usuarioAutenticado, propiedadId);
+            servicioUsuario.eliminarFavorito(usuarioAutenticado, propiedadId);
             model.put("success", "La propiedad ha sido eliminada de tu lista de favoritos correctamente.");
         }catch(CRUDPropiedadExcepcion e){
             model.put("error", e.getMessage());
         }
 
         try{
-            Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+            Set<Propiedad> favoritos =  servicioUsuario.listarFavoritos(usuarioAutenticado);
             model.put("favoritos", favoritos);
         }catch(CRUDPropiedadExcepcion e){
             model.put("error", e.getMessage());
@@ -135,7 +135,7 @@ public class ControladorUsuario {
         }
 
         imagenServicio.subirImagenUsuario(usuarioAutenticado.getId(), foto);
-        Usuario usuarioActualizado = repositorioUsuario.buscarPorId(usuarioAutenticado.getId());
+        Usuario usuarioActualizado = servicioUsuario.buscarPorId(usuarioAutenticado.getId());
         session.setAttribute("usuario", usuarioActualizado);
         model.put("usuario", usuarioActualizado);
 
@@ -149,7 +149,7 @@ public class ControladorUsuario {
         usuario.setId(usuarioAutenticado.getId());
 
         try {
-            repositorioUsuario.editarPerfil(usuario);
+            servicioUsuario.editarPerfil(usuario);
         }catch(PasswordInvalidaExcepcion e){
             model.put("error", "Error! La contraseña debe contener al menos: 6 digitos, una mayuscula, un numero y un caracter especial.");
             return new ModelAndView("perfil", model);
