@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,6 +24,9 @@ public class Propiedad {
     private String ubicacion;
     private String rutaImagen;
     private Boolean aceptada; // Nuevo atributo
+
+    @OneToMany(mappedBy = "propiedad", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<AlquilerPropiedad> alquileres;
 
     public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
         this.id = id;
@@ -133,4 +137,23 @@ public class Propiedad {
         return Objects.hash(id);
     }
 
+    public Boolean getAceptada() {
+        return aceptada;
+    }
+
+    public List<AlquilerPropiedad> getAlquileres() {
+        return alquileres;
+    }
+
+    public void setAlquileres(List<AlquilerPropiedad> alquileres) {
+        this.alquileres = alquileres;
+    }
+
+    public Set<Usuario> getUsuariosFavoritos() {
+        return usuariosFavoritos;
+    }
+
+    public void setUsuariosFavoritos(Set<Usuario> usuariosFavoritos) {
+        this.usuariosFavoritos = usuariosFavoritos;
+    }
 }

@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,6 +19,9 @@ public class Usuario {
     private String rol;
     private Boolean activo = false;
     private String fotoPerfil;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<AlquilerPropiedad> alquileres;
 
     @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
@@ -96,5 +100,13 @@ public class Usuario {
 
     public void setFotoPerfil(String fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
+    }
+
+    public List<AlquilerPropiedad> getAlquileres() {
+        return alquileres;
+    }
+
+    public void setAlquileres(List<AlquilerPropiedad> alquileres) {
+        this.alquileres = alquileres;
     }
 }
