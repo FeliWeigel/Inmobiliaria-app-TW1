@@ -46,7 +46,7 @@
         </div>
 
         <div class="propiedad">
-            <h1 class="message" th:if="${messageSuccess != null}" th:text="${messageSuccess}">Detalles de la Propiedad</h1>
+            <h1 class="message" th:if="${messageSuccess != null}">Detalles de la Propiedad</h1>
             <div class="propiedad-content">
                 <div class="propiedad-info">
                     <p class="propiedad-estado">En <span th:text="${propiedad.estado}"></span></p>
@@ -57,7 +57,10 @@
                     <p><i style="margin-right: .5rem" class="fa-brands fa-codepen"></i>Superficie: <span th:text="${propiedad.superficie}"></span></p>
                 </div>
                 <div class="propiedad-galeria">
-                    <img id="img-principal" class="galeria-img-principal" th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}">
+                    <h4 class="galeria-title">Galeria de imagenes:</h4>
+                    <div>
+                        <img id="img-principal" class="galeria-img-principal" th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}">
+                    </div>
                     <div class="galeria-seleccion">
                         <div th:each="imagen : ${imagenes}">
                             <img onclick="seleccionarImagen(this)" class="galeria-img-sec" th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${imagen}}">
