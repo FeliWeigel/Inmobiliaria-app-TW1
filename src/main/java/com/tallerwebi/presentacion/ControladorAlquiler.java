@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +29,7 @@ public class ControladorAlquiler {
     @RequestMapping(path = "/propiedad/{id}/nuevo-alquiler", method = RequestMethod.POST)
     public ModelAndView nuevoAlquiler(
             @PathVariable Long id, HttpSession session,
-                @RequestParam Date fechaInicio, @RequestParam Date fechaFin
+            @RequestParam Date fechaInicio, @RequestParam Date fechaFin
     ){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
