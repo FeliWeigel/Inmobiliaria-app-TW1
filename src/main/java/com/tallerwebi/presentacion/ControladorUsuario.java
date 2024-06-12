@@ -126,7 +126,7 @@ public class ControladorUsuario {
     }
 
     @RequestMapping(path = "/perfil/editar/foto-perfil", method = RequestMethod.POST)
-    public ModelAndView nuevaFotoPerfil(@RequestParam("foto")MultipartFile foto, HttpSession session) throws IOException {
+    public ModelAndView nuevaFotoPerfil(@RequestParam("foto")MultipartFile foto, HttpSession session) throws IOException, UsuarioInexistenteExcepcion {
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
 
