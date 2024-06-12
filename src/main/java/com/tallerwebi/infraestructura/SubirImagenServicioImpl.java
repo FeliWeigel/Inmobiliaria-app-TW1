@@ -89,6 +89,14 @@ public class SubirImagenServicioImpl implements SubirImagenServicio {
                 throw new IOException("Error al crear la carpeta de destino para el usuario: " + usuarioId);
             }
         }
+        if (usuario.getFotoPerfil() != null) {
+            Path imagenAlmacenadaPath = carpetaDestino.resolve(usuario.getFotoPerfil());
+            try {
+                Files.deleteIfExists(imagenAlmacenadaPath);
+            } catch (IOException e) {
+                throw new IOException("Error al eliminar la imagen anterior: " + imagenAlmacenadaPath.toString());
+            }
+        }
 
         try {
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(imagen.getOriginalFilename()));
