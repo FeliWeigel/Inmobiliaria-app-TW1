@@ -40,6 +40,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     const rangoFechasTexto = document.getElementById('rango-fechas-texto');
                     rangoFechasTexto.innerHTML = `<strong>de:</strong> ${flatpickr.formatDate(startDate, "d-m-Y")} <strong>hasta:</strong> ${flatpickr.formatDate(endDate, "d-m-Y")}`;
                 }
+            },
+            onReady: function(selectedDates, dateStr, instance) {
+                instance.days.childNodes.forEach(node => {
+                    if(node.classList.contains("flatpickr-disabled")){
+                        node.style.background= "#ffcccc"
+                        node.style.color= "#000"
+                    }
+                });
             }
         });
     }
