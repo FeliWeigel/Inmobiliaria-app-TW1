@@ -1,14 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
     const propiedadId = document.getElementById('rango-fechas').dataset.propiedadId;
-    const fetchURL = `http://localhost:8080/spring/propiedad/${propiedadId}/reservas`
+    const fetchURL = `http://localhost:8080/spring/propiedad/${propiedadId}/reservas`;
+    // llamada al servidor para obtener las fechas reservadas de una propiedad y posteriormente marcarlas en rojo dentro del calendario dinamicamente
     fetch(fetchURL)
         .then(res => res.json())
         .then(data => {
             let fechasArray = new Array()
             if(data){
                 data.forEach((fechasAlquiler) => {
-                    fechaInicio = new Date(fechasAlquiler.fechaInicio).toLocaleDateString()
-                    fechaFin = new Date(fechasAlquiler.fechaFin).toLocaleDateString()
+                    let fechaInicio = new Date(fechasAlquiler.fechaInicio).toLocaleDateString()
+                    let fechaFin = new Date(fechasAlquiler.fechaFin).toLocaleDateString()
 
                     let rangoFechas = {
                         fechaInicio: fechaInicio,
@@ -21,7 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             console.log(fechasArray)
         })
+        .catch(err => console.log(err))
 
+    // calendario
     flatpickr("#rango-fechas", {
         mode: "range",
         dateFormat: "Y-m-d",
@@ -41,19 +44,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // manejo de alertas de error/exito al ejecutar un nuevo alquiler
     let successMessage = document.getElementById("alquiler-success")
     let errorMessage = document.getElementById("alquiler-error")
     if(successMessage){
         successMessage.style.opacity = '1'
-    }
-    if(errorMessage){
+    }else if(errorMessage){
         errorMessage.style.opacity = '1'
     }
+
     setTimeout(() => {
         if(successMessage){
             successMessage.style.opacity = '0'
-        }
-        if(errorMessage){
+        }else if(errorMessage){
             errorMessage.style.opacity = '0'
         }
     }, 5000)
