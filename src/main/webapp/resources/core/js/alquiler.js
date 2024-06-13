@@ -11,12 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     let fechaInicio = new Date(fechasAlquiler.fechaInicio);
                     let fechaFin = new Date(fechasAlquiler.fechaFin)
 
-                    let rangoFechas = {
-                        fechaInicio: fechaInicio,
-                        fechaFin: fechaFin,
-                        className: 'fecha-reservada'
-                    }
-                    fechasArray.push(rangoFechas)
+                    fechasArray.push({
+                        from: fechaInicio,
+                        to: fechaFin
+                    })
                 })
             }
             mostrarCalendario(fechasArray)
@@ -32,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
             locale: {
                 rangeSeparator: ' a: '
             },
-            disabled: fechasReservadas,
+            disable: fechasReservadas,
             onChange: function(selectedDates) {
                 if (selectedDates.length === 2) {
                     const startDate = selectedDates[0];
