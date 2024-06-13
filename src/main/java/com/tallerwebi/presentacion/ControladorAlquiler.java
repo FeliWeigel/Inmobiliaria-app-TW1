@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.FechasAlquiler;
 import com.tallerwebi.dominio.ServicioAlquiler;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Date;
+import java.util.List;
 
 @Controller
 public class ControladorAlquiler {
@@ -65,5 +67,10 @@ public class ControladorAlquiler {
         model.put("usuario", usuarioAutenticado);
         model.put("propiedadId", id);
         return new ModelAndView("alquiler", model);
+    }
+
+    @RequestMapping(path = "/propiedad/{id}/alquiler/fechas", method = RequestMethod.GET)
+    public List<FechasAlquiler> fechasReservadasPorPropiedad(@PathVariable Long id){
+        return servicioAlquiler.fechasReservadasPorPropiedad(id);
     }
 }
