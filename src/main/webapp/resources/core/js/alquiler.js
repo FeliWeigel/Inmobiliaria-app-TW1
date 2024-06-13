@@ -31,7 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 rangeSeparator: ' a: '
             },
             disable: fechasReservadas,
-            onChange: function(selectedDates) {
+            onChange: function(selectedDates,dateStr, instance) {
+                marcarFechasYaReservadas(instance)
                 if (selectedDates.length === 2) {
                     const startDate = selectedDates[0];
                     const endDate = selectedDates[1];
@@ -42,12 +43,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             },
             onReady: function(selectedDates, dateStr, instance) {
-                instance.days.childNodes.forEach(node => {
-                    if(node.classList.contains("flatpickr-disabled")){
-                        node.style.background= "#ffcccc"
-                        node.style.color= "#000"
-                    }
-                });
+                marcarFechasYaReservadas(instance)
+            },
+            onMonthChange: function(selectedDates, dateStr, instance) {
+                marcarFechasYaReservadas(instance);
+            }
+        });
+    }
+
+    function marcarFechasYaReservadas(instance){
+        instance.days.childNodes.forEach(node => {
+            if(node.classList.contains("flatpickr-disabled")){
+                node.style.background= "#ffcccc"
+                node.style.color= "#000"
             }
         });
     }
