@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     let rangoFechas = {
                         fechaInicio: fechaInicio,
-                        fechaFin: fechaFin
+                        fechaFin: fechaFin,
+                        className: 'fecha-reservada'
                     }
                     fechasArray.push(rangoFechas)
                 })
@@ -31,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
             locale: {
                 rangeSeparator: ' a: '
             },
-            disable: fechasReservadas,
+            disabled: fechasReservadas,
             onChange: function(selectedDates) {
                 if (selectedDates.length === 2) {
                     const startDate = selectedDates[0];
