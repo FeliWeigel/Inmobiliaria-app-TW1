@@ -36,7 +36,7 @@
     <img class="alquiler-bg" th:src="@{/img/home-bg.png}"/>
     <div class="container">
       <h2>Seleccione el rango de fechas en que desea alquilar la propiedad</h2>
-      <div id="rango-fechas" class="form-control"></div>
+      <div id="rango-fechas" class="form-control" th:data-propiedad-id="${id}"></div>
       <div class="confirmacion-alquiler">
         <div id="rango-fechas-texto" style="margin-top: 10px"><strong>de:</strong> ____ <strong>hasta:</strong> ____</div>
         <form id="fecha-form" th:action="@{'/propiedad/' + ${id} + '/nuevo-alquiler'}" method="post">

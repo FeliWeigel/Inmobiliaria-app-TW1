@@ -1,29 +1,27 @@
 package com.tallerwebi.presentacion;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tallerwebi.dominio.FechasAlquiler;
 import com.tallerwebi.dominio.ServicioAlquiler;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.List;
 
 @Controller
 public class ControladorAlquiler {
-
     private final ServicioAlquiler servicioAlquiler;
-
     public ControladorAlquiler(ServicioAlquiler servicioAlquiler) {
         this.servicioAlquiler = servicioAlquiler;
     }
@@ -69,8 +67,15 @@ public class ControladorAlquiler {
         return new ModelAndView("alquiler", model);
     }
 
-    @RequestMapping(path = "/propiedad/{id}/alquiler/fechas", method = RequestMethod.GET)
-    public List<FechasAlquiler> fechasReservadasPorPropiedad(@PathVariable Long id){
-        return servicioAlquiler.fechasReservadasPorPropiedad(id);
+    @RequestMapping(path = "/propiedad/{id}/reservas", method = RequestMethod.GET)
+    public void fechasReservadasPorPropiedad(@PathVariable Long id, HttpServletResponse response) throws IOException {
+        List<FechasAlquiler> fechasReservadas = servicioAlquiler.fechasReservadasPorPropiedad(id);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(out, fechasReservadas);
     }
 }
