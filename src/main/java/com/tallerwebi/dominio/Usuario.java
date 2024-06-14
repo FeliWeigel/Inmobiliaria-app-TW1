@@ -31,6 +31,15 @@ public class Usuario {
     )
     private Set<Propiedad> favoritos;
 
+    public Usuario() {
+    }
+
+    public Usuario(Long id, String nombre, String password) {
+        this.id = id;
+        this. nombre = nombre;
+        this.password = password;
+    }
+
     public Long getId() {
         return id;
     }
