@@ -52,4 +52,12 @@ public class AlquilerPropiedad {
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = this.id;
+    }
 }
