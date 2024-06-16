@@ -25,12 +25,14 @@ public class ControladorPropiedadTest {
     private ServicioPropiedad servicioPropiedad;
     private ServicioUsuario servicioUsuario;
     private HttpSession session;
+    private Usuario usuario;
 
     @BeforeEach
     public void init(){
         this.servicioPropiedad = mock(ServicioPropiedad.class);
         this.session = mock(HttpSession.class);
         this.servicioUsuario = mock(ServicioUsuario.class);
+        this.usuario = mock(Usuario.class);
         this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, servicioUsuario);
     }
 
@@ -221,8 +223,8 @@ public class ControladorPropiedadTest {
     public void queMuestreMensajeDeExitoAlAgregarPropiedad() throws CRUDPropiedadExcepcion, IOException {
         Propiedad nuevaPropiedad = new Propiedad();
         MultipartFile imagenMock = mock(MultipartFile.class);
-
-        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock);
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock, session);
 
         assertThat(mav.getViewName(), equalTo("nuevaPropiedad"));
         assertThat(mav.getModel().get("success"), equalTo("La Propiedad ha sido agregada con exito!"));
@@ -234,8 +236,8 @@ public class ControladorPropiedadTest {
         Propiedad nuevaPropiedad = new Propiedad();
         MultipartFile imagenMock = mock(MultipartFile.class);
         doThrow(new CRUDPropiedadExcepcion("Error al agregar la propiedad")).when(servicioPropiedad).agregarPropiedad(any(Propiedad.class), any(MultipartFile.class));
-
-        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock);
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock, session);
 
         assertThat(mav.getViewName(), equalTo("nuevaPropiedad"));
         assertThat(mav.getModel().get("error"), equalTo("Error al agregar la propiedad"));
@@ -247,8 +249,8 @@ public class ControladorPropiedadTest {
         Propiedad nuevaPropiedad = new Propiedad();
         MultipartFile imagenMock = mock(MultipartFile.class);
         doThrow(new IOException("Error de E/S")).when(servicioPropiedad).agregarPropiedad(any(Propiedad.class), any(MultipartFile.class));
-
-        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock);
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock, session);
 
         assertThat(mav.getViewName(), equalTo("nuevaPropiedad"));
         assertThat(mav.getModel().get("error"), equalTo("Error de E/S"));
