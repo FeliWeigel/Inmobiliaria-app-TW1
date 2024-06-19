@@ -50,6 +50,7 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
                 propiedadAlmacenada.setNombre(propiedadEditada.getNombre());
                 propiedadAlmacenada.setBanios(propiedadEditada.getBanios());
                 propiedadAlmacenada.setHabitaciones(propiedadEditada.getHabitaciones());
+                propiedadAlmacenada.setEstado(propiedadEditada.getEstado());
                 propiedadAlmacenada.setPisos(propiedadEditada.getPisos());
                 propiedadAlmacenada.setSuperficie(propiedadEditada.getSuperficie());
                 propiedadAlmacenada.setPrecio(propiedadEditada.getPrecio());
