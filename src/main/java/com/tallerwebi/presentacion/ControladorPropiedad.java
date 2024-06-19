@@ -187,7 +187,7 @@ public class ControladorPropiedad {
             return new ModelAndView("nuevaPropiedad", model);
         }
 
-        model.put("success", "La Propiedad ha sido agregada con exito!");
+        model.put("success", "La peticion ha sido registrada con exito! La propiedad sera publicada en cuanto verifiquemos los detalles de la venta.");
         return new ModelAndView("nuevaPropiedad", model);
     }
 
