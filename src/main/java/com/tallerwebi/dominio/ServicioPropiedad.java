@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ServicioPropiedad {
@@ -61,6 +64,26 @@ public class ServicioPropiedad {
         return repositorioPropiedad.listarPropiedadesAceptadas();
     }
 
+    public List<Propiedad> filtrarPropiedades(FiltroPropiedad filtroPropiedad){
+        Set<Propiedad> propiedadesFiltradas = new HashSet<>(
+                this.repositorioPropiedad.listarPropiedades()
+        );
+
+        if(filtroPropiedad.getMinPrecio() != null && filtroPropiedad.getMaxPrecio() != null){
+            propiedadesFiltradas.retainAll(this.repositorioPropiedad.listarPorRangoPrecio(filtroPropiedad.getMinPrecio(), filtroPropiedad.getMaxPrecio()));
+        }
+        if(filtroPropiedad.getEstado() != null){
+            propiedadesFiltradas.retainAll(this.repositorioPropiedad.listarPorEstado(filtroPropiedad.getEstado()));
+        }
+        if(filtroPropiedad.getSuperficie() != null){
+            propiedadesFiltradas.retainAll(this.repositorioPropiedad.listarPorSuperficie(filtroPropiedad.getSuperficie()));
+        }
+        if(filtroPropiedad.getUbicacion() != null){
+            propiedadesFiltradas.retainAll(this.repositorioPropiedad.listarPorUbicacion(filtroPropiedad.getUbicacion()));
+        }
+
+        return new ArrayList<>(propiedadesFiltradas);
+    }
 
     public List<Propiedad> listarPropiedadesPorPrecio(Double min, Double max){
         if(min >= 0.0 && max >= 0.0){

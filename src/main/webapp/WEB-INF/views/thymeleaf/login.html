@@ -18,7 +18,7 @@
 <body>
     <form class="login-form" action="#" th:action="@{/validar-login}" method="POST" th:object="${datosLogin}">
         <h3>Iniciar sesión</h3>
-        <p class="subtitle">¿No tienes cuenta? <a href="registrarme.html">Regístrate</a></p>
+        <p class="subtitle">¿No tienes cuenta? <a th:href="@{/registrarme}">Regístrate</a></p>
 
         <label for="email">Correo electrónico</label>
         <input th:field="*{email}" id="email" type="email" class="form-control" required/>

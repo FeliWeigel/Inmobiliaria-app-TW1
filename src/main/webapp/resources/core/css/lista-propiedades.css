@@ -9,13 +9,14 @@
     row-gap: 2rem;
 }
 
-.filtros {
+.filtros, .filtros-form {
     display: flex;
     align-items: center;
     column-gap: 1.2rem;
 }
 
-.filtro-precio, .filtro-ubicacion {
+
+.filtro-precio, .filtro-ubicacion, .filtro-superficie, .filtro-estado {
     padding: .3rem;
     border: 1px solid rgba(1, 29, 51, 0.3);
     transition: .4s;
