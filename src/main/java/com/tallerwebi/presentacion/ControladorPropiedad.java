@@ -62,6 +62,34 @@ public class ControladorPropiedad {
         return new ModelAndView("lista-propiedades", model);
     }
 
+    @RequestMapping(path = "/lista-propiedades/filtro", method = RequestMethod.POST)
+    public ModelAndView filtrarPropiedades(@ModelAttribute("filtroPropiedad") FiltroPropiedad filtro, HttpSession session){
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        try {
+            List<Propiedad> propiedadesFiltradas = servicioPropiedad.filtrarPropiedades(filtro);
+            model.put("propiedades", propiedadesFiltradas);
+            model.put("usuario", usuarioAutenticado);
+        }catch(CRUDPropiedadExcepcion e){
+            model.put("message", e.getMessage());
+        }
+        catch (Exception e){
+            model.put("message", "Ha Ocurrido un Error Inesperado");
+        }
+
+        if(usuarioAutenticado != null){
+            try{
+                Set<Propiedad> favoritos =  servicioUsuario.listarFavoritos(usuarioAutenticado);
+                model.put("favoritos", favoritos);
+            }catch(CRUDPropiedadExcepcion e){
+                model.put("error", e.getMessage());
+            }
+        }
+
+        return new ModelAndView("lista-propiedades", model);
+    }
+
     @GetMapping("/propiedad/{id}")
     public ModelAndView verPropiedad(@PathVariable Long id, HttpSession session) {
         ModelMap model = new ModelMap();
@@ -98,66 +126,6 @@ public class ControladorPropiedad {
 
         return new ModelAndView("propiedad", model);
     }
-
-    @RequestMapping(path = "/filtro/precio", method = RequestMethod.POST)
-    public ModelAndView filtrarPropiedadesPorPrecio(
-            @RequestParam("min") Double min,
-            @RequestParam("max") Double max,
-            HttpSession session
-    ) {
-        ModelMap model = new ModelMap();
-        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-        try {
-            List<Propiedad> propiedadesFiltradas = servicioPropiedad.listarPropiedadesPorPrecio(min, max);
-            model.put("propiedades", propiedadesFiltradas);
-            model.put("usuario", usuarioAutenticado);
-        }catch(CRUDPropiedadExcepcion e){
-            model.put("message", e.getMessage());
-        }catch (Exception e){
-            model.put("message", "Ha Ocurrido un Error Inesperado");
-        }
-
-        if(usuarioAutenticado != null){
-            try{
-                Set<Propiedad> favoritos =  servicioUsuario.listarFavoritos(usuarioAutenticado);
-                model.put("favoritos", favoritos);
-            }catch(CRUDPropiedadExcepcion e){
-                model.put("error", e.getMessage());
-            }
-        }
-
-        return new ModelAndView("lista-propiedades", model);
-    }
-
-
-    @RequestMapping(path = "/filtro/ubicacion", method = RequestMethod.POST)
-    public ModelAndView filtrarPropiedadesPorUbicacion(@RequestParam("ubicacion") String ubicacion, HttpSession session) {
-        ModelMap model = new ModelMap();
-        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-
-        try {
-            List<Propiedad> propiedadesFiltradas = servicioPropiedad.listarPropiedadesPorUbicacion(ubicacion);
-            model.put("propiedades", propiedadesFiltradas);
-            model.put("usuario", usuarioAutenticado);
-        }catch(CRUDPropiedadExcepcion e){
-            model.put("message", e.getMessage());
-        }
-        catch (Exception e){
-            model.put("message", "Ha Ocurrido un Error Inesperado");
-        }
-
-        if(usuarioAutenticado != null){
-            try{
-                Set<Propiedad> favoritos =  servicioUsuario.listarFavoritos(usuarioAutenticado);
-                model.put("favoritos", favoritos);
-            }catch(CRUDPropiedadExcepcion e){
-                model.put("error", e.getMessage());
-            }
-        }
-
-        return new ModelAndView("lista-propiedades", model);
-    }
-
 
     @RequestMapping(path = "/agregar-propiedad", method = RequestMethod.GET)
     public ModelAndView vistaAgregarPropiedad() {

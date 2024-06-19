@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
+
 import java.util.List;
 
 public interface RepositorioPropiedad {
@@ -11,6 +13,8 @@ public interface RepositorioPropiedad {
     void editarPropiedad(Propiedad propiedad);
     List<Propiedad> listarPorRangoPrecio(Double min, Double max);
     List<Propiedad> listarPorUbicacion(String ubicacion);
+    List<Propiedad> listarPorEstado(EstadoPropiedad estado);
+    List<Propiedad> listarPorSuperficie(Double superficie);
 
     List<Propiedad> listarPropiedadesAceptadas();
 

@@ -10,7 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -137,6 +139,53 @@ public class ControladorPropiedadTest {
         assertThat(error, equalTo("Error al encontrar la propiedad seleccionada."));
     }
 
+    @Test
+    public void queSeListenLasPropiedadesFiltradas() {
+        List<Propiedad> propiedadesFiltradas = crearPropiedades();
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+        filtro.setUbicacion("Ubicacion");
+
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenReturn(propiedadesFiltradas);
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+        List<Propiedad> propiedadesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(propiedadesDevueltas.size(), equalTo(3));
+    }
+
+    @Test
+    public void queMuestreErrorCuandoOcurreCRUDPropiedadExcepcion() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+
+        doThrow(new CRUDPropiedadExcepcion("Error al filtrar propiedades")).when(servicioPropiedad).filtrarPropiedades(any(FiltroPropiedad.class));
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(mav.getModel().get("message"), equalTo("Error al filtrar propiedades"));
+    }
+
+    @Test
+    public void queMuestreErrorCuandoOcurreExcepcionInesperada() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+
+        doThrow(new RuntimeException("Error inesperado")).when(servicioPropiedad).filtrarPropiedades(any(FiltroPropiedad.class));
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
+    }
+
+
+   /*
 
     @Test
     public void queSeListenLasPropiedadesFiltradasPorPrecio(){
@@ -210,6 +259,10 @@ public class ControladorPropiedadTest {
     }
 
 
+
+   * */
+
+
     @Test
     public void queRetorneVistaAgregarPropiedadCorrectamente() {
         ModelAndView mav = this.controladorPropiedad.vistaAgregarPropiedad();
@@ -227,7 +280,7 @@ public class ControladorPropiedadTest {
         ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock, session);
 
         assertThat(mav.getViewName(), equalTo("nuevaPropiedad"));
-        assertThat(mav.getModel().get("success"), equalTo("La Propiedad ha sido agregada con exito!"));
+        assertThat(mav.getModel().get("success"), equalTo("La peticion ha sido registrada con exito! La propiedad sera publicada en cuanto verifiquemos los detalles de la venta."));
     }
 
 
