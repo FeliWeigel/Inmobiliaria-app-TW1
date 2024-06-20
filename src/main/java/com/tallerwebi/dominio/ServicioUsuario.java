@@ -44,6 +44,10 @@ public class ServicioUsuario {
         repositorioUsuario.bloquearUsuario(usuarioId);
     }
 
+    public void eliminarUsuario(Long usuarioId) {
+        repositorioUsuario.eliminarUsuario(usuarioId);
+    }
+
     public void desbloquearUsuario(Long usuarioId) {
         repositorioUsuario.desbloquearUsuario(usuarioId);
     }

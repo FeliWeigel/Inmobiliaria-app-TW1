@@ -170,6 +170,25 @@ public class ControladorPanel {
         return new ModelAndView("redirect:/panel-admin/usuarios");
     }
 
+    @RequestMapping(path = "/panel-admin/eliminar-usuario", method = RequestMethod.POST)
+    public ModelAndView eliminarUsuario(@RequestParam("id") Long usuarioId, HttpSession session) {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioAutenticado == null || !usuarioAutenticado.getRol().equals("ADMIN")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        try {
+            this.servicioUsuario.eliminarUsuario(usuarioId);
+        } catch (CRUDPropiedadExcepcion e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("redirect:/panel-admin/usuarios", model);
+        }
+
+        return new ModelAndView("redirect:/panel-admin/usuarios");
+    }
+
 
     @RequestMapping(path = "/panel-admin/desbloquear-usuario", method = RequestMethod.POST)
     public ModelAndView desbloquearUsuario(@RequestParam("id") Long usuarioId, HttpSession session) {
@@ -188,6 +207,7 @@ public class ControladorPanel {
         }
         return new ModelAndView("redirect:/panel-admin/usuarios");
     }
+
 
 }
 

@@ -224,6 +224,20 @@ public class ControladorPanelTest {
     }
 
     @Test
+    public void queAdminPuedaEliminarUsuarioSiUsuarioEstaBloqueado() {
+        Usuario usuario = new Usuario();
+        usuario.setRol("ADMIN");
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        Long usuarioId = 1L;
+
+        ModelAndView modelAndView = controladorPanel.eliminarUsuario(usuarioId, session);
+
+        verify(servicioUsuario, times(1)).eliminarUsuario(usuarioId);
+        assertThat(modelAndView.getViewName(), is("redirect:/panel-admin/usuarios"));
+    }
+
+    @Test
     public void queDesbloqueeUsuarioSiUsuarioEsAdmin() {
         Usuario usuario = new Usuario();
         usuario.setRol("ADMIN");

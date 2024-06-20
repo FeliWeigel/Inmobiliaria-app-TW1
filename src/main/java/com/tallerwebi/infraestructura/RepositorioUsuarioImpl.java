@@ -47,8 +47,11 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public void eliminarUsuario(Usuario usuarioAEliminar) {
-        sessionFactory.getCurrentSession().delete(usuarioAEliminar);
+    public void eliminarUsuario(Long id) {
+        Usuario usuario = this.buscarPorId(id);
+        if(usuario!=null && !usuario.getActivo()){
+          sessionFactory.getCurrentSession().delete(usuario);
+        }
     }
 
     @Override

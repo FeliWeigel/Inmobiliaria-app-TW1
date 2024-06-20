@@ -95,6 +95,7 @@ public class ServicioUsuarioTest {
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setEmail("newuser@example.com");
         nuevoUsuario.setPassword("newpassword123");
+        nuevoUsuario.setId(3L);
 
         when(repositorioUsuario.buscarUsuario("newuser@example.com", "newpassword123"))
                 .thenReturn(nuevoUsuario)
@@ -104,7 +105,7 @@ public class ServicioUsuarioTest {
         Usuario encontrado = repositorioUsuario.buscarUsuario("newuser@example.com", "newpassword123");
         assertThat(encontrado, is(notNullValue()));
 
-        repositorioUsuario.eliminarUsuario(nuevoUsuario);
+        repositorioUsuario.eliminarUsuario(nuevoUsuario.getId());
         Usuario eliminado = repositorioUsuario.buscarUsuario("newuser@example.com", "newpassword123");
         assertThat(eliminado, is(nullValue()));
     }

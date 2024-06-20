@@ -127,6 +127,7 @@ public class RepositorioUsuarioTest {
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setEmail("newuser@example.com");
         nuevoUsuario.setPassword("newpassword123");
+        nuevoUsuario.setId(3L);
         this.repositorioUsuarioImpl.guardar(nuevoUsuario);
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -139,7 +140,7 @@ public class RepositorioUsuarioTest {
             throw new UsuarioInexistenteExcepcion();
         }
 
-        repositorioUsuarioImpl.eliminarUsuario(usuarioAEliminar);
+        repositorioUsuarioImpl.eliminarUsuario(usuarioAEliminar.getId());
         Usuario usuarioEliminado = session.createQuery(criteriaQuery).uniqueResult();
         assertThat(usuarioEliminado, is(nullValue()));
     }
