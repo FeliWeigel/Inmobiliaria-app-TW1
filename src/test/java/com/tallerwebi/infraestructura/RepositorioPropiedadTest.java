@@ -3,6 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -118,27 +119,85 @@ public class RepositorioPropiedadTest {
     @Transactional
     @Rollback
     public void queSePuedanListarLasPropiedadesPorRangoPrecio(){
+        Propiedad propiedad = new Propiedad();
+        propiedad.setNombre("Propiedad 1");
+        propiedad.setPrecio(15000.0);
+        this.sessionFactory.getCurrentSession().save(propiedad);
 
         Integer numeroDePropiedadesQueCumplenElFiltro = this.sessionFactory.getCurrentSession()
-                .createQuery("FROM Propiedad WHERE precio BETWEEN 1000 AND 25000").getResultList().size();
+                .createQuery("FROM Propiedad WHERE precio BETWEEN 1000 AND 25000")
+                .getResultList()
+                .size();
 
-        List <Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPorRangoPrecio(1000.0, 25000.0);
+        List<Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPorRangoPrecio(1000.0, 25000.0);
 
         assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesQueCumplenElFiltro));
     }
+
 
     @Test
     @Transactional
     @Rollback
     public void queSePuedanListarLasPropiedadesPorUbicacion(){
+        Propiedad propiedad = new Propiedad();
+        propiedad.setNombre("Propiedad 2");
+        propiedad.setUbicacion("Moron");
+        this.sessionFactory.getCurrentSession().save(propiedad);
 
         Integer numeroDePropiedadesQueCumplenElFiltro = this.sessionFactory.getCurrentSession()
-                .createQuery("FROM Propiedad WHERE LOCATE(LOWER('Moron'), LOWER(ubicacion)) > 0").getResultList().size();
+                .createQuery("FROM Propiedad WHERE LOCATE(LOWER('Moron'), LOWER(ubicacion)) > 0")
+                .getResultList()
+                .size();
 
-        List <Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPorUbicacion("Moron");
+        List<Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPorUbicacion("Moron");
 
         assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesQueCumplenElFiltro));
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedanListarLasPropiedadesPorEstado(){
+        EstadoPropiedad estado = EstadoPropiedad.VENTA;
+        Propiedad propiedad = new Propiedad();
+        propiedad.setNombre("Propiedad 3");
+        propiedad.setEstado(estado);
+        this.sessionFactory.getCurrentSession().save(propiedad);
+
+        Integer numeroDePropiedadesQueCumplenElFiltro = this.sessionFactory.getCurrentSession()
+                .createQuery("FROM Propiedad WHERE estado = :estado")
+                .setParameter("estado", estado)
+                .getResultList()
+                .size();
+
+        List<Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPorEstado(estado);
+
+        assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesQueCumplenElFiltro));
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedanListarLasPropiedadesPorSuperficie(){
+        Double superficie = 100.0;
+        Propiedad propiedad = new Propiedad();
+        propiedad.setNombre("Propiedad 4");
+        propiedad.setSuperficie(150.0);
+        this.sessionFactory.getCurrentSession().save(propiedad);
+
+        Integer numeroDePropiedadesQueCumplenElFiltro = this.sessionFactory.getCurrentSession()
+                .createQuery("FROM Propiedad WHERE superficie >= :superficie")
+                .setParameter("superficie", superficie)
+                .getResultList()
+                .size();
+
+        List<Propiedad> propiedadesBuscadas = this.repositorioPropiedad.listarPorSuperficie(superficie);
+
+        assertThat(propiedadesBuscadas.size(), equalTo(numeroDePropiedadesQueCumplenElFiltro));
+    }
+
 
 
     @Test
@@ -210,6 +269,7 @@ public class RepositorioPropiedadTest {
 
 
 
+    
 
     private Integer contarPropiedadesEnLaBaseDeDatos(){
 

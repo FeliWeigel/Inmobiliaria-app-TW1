@@ -1,12 +1,14 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -97,47 +99,6 @@ public class ServicioPropiedadTest {
         List<Propiedad> propiedadesListadas = this.servicioPropiedad.listarPropiedadesAceptadas();
 
         assertThat(propiedadesListadas, equalTo(propiedadesMock));
-    }
-
-
-
-
-    @Test
-    public void queSeDevuelvanLasPropiedadesFiltradasPorPrecio() {
-
-        when(this.repositorioPropiedad.listarPorRangoPrecio(1000.0, 25000.0)).thenReturn(propiedadesMock);
-        List<Propiedad> propiedadesListadas = this.servicioPropiedad.listarPropiedadesPorPrecio(1000.0, 25000.0);
-
-        assertThat(propiedadesListadas, equalTo(propiedadesMock));
-    }
-
-
-    @Test
-    public void queSeLanceUnaExcepcionAlIntentarFiltrarPorPrecioDeFormaInvalida() {
-
-
-        assertThrows(CRUDPropiedadExcepcion.class, () -> {
-            this.servicioPropiedad.listarPropiedadesPorPrecio(-1.0, 25000.0);
-        });
-    }
-
-
-    @Test
-    public void queSeDevuelvanLasPropiedadesFiltradasPorUbicacion() {
-        when(this.repositorioPropiedad.listarPorUbicacion("Moron")).thenReturn(propiedadesMock);
-        List<Propiedad> propiedadesListadas = this.servicioPropiedad.listarPropiedadesPorUbicacion("Moron");
-
-        assertThat(propiedadesListadas, equalTo(propiedadesMock));
-    }
-
-
-    @Test
-    public void queSeLanceUnaExcepcionAlIntentarFiltrarPorUbicacionDeFormaInvalida() {
-
-
-        assertThrows(CRUDPropiedadExcepcion.class, () -> {
-            this.servicioPropiedad.listarPropiedadesPorUbicacion("");
-        });
     }
 
 
@@ -251,5 +212,111 @@ public class ServicioPropiedadTest {
         verify(this.repositorioPropiedad, times(1)).editarPropiedad(propiedad);
         assertThat(propiedad.getBanios(), equalTo(4));
     }
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorPrecio() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+
+        when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
+        when(this.repositorioPropiedad.listarPorRangoPrecio(1000.0, 25000.0)).thenReturn(propiedadesMock);
+
+        List<Propiedad> propiedadesFiltradas = this.servicioPropiedad.filtrarPropiedades(filtro);
+
+        assertThat(propiedadesFiltradas, equalTo(propiedadesMock));
+    }
+
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorEstado() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setEstado(EstadoPropiedad.VENTA);
+
+        when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
+        when(this.repositorioPropiedad.listarPorEstado(EstadoPropiedad.VENTA)).thenReturn(propiedadesMock);
+
+        List<Propiedad> propiedadesFiltradas = this.servicioPropiedad.filtrarPropiedades(filtro);
+
+        assertThat(propiedadesFiltradas, equalTo(propiedadesMock));
+    }
+
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorSuperficie() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setSuperficie(100.0);
+
+        when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
+        when(this.repositorioPropiedad.listarPorSuperficie(100.0)).thenReturn(propiedadesMock);
+
+        List<Propiedad> propiedadesFiltradas = this.servicioPropiedad.filtrarPropiedades(filtro);
+
+        assertThat(propiedadesFiltradas, equalTo(propiedadesMock));
+    }
+
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorUbicacion() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setUbicacion("Moron");
+
+        when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
+        when(this.repositorioPropiedad.listarPorUbicacion("Moron")).thenReturn(propiedadesMock);
+
+        List<Propiedad> propiedadesFiltradas = this.servicioPropiedad.filtrarPropiedades(filtro);
+
+        assertThat(propiedadesFiltradas, equalTo(propiedadesMock));
+    }
+
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorEstadoYPrecio() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setEstado(EstadoPropiedad.VENTA);
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+
+        when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
+        when(this.repositorioPropiedad.listarPorEstado(EstadoPropiedad.VENTA)).thenReturn(propiedadesMock);
+        when(this.repositorioPropiedad.listarPorRangoPrecio(1000.0, 25000.0)).thenReturn(propiedadesMock);
+
+        List<Propiedad> propiedadesFiltradas = this.servicioPropiedad.filtrarPropiedades(filtro);
+
+        assertThat(propiedadesFiltradas, equalTo(propiedadesMock));
+    }
+
+
+    @Test
+    public void queSeDevuelvanLasPropiedadesFiltradasPorTodasLasCondiciones() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+        filtro.setEstado(EstadoPropiedad.VENTA);
+        filtro.setSuperficie(100.0);
+        filtro.setUbicacion("Moron");
+
+        Propiedad propiedad1 = new Propiedad(1L, "Casa 1", EstadoPropiedad.VENTA, 2,
+                2, 1, 120.0, 20000.0, "Moron");
+
+        Propiedad propiedad2 = new Propiedad(2L, "Casa 2", EstadoPropiedad.ALQUILER, 2,
+                2, 1, 90.0, 18000.0, "Otra Ubicacion");
+
+        when(this.repositorioPropiedad.listarPropiedades()).thenReturn(Arrays.asList(propiedad1, propiedad2));
+        when(this.repositorioPropiedad.listarPorRangoPrecio(1000.0, 25000.0)).thenReturn(Arrays.asList(propiedad1, propiedad2));
+        when(this.repositorioPropiedad.listarPorEstado(EstadoPropiedad.VENTA)).thenReturn(Arrays.asList(propiedad1));
+        when(this.repositorioPropiedad.listarPorSuperficie(100.0)).thenReturn(Arrays.asList(propiedad1));
+        when(this.repositorioPropiedad.listarPorUbicacion("Moron")).thenReturn(Arrays.asList(propiedad1));
+
+        List<Propiedad> propiedadesFiltradas = this.servicioPropiedad.filtrarPropiedades(filtro);
+
+        assertThat(propiedadesFiltradas.size(), equalTo(1));
+        assertThat(propiedadesFiltradas.get(0), equalTo(propiedad1));
+    }
+
+
+
+
+
 
 }

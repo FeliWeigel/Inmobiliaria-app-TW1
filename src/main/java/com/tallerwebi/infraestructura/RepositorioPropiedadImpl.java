@@ -3,6 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.RepositorioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -50,6 +51,7 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
                 propiedadAlmacenada.setNombre(propiedadEditada.getNombre());
                 propiedadAlmacenada.setBanios(propiedadEditada.getBanios());
                 propiedadAlmacenada.setHabitaciones(propiedadEditada.getHabitaciones());
+                propiedadAlmacenada.setEstado(propiedadEditada.getEstado());
                 propiedadAlmacenada.setPisos(propiedadEditada.getPisos());
                 propiedadAlmacenada.setSuperficie(propiedadEditada.getSuperficie());
                 propiedadAlmacenada.setPrecio(propiedadEditada.getPrecio());
@@ -85,6 +87,26 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
 
         return session.createQuery(query, Propiedad.class)
                 .setParameter("ubicacionFiltro",ubicacionFiltro)
+                .getResultList();
+    }
+
+    @Override
+    public List<Propiedad> listarPorEstado(EstadoPropiedad estado) {
+        final Session session = sessionFactory.getCurrentSession();
+        String query = "FROM Propiedad WHERE estado = :estado";
+
+        return session.createQuery(query, Propiedad.class)
+                .setParameter("estado", estado)
+                .getResultList();
+    }
+
+    @Override
+    public List<Propiedad> listarPorSuperficie(Double superficie) {
+        final Session session = sessionFactory.getCurrentSession();
+        String query = "FROM Propiedad WHERE superficie >= :superficie";
+
+        return session.createQuery(query, Propiedad.class)
+                .setParameter("superficie",superficie)
                 .getResultList();
     }
 

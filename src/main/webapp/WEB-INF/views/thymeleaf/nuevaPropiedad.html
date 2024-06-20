@@ -99,16 +99,10 @@
                 th:text="${error}"
         >
         </p>
-
-        <p
-                class="success"
-                th:if="${success != null}"
-                th:text="${success}"
-        >
-        </p>
         <button type="Submit">Agregar propiedad</button>
       </form>
     </div>
+    <p id="successMessage" class="fav-alert-success" th:if="${success != null}" th:text="${success}"></p>
   </main>
 
   <footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">

@@ -28,6 +28,25 @@ public class Propiedad {
     @OneToMany(mappedBy = "propiedad", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<AlquilerPropiedad> alquileres;
 
+
+    public Propiedad() {
+        this.aceptada = false;
+    }
+
+
+    public Propiedad(Long id, String nombre, EstadoPropiedad estado, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.pisos = pisos;
+        this.banios = banios;
+        this.habitaciones = habitaciones;
+        this.superficie = superficie;
+        this.precio = precio;
+        this.estado = estado;
+        this.ubicacion = ubicacion;
+        this.aceptada = false;
+    }
+
     public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
         this.id = id;
         this.nombre = nombre;
@@ -50,14 +69,9 @@ public class Propiedad {
         }
     }
 
-    public Propiedad() {
-        this.aceptada = false;
-    }
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }

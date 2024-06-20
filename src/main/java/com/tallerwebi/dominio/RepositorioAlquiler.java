@@ -8,4 +8,5 @@ public interface RepositorioAlquiler {
     void nuevoAlquiler(AlquilerPropiedad alquiler);
     List<AlquilerPropiedad> getAlquileresByPropiedad(Long propiedadId);
     List<AlquilerPropiedad> getAlquileresByUsuario(Long usuarioId);
+    List<FechasAlquiler> getFechasByPropiedad(Long propiedadId);
 }

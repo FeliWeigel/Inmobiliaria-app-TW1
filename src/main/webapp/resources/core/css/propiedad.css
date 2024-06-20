@@ -99,7 +99,7 @@ p {
 .propiedad {
     background-color: #fff;
     border: 1px solid #ddd;
-    padding: 1rem 0rem .5rem 3rem;
+    padding: 1rem .5rem .5rem 3rem;
 }
 
 .propiedad-content {
@@ -125,7 +125,7 @@ p {
 }
 
 .propiedad-info {
-    width: 55%;
+    width: 53%;
 }
 
 .galeria-title {

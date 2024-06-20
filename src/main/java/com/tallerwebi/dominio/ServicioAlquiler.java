@@ -57,4 +57,16 @@ public class ServicioAlquiler {
         usuario.getAlquileres().add(nuevoAlquiler);
         propiedadAlmacenada.getAlquileres().add(nuevoAlquiler);
     }
+
+    public List<AlquilerPropiedad> listarAlquileresPorPropiedad(Long propiedadId){
+        return repositorioAlquiler.getAlquileresByPropiedad(propiedadId);
+    }
+
+    public List<FechasAlquiler> fechasReservadasPorPropiedad(Long propiedadId){
+        if(propiedadId == null){
+            throw new CRUDPropiedadExcepcion("El id de la propiedad es nulo!");
+        }
+
+        return repositorioAlquiler.getFechasByPropiedad(propiedadId);
+    }
 }

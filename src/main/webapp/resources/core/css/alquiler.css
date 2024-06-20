@@ -1,12 +1,113 @@
 .alquiler-container {
     height: 100vh;
-    padding: 2rem;
+    padding: .8rem 2rem 1.2rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    position: relative;
+}
+
+.alquiler-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    object-fit: cover;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
 }
 
 h2 {
-    margin-bottom: 1.5rem;
+    width: 70%;
+    text-align: center;
+    color: #e9f0f5;
+    margin-bottom: .7rem;
 }
+
+.flatpickr-calendar {
+    width: 100%;
+    max-width: none;
+    font-size: 1.3rem;
+}
+
+.flatpickr-months {
+    padding-bottom: 12px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #011423;
+}
+
+.flatpickr-current-month, .numInputWrapper, .flatpickr-next-month svg, .flatpickr-prev-month svg{
+    color: #fff;
+    fill: #fff;
+}
+
+.flatpickr-innerContainer {
+    display: flex;
+    justify-content: center;
+    padding: 1.2rem;
+}
+
+#start_date, #end_date {
+    position: absolute;
+    left: -9999px;
+}
+
+.confirmacion-alquiler {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+#rango-fechas-texto {
+    align-self: flex-start;
+    padding: 7px 20px;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #011d33;
+}
+
+.alquilar-btn {
+    font-size: 1.3rem;
+    color: #fff;
+    background-color: #146cb4;
+    border: none;
+    padding: .25rem 1.4rem;
+    border-radius: 15px;
+    transition: .4s;
+    margin-top: 9px;
+}
+
+.alquilar-btn:hover {
+    transform: translateY(-.1rem);
+    background-color: #011f36;
+}
+
+.alquiler-error, .alquiler-success {
+    position: fixed;
+    top: 4rem;
+    right: 2rem;
+    width: 300px;
+    padding: 1rem;
+    color: #fff;
+    border-radius: 5px;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0;
+    z-index: 1000;
+}
+
+.alquiler-error {
+    background-color: #8c0000;
+}
+
+.alquiler-success {
+    background-color: #017201;
+}
+

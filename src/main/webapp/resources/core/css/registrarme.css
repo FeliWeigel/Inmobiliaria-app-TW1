@@ -13,11 +13,12 @@
 
 .pswLabel {
     display: flex;
+    align-items: center;
     height: auto;
+    gap: .1rem;
 }
 .plusIcon {
-    margin: 18px 0 0 5px;
-    height: 18px;
+    height: 16px;
 }
 input{
     display: block;

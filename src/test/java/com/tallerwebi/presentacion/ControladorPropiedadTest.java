@@ -10,7 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,12 +27,14 @@ public class ControladorPropiedadTest {
     private ServicioPropiedad servicioPropiedad;
     private ServicioUsuario servicioUsuario;
     private HttpSession session;
+    private Usuario usuario;
 
     @BeforeEach
     public void init(){
         this.servicioPropiedad = mock(ServicioPropiedad.class);
         this.session = mock(HttpSession.class);
         this.servicioUsuario = mock(ServicioUsuario.class);
+        this.usuario = mock(Usuario.class);
         this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, servicioUsuario);
     }
 
@@ -137,6 +141,112 @@ public class ControladorPropiedadTest {
 
 
     @Test
+    public void queSeListenLasPropiedadesFiltradas() {
+        List<Propiedad> propiedadesFiltradas = crearPropiedades();
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+        filtro.setUbicacion("Ubicacion");
+
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenReturn(propiedadesFiltradas);
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+        List<Propiedad> propiedadesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(propiedadesDevueltas.size(), equalTo(3));
+    }
+
+
+    @Test
+    public void queSeMuestreMensajeDeErrorCuandoOcurreCRUDPropiedadExcepcionDuranteElFiltrado() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+        filtro.setUbicacion("Ubicacion");
+
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenThrow(new CRUDPropiedadExcepcion("Error al filtrar propiedades"));
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(mav.getModel().get("message"), equalTo("Error al filtrar propiedades"));
+    }
+
+
+    @Test
+    public void queSeMuestreMensajeDeErrorInesperadoDuranteElFiltrado() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+        filtro.setUbicacion("Ubicacion");
+
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenThrow(new RuntimeException("Error inesperado"));
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
+    }
+
+
+    @Test
+    public void queSeMuestreMensajeDeErrorCuandoOcurreCRUDPropiedadExcepcionDuranteObtencionDeFavoritos() {
+        List<Propiedad> propiedadesFiltradas = crearPropiedades();
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+        filtro.setUbicacion("Ubicacion");
+
+        Usuario usuarioAutenticado = new Usuario();
+        usuarioAutenticado.setNombre("Usuario de prueba");
+
+        when(session.getAttribute("usuario")).thenReturn(usuarioAutenticado);
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenReturn(propiedadesFiltradas);
+        when(servicioUsuario.listarFavoritos(any(Usuario.class))).thenThrow(new CRUDPropiedadExcepcion("Error al listar favoritos"));
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(mav.getModel().get("propiedades"), equalTo(propiedadesFiltradas));
+        assertThat(mav.getModel().get("usuario"), equalTo(usuarioAutenticado));
+        assertThat(mav.getModel().get("error"), equalTo("Error al listar favoritos"));
+    }
+
+
+    @Test
+    public void queMuestreErrorCuandoOcurreCRUDPropiedadExcepcion() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+
+        doThrow(new CRUDPropiedadExcepcion("Error al filtrar propiedades")).when(servicioPropiedad).filtrarPropiedades(any(FiltroPropiedad.class));
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(mav.getModel().get("message"), equalTo("Error al filtrar propiedades"));
+    }
+
+
+    @Test
+    public void queMuestreErrorCuandoOcurreExcepcionInesperada() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+
+        doThrow(new RuntimeException("Error inesperado")).when(servicioPropiedad).filtrarPropiedades(any(FiltroPropiedad.class));
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
+    }
+
+
+   /*
+
+    @Test
     public void queSeListenLasPropiedadesFiltradasPorPrecio(){
 
         List<Propiedad> propiedadesFiltradas = crearPropiedades();
@@ -207,6 +317,8 @@ public class ControladorPropiedadTest {
         assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
     }
 
+   * */
+
 
     @Test
     public void queRetorneVistaAgregarPropiedadCorrectamente() {
@@ -221,11 +333,11 @@ public class ControladorPropiedadTest {
     public void queMuestreMensajeDeExitoAlAgregarPropiedad() throws CRUDPropiedadExcepcion, IOException {
         Propiedad nuevaPropiedad = new Propiedad();
         MultipartFile imagenMock = mock(MultipartFile.class);
-
-        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock);
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock, session);
 
         assertThat(mav.getViewName(), equalTo("nuevaPropiedad"));
-        assertThat(mav.getModel().get("success"), equalTo("La Propiedad ha sido agregada con exito!"));
+        assertThat(mav.getModel().get("success"), equalTo("La peticion ha sido registrada con exito! La propiedad sera publicada en cuanto verifiquemos los detalles de la venta."));
     }
 
 
@@ -234,8 +346,8 @@ public class ControladorPropiedadTest {
         Propiedad nuevaPropiedad = new Propiedad();
         MultipartFile imagenMock = mock(MultipartFile.class);
         doThrow(new CRUDPropiedadExcepcion("Error al agregar la propiedad")).when(servicioPropiedad).agregarPropiedad(any(Propiedad.class), any(MultipartFile.class));
-
-        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock);
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock, session);
 
         assertThat(mav.getViewName(), equalTo("nuevaPropiedad"));
         assertThat(mav.getModel().get("error"), equalTo("Error al agregar la propiedad"));
@@ -247,8 +359,8 @@ public class ControladorPropiedadTest {
         Propiedad nuevaPropiedad = new Propiedad();
         MultipartFile imagenMock = mock(MultipartFile.class);
         doThrow(new IOException("Error de E/S")).when(servicioPropiedad).agregarPropiedad(any(Propiedad.class), any(MultipartFile.class));
-
-        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock);
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+        ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock, session);
 
         assertThat(mav.getViewName(), equalTo("nuevaPropiedad"));
         assertThat(mav.getModel().get("error"), equalTo("Error de E/S"));

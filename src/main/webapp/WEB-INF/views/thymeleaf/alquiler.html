@@ -10,6 +10,12 @@
   <link rel="stylesheet" th:href="@{/css/header.css}"/>
   <link rel="stylesheet" th:href="@{/css/footer.css}"/>
     <title>Alquilar propiedad</title>
+  <style>
+    .flatpickr-monthDropdown-month {
+      background-color: #011d33 !important;
+      color: #fff !important;
+    }
+  </style>
 </head>
 <body>
   <header style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
@@ -32,18 +38,22 @@
     </nav>
   </header>
   <main class="alquiler-container">
+    <div class="bg-overlay"></div>
+    <img class="alquiler-bg" th:src="@{/img/home-bg.png}"/>
     <div class="container">
       <h2>Seleccione el rango de fechas en que desea alquilar la propiedad</h2>
-      <div id="rango-fechas" class="form-control"></div>
-      <div id="rango-fechas-texto" style="margin-top: 10px">de: ____ hasta: ____</div>
-      <form id="fecha-form" th:action="@{'/propiedad/' + ${id} + '/nuevo-alquiler'}" method="post">
-        <input type="date" name="fechaInicio" id="start_date">
-        <input type="date" name="fechaFin" id="end_date">
-        <button type="submit" class="alquilar-btn">Alquilar</button>
-      </form>
+      <div id="rango-fechas" class="form-control" th:data-propiedad-id="${id}"></div>
+      <div class="confirmacion-alquiler">
+        <div id="rango-fechas-texto" style="margin-top: 10px"><strong>De:</strong> ____ <strong>hasta:</strong> ____</div>
+        <form id="fecha-form" th:action="@{'/propiedad/' + ${id} + '/nuevo-alquiler'}" method="post">
+          <input type="date" name="fechaInicio" id="start_date">
+          <input type="date" name="fechaFin" id="end_date">
+          <button type="submit" class="alquilar-btn">Alquilar</button>
+        </form>
+      </div>
 
-      <p class="alquiler-error" th:if="${error}" th:text="${error}" style="color:red"></p>
-      <p class="alquiler-success" th:if="${success}" th:text="${success}" style="color:green"></p>
+      <p id="alquiler-error" class="alquiler-error" th:if="${error}" th:text="${error}"></p>
+      <p id="alquiler-success" class="alquiler-success" th:if="${success}" th:text="${success}"></p>
     </div>
   </main>
   <footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
