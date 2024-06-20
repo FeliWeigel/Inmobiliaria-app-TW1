@@ -10,9 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,16 +24,18 @@ public class ControladorPropiedadTest {
     private ControladorPropiedad controladorPropiedad;
     private ServicioPropiedad servicioPropiedad;
     private ServicioUsuario servicioUsuario;
+    private ServicioCalificacion servicioCalificacion;
     private HttpSession session;
     private Usuario usuario;
 
     @BeforeEach
     public void init(){
         this.servicioPropiedad = mock(ServicioPropiedad.class);
+        this.servicioCalificacion = mock(ServicioCalificacion.class);
         this.session = mock(HttpSession.class);
         this.servicioUsuario = mock(ServicioUsuario.class);
         this.usuario = mock(Usuario.class);
-        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, servicioUsuario);
+        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, servicioUsuario, servicioCalificacion);
     }
 
 

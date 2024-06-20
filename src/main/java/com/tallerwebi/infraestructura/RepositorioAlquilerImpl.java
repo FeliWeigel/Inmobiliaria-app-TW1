@@ -6,7 +6,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
