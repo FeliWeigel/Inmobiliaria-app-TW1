@@ -269,6 +269,7 @@ public class RepositorioPropiedadTest {
 
 
 
+    
 
     private Integer contarPropiedadesEnLaBaseDeDatos(){
 

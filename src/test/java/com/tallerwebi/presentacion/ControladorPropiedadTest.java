@@ -139,6 +139,7 @@ public class ControladorPropiedadTest {
         assertThat(error, equalTo("Error al encontrar la propiedad seleccionada."));
     }
 
+
     @Test
     public void queSeListenLasPropiedadesFiltradas() {
         List<Propiedad> propiedadesFiltradas = crearPropiedades();
@@ -213,7 +214,6 @@ public class ControladorPropiedadTest {
     }
 
 
-
     @Test
     public void queMuestreErrorCuandoOcurreCRUDPropiedadExcepcion() {
         FiltroPropiedad filtro = new FiltroPropiedad();
@@ -227,6 +227,7 @@ public class ControladorPropiedadTest {
         assertThat(mav.getViewName(), equalTo("lista-propiedades"));
         assertThat(mav.getModel().get("message"), equalTo("Error al filtrar propiedades"));
     }
+
 
     @Test
     public void queMuestreErrorCuandoOcurreExcepcionInesperada() {
