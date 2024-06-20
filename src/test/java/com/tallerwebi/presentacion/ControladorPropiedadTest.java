@@ -156,6 +156,64 @@ public class ControladorPropiedadTest {
         assertThat(propiedadesDevueltas.size(), equalTo(3));
     }
 
+
+    @Test
+    public void queSeMuestreMensajeDeErrorCuandoOcurreCRUDPropiedadExcepcionDuranteElFiltrado() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+        filtro.setUbicacion("Ubicacion");
+
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenThrow(new CRUDPropiedadExcepcion("Error al filtrar propiedades"));
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(mav.getModel().get("message"), equalTo("Error al filtrar propiedades"));
+    }
+
+
+    @Test
+    public void queSeMuestreMensajeDeErrorInesperadoDuranteElFiltrado() {
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+        filtro.setUbicacion("Ubicacion");
+
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenThrow(new RuntimeException("Error inesperado"));
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
+    }
+
+
+    @Test
+    public void queSeMuestreMensajeDeErrorCuandoOcurreCRUDPropiedadExcepcionDuranteObtencionDeFavoritos() {
+        List<Propiedad> propiedadesFiltradas = crearPropiedades();
+        FiltroPropiedad filtro = new FiltroPropiedad();
+        filtro.setMinPrecio(1000.0);
+        filtro.setMaxPrecio(25000.0);
+        filtro.setUbicacion("Ubicacion");
+
+        Usuario usuarioAutenticado = new Usuario();
+        usuarioAutenticado.setNombre("Usuario de prueba");
+
+        when(session.getAttribute("usuario")).thenReturn(usuarioAutenticado);
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenReturn(propiedadesFiltradas);
+        when(servicioUsuario.listarFavoritos(any(Usuario.class))).thenThrow(new CRUDPropiedadExcepcion("Error al listar favoritos"));
+
+        ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
+
+        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
+        assertThat(mav.getModel().get("propiedades"), equalTo(propiedadesFiltradas));
+        assertThat(mav.getModel().get("usuario"), equalTo(usuarioAutenticado));
+        assertThat(mav.getModel().get("error"), equalTo("Error al listar favoritos"));
+    }
+
+
+
     @Test
     public void queMuestreErrorCuandoOcurreCRUDPropiedadExcepcion() {
         FiltroPropiedad filtro = new FiltroPropiedad();
@@ -257,8 +315,6 @@ public class ControladorPropiedadTest {
         assertThat(mav.getViewName(), equalTo("lista-propiedades"));
         assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
     }
-
-
 
    * */
 
