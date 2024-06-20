@@ -2,13 +2,14 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.excepcion.CalificacionDenegadaExcepcion;
+import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -21,11 +22,13 @@ public class ControladorPropiedad {
 
     private final ServicioPropiedad servicioPropiedad;
     private final ServicioUsuario servicioUsuario;
+    private final ServicioCalificacion servicioCalificacion;
     private final String CARPETA_IMAGENES = "src/main/webapp/resources/core/img/propiedades/";
 
-    public ControladorPropiedad(ServicioPropiedad servicioPropiedad, ServicioUsuario servicioUsuario) {
+    public ControladorPropiedad(ServicioPropiedad servicioPropiedad, ServicioUsuario servicioUsuario, ServicioCalificacion servicioCalificacion) {
         this.servicioPropiedad = servicioPropiedad;
         this.servicioUsuario = servicioUsuario;
+        this.servicioCalificacion = servicioCalificacion;
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -99,7 +102,6 @@ public class ControladorPropiedad {
         File carpetaImagenes = new File(pathImagenes); // Obtengo la carpeta
         File[] listOfFiles = carpetaImagenes.listFiles(); // Transformo el contenido de la carpeta a una lista de archivos(en este caso de imagen)
         List<String> imagenes = new ArrayList<>(); // Creo un array donde iran almacenadas todas las referencias a las imagenes que queremos mostrar
-
         if(listOfFiles != null){
             for(File image : listOfFiles){
                 if(image.isFile()){
@@ -110,6 +112,8 @@ public class ControladorPropiedad {
 
         try {
             Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
+            List<CalificacionPropiedad> calificaciones = servicioCalificacion.listarCalificacionesPorPropiedad(id);
+            model.put("calificaciones", calificaciones);
             model.put("messageSuccess", "Detalles de la Propiedad.");
             model.put("propiedad", propiedad);
             model.put("usuario", usuarioAutenticado);

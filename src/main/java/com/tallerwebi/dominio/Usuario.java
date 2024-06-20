@@ -1,5 +1,8 @@
 package com.tallerwebi.dominio;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
@@ -20,7 +23,11 @@ public class Usuario {
     private Boolean activo = false;
     private String fotoPerfil;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "usuario", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.EAGER
+    )
+    @Fetch(FetchMode.SUBSELECT)
     private List<AlquilerPropiedad> alquileres;
 
     @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
@@ -30,6 +37,13 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "propiedad_id")
     )
     private Set<Propiedad> favoritos;
+
+    @OneToMany(
+            mappedBy = "usuario", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.EAGER
+    )
+    @Fetch(FetchMode.SUBSELECT) // indicarle a hibernate que obtenga las colecciones en subconsultas
+    private List<CalificacionPropiedad> calificaciones;
 
     public Usuario() {
     }

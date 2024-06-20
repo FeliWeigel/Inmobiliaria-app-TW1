@@ -70,6 +70,19 @@
             </div>
         </div>
         <h5 class="prop-det-price" th:text="'$' + ${propiedad.precio} + '(AR$ por mes)'"></h5>
+        <div class="calificaciones-container">
+            <h3 class="calificaciones-titulo">Reseñas de la propiedad</h3>
+            <div style="text-align: center; font-size: 2rem" th:unless="calificaciones">Aun no se han aportado reseñas sobre esta propiedad.</div>
+            <div th:if="calificaciones" th:each="calificacion : ${calificaciones}" class="calificaciones-lista">
+                <div class="calificacion">
+                    <p th:text="${calificacion.usuario.nombre}"></p>
+                    <p th:text="${calificacion.usuario.apellido}"></p>
+                    <p th:text="${calificacion.fecha}"></p>
+                    <p th:text="${calificacion.descripcion}"></p>
+                </div>
+            </div>
+            <a th:href="@{'/propiedad/' + ${id} + '/nueva-calificacion'}">Agregar reseña</a>
+        </div>
     </main>
 
 

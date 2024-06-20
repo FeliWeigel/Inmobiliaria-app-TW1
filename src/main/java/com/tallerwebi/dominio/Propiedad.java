@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -25,9 +27,19 @@ public class Propiedad {
     private String rutaImagen;
     private Boolean aceptada; // Nuevo atributo
 
-    @OneToMany(mappedBy = "propiedad", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "propiedad", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.EAGER
+    )
+    @Fetch(FetchMode.SUBSELECT)
     private List<AlquilerPropiedad> alquileres;
 
+    @OneToMany(
+            mappedBy = "propiedad", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.EAGER
+    )
+    @Fetch(FetchMode.SUBSELECT)
+    private List<CalificacionPropiedad> calificaciones;
 
     public Propiedad() {
         this.aceptada = false;
