@@ -85,22 +85,6 @@ public class ServicioPropiedad {
         return new ArrayList<>(propiedadesFiltradas);
     }
 
-    public List<Propiedad> listarPropiedadesPorPrecio(Double min, Double max){
-        if(min >= 0.0 && max >= 0.0){
-            return this.repositorioPropiedad.listarPorRangoPrecio(min, max);
-        }
-        throw new CRUDPropiedadExcepcion("No se ha podido aplicar el filtro de precio correctamente, revise los datos enviados.");
-    }
-
-
-    public List<Propiedad> listarPropiedadesPorUbicacion(String ubicacion){
-        if(!ubicacion.isBlank()){
-            return this.repositorioPropiedad.listarPorUbicacion(ubicacion);
-        }
-        throw new CRUDPropiedadExcepcion("No se ha podido aplicar el filtro de ubicacion correctamente, revise los datos enviados.");
-    }
-
-
     public void aceptarPropiedad(Long idPropiedad) {
         Propiedad propiedad = repositorioPropiedad.buscarPropiedad(idPropiedad);
         if (propiedad != null) {

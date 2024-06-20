@@ -45,6 +45,13 @@ public class Usuario {
     @Fetch(FetchMode.SUBSELECT) // indicarle a hibernate que obtenga las colecciones en subconsultas
     private List<CalificacionPropiedad> calificaciones;
 
+    @PreRemove
+    private void quitarUsuarioDePropiedadFav() {
+        for (Propiedad propiedad : favoritos) {
+            propiedad.getUsuariosFavoritos().remove(this);
+        }
+    }
+
     public Usuario() {
     }
 

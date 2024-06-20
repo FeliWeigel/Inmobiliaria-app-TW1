@@ -141,7 +141,7 @@ public class ControladorPropiedad {
 
     @RequestMapping(path = "/agregar-propiedad", method = RequestMethod.POST)
     public ModelAndView agregarPropiedad(
-            @ModelAttribute("propiedad") Propiedad propiedad ,
+            @ModelAttribute("propiedad") Propiedad propiedad,
             @RequestParam("imagen") MultipartFile imagen,
             HttpSession session
     ){
