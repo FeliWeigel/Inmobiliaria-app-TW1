@@ -19,6 +19,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
@@ -79,7 +82,7 @@ public class RepositorioUsuarioTest {
 
         this.repositorioUsuarioImpl.guardar(nuevoUsuario);
 
-        Usuario usuarioGuardado = (Usuario) this.sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+        Usuario usuarioGuardado = (Usuario) session.createCriteria(Usuario.class)
                 .add(Restrictions.eq("email", "newuser@example.com"))
                 .uniqueResult();
 
@@ -115,6 +118,30 @@ public class RepositorioUsuarioTest {
         assertThat(usuarioModificado, notNullValue());
         assertThat(usuarioModificado.getEmail(), is("test@example.com"));
         assertThat(usuarioModificado.getPassword(), is("newPassword.456"));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaEliminarUnUsuario() throws UsuarioInexistenteExcepcion {
+        Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setEmail("newuser@example.com");
+        nuevoUsuario.setPassword("newpassword123");
+        this.repositorioUsuarioImpl.guardar(nuevoUsuario);
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Usuario> criteriaQuery = criteriaBuilder.createQuery(Usuario.class);
+        Root<Usuario> root = criteriaQuery.from(Usuario.class);
+        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("email"), "newuser@example.com"));
+
+        Usuario usuarioAEliminar = session.createQuery(criteriaQuery).uniqueResult();
+        if(usuarioAEliminar==null){
+            throw new UsuarioInexistenteExcepcion();
+        }
+
+        repositorioUsuarioImpl.eliminarUsuario(usuarioAEliminar);
+        Usuario usuarioEliminado = session.createQuery(criteriaQuery).uniqueResult();
+        assertThat(usuarioEliminado, is(nullValue()));
     }
 
 

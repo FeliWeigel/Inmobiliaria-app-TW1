@@ -40,12 +40,8 @@ public class ServicioLoginImpl implements ServicioLogin {
             throw new CredencialesInvalidasExcepcion();
         }
 
-        if(usuario.getPassword().length() >= 6){
-            if(!validarPassword(usuario.getPassword())){
+        if(usuario.getPassword().length() < 6 || !validarPassword(usuario.getPassword())){
                 throw new PasswordInvalidaExcepcion();
-            }
-        }else {
-            throw new PasswordInvalidaExcepcion();
         }
 
         if(repositorioUsuario.buscarPorEmail(usuario.getEmail()) != null){

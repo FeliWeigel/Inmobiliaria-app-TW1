@@ -91,6 +91,25 @@ public class ServicioUsuarioTest {
     }
 
     @Test
+    public void queSePuedaEliminarUnUsuario(){
+        Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setEmail("newuser@example.com");
+        nuevoUsuario.setPassword("newpassword123");
+
+        when(repositorioUsuario.buscarUsuario("newuser@example.com", "newpassword123"))
+                .thenReturn(nuevoUsuario)
+                .thenReturn(null);
+
+        repositorioUsuario.guardar(nuevoUsuario);
+        Usuario encontrado = repositorioUsuario.buscarUsuario("newuser@example.com", "newpassword123");
+        assertThat(encontrado, is(notNullValue()));
+
+        repositorioUsuario.eliminarUsuario(nuevoUsuario);
+        Usuario eliminado = repositorioUsuario.buscarUsuario("newuser@example.com", "newpassword123");
+        assertThat(eliminado, is(nullValue()));
+    }
+
+    @Test
     public void queSePuedaBloquearUnUsuario(){
         repositorioUsuario.bloquearUsuario(idUsuario);
         verify(repositorioUsuario).bloquearUsuario(idUsuario);

@@ -47,6 +47,11 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
+    public void eliminarUsuario(Usuario usuarioAEliminar) {
+        sessionFactory.getCurrentSession().delete(usuarioAEliminar);
+    }
+
+    @Override
     public Usuario buscarPorEmail(String email) {
         return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
                 .add(Restrictions.eq("email", email))

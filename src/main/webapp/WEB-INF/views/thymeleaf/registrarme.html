@@ -18,7 +18,7 @@
 <body>
     <form class="register-form" action="#" th:action="@{/registrarse}" method="POST" th:object="${usuario}">
         <h3>Registrarse</h3>
-        <p class="subtitle">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+        <p class="subtitle">¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión</a></p>
 
         <div class="nombre-completo">
             <div>
