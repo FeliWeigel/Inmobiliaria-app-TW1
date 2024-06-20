@@ -48,5 +48,17 @@
         <p id="calificacion-error" class="calificacion-error" th:if="${error}" th:text="${error}"></p>
         <p id="calificacion-success" class="calificacion-success" th:if="${success}" th:text="${success}"></p>
     </main>
+    <footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
+        <div class="social">
+            <a href="https://www.instagram.com">
+                <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>
+            </a>
+            <a href="https://www.whatsapp.com">
+                <i class="fa-brands fa-whatsapp" style="color: #f8f1f1;"></i>
+            </a>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/calificacion.js}"></script>
 </body>
 </html>

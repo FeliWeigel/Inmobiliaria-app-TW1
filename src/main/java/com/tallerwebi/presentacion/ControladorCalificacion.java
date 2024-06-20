@@ -25,8 +25,10 @@ public class ControladorCalificacion {
     }
 
     @GetMapping("/propiedad/{id}/nueva-calificacion")
-    public ModelAndView vistaAgregarCalificacion(){
-        return new ModelAndView("agregarCalificacion");
+    public ModelAndView vistaAgregarCalificacion(@PathVariable Long id){
+        ModelMap model = new ModelMap();
+        model.put("id", id);
+        return new ModelAndView("agregarCalificacion", model);
     }
 
     @PostMapping("/propiedad/{id}/nueva-calificacion")
