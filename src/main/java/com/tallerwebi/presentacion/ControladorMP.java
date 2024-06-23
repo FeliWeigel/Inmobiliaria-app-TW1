@@ -1,9 +1,14 @@
 package com.tallerwebi.presentacion;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java. time. OffsetDateTime;
 
 
+import com.mercadopago.client.common.AddressRequest;
+import com.mercadopago.client.common.IdentificationRequest;
+import com.mercadopago.client.common.PhoneRequest;
 import com.mercadopago.client.preference.*;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.resources.common.Address;
@@ -46,44 +51,60 @@ public class ControladorMP {
             items.add(itemRequest);
 
             //
-//            PreferencePayer payer = new PreferencePayer();
-//            payer.setName("João");
-//            payer.setSurname("Silva");
-//            payer.setEmail("user@email.com");
-//            Phone phone = new Phone();
-//            phone.setAreaCode("11");
-//            phone.setNumber("4444-4444");
-//            payer.setPhone(phone);
-//            Identification identification = new Identification();
-//            identification.setType("CPF");
-//            identification.setNumber("19119119100");
-//            payer.setIdentification(identification);
-//            Address address = new Address();
-//            address.setStreetName("Street");
-//            address.setStreetNumber(123);
-//            address.setZipCode("06233200");
-//            payer.setAddress(address);
-//
-//            PreferenceBackUrls backUrls = new PreferenceBackUrls();
-//            backUrls.setSuccess("https://www.success.com");
-//            backUrls.setFailure("http://www.failure.com");
-//            backUrls.setPending("http://www.pending.com");
+            PhoneRequest phone =
+                    PhoneRequest.builder()
+                            .areaCode("11")
+                            .number("4444-4444")
+                            .build();
+            IdentificationRequest identification =
+                    IdentificationRequest.builder()
+                            .type("CPF")
+                            .number("19119119100")
+                            .build();
+            AddressRequest address =
+                    AddressRequest.builder()
+                            .streetName("Street")
+                            .streetNumber("123")
+                            .zipCode("06233200")
+                            .build();
+            PreferencePayerRequest payer =
+                    PreferencePayerRequest.builder()
+                            .name("João")
+                            .surname("Silva")
+                            .email("user@email.com")
+                            .phone(phone)
+                            .identification(identification)
+                            .address(address)
+                            .build();
+
+
+            PreferenceBackUrlsRequest backUrls =
+                    PreferenceBackUrlsRequest.builder()
+                            .success("https://www.success.com")
+                            .failure("http://www.failure.com")
+                            .pending("http://www.pending.com")
+                            .build();
+
             //
+            String expirationDateFrom = "2016-02-01T12:00:00.000-04:00";
+            // Parse the date-time string to OffsetDateTime
+            OffsetDateTime offsetDateTimeFrom = OffsetDateTime.parse(expirationDateFrom, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            String expirationDateTo = "2016-02-01T12:00:00.000-04:00";
+            // Parse the date-time string to OffsetDateTime
+            OffsetDateTime offsetDateTimeTo = OffsetDateTime.parse(expirationDateFrom, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
                     //
-//                    .payer(payer)
-//                    .backUrls(backUrls)
-//                    .autoReturn("approved")
-//                    .paymentMethods(paymentMethods)
-//                    .notificationUrl("https://www.your-site.com/ipn")
-//                    .statementDescriptor("MEUNEGOCIO")
-//                    .externalReference("Reference_1234")
-//                    .expires(true)
-//                    .expirationDateFrom("2016-02-01T12:00:00.000-04:00")
-//                    .expirationDateTo("2016-02-28T12:00:00.000-04:00")
-                    //
+                    .payer(payer)
+                    .backUrls(backUrls)
+                    .autoReturn("approved")
+                    .notificationUrl("https://www.your-site.com/ipn")
+                    .statementDescriptor("MEUNEGOCIO")
+                    .externalReference("Reference_1234")
+                    .expires(true)
+                    .expirationDateFrom(offsetDateTimeFrom)
+                    .expirationDateTo(offsetDateTimeTo)
                     .build();
 
             PreferenceClient client = new PreferenceClient();
