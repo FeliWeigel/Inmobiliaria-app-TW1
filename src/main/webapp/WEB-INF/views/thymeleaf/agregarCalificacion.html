@@ -10,10 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/agregar-calificacion.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
-    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/agregar-calificacion.css}">
 
     <script src="https://kit.fontawesome.com/f3e8220cf2.js" crossorigin="anonymous"></script>
 
@@ -38,12 +38,17 @@
         </nav>
     </header>
     <main class="nueva-calificacion-container">
-
-        <form method="POST" th:action="@{'/propiedad/' + ${id} + '/nueva-calificacion'}">
-            <label for="input-puntaje">Elija un puntaje comprendido del 1 al 5</label>
-            <input id="input-puntaje" class="input-puntaje" type="number" name="puntaje" placeholder="puntaje" max="5" required>
-            <textarea class="textarea-descripcion" name="descripcion" rows="5" cols="5" required>Agregue una descripcion</textarea>
-            <button type="submit">Enviar reseña</button>
+        <h2>Calificacion de la propiedad</h2>
+        <form class="calificacion-form" method="POST" th:action="@{'/propiedad/' + ${id} + '/nueva-calificacion'}">
+            <div>
+                <label for="input-puntaje">Elija un puntaje comprendido del 1 al 5</label>
+                <input id="input-puntaje" class="input-puntaje" type="number" name="puntaje" placeholder="puntaje" min="1" max="5" required>
+            </div>
+            <div>
+                <label for="txt-descripcion">Comentario</label>
+                <textarea id="txt-descripcion" class="textarea-descripcion" name="descripcion" rows="5" cols="5" placeholder="Agregue un breve comentario" required></textarea>
+            </div>
+            <button class="calificacion-btn" type="submit">Enviar reseña</button>
         </form>
         <p id="calificacion-error" class="calificacion-error" th:if="${error}" th:text="${error}"></p>
         <p id="calificacion-success" class="calificacion-success" th:if="${success}" th:text="${success}"></p>

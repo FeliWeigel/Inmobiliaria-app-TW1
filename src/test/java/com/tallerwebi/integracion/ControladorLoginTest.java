@@ -7,7 +7,7 @@ import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
 import com.tallerwebi.presentacion.ControladorLogin;
-import com.tallerwebi.presentacion.DatosLogin;
+import com.tallerwebi.dominio.DatosLogin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;

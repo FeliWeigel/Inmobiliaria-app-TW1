@@ -1,8 +1,8 @@
 package com.tallerwebi.presentacion;
 
 
+import com.tallerwebi.dominio.DatosLogin;
 import com.tallerwebi.dominio.ServicioLogin;
-import com.tallerwebi.dominio.Propiedad;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class ControladorLogin {
