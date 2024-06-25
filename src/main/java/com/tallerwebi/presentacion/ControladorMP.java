@@ -1,16 +1,15 @@
 package com.tallerwebi.presentacion;
 import java.math.BigDecimal;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java. time. OffsetDateTime;
+import java.time.OffsetDateTime;
 
 
-import com.mercadopago.client.common.AddressRequest;
-import com.mercadopago.client.common.IdentificationRequest;
-import com.mercadopago.client.common.PhoneRequest;
 import com.mercadopago.client.preference.*;
 import com.mercadopago.exceptions.MPApiException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.exceptions.MPException;
@@ -26,14 +25,13 @@ public class ControladorMP {
     @Value("${mercadopago.access.token}")
     private String accessToken;
 
-//    @RequestMapping(value = "/create_preference", method = RequestMethod.POST)
-    @GetMapping("/create_preference")
+    @RequestMapping(path = "/create_preference", method = RequestMethod.POST)
     @ResponseBody
-    public String createPreference() {
-//    public ResponseEntity<Preference> createPreference() {
+    public ResponseEntity<Preference> createPreference() {
+//        return ResponseEntity.ok("TEST");
+
         try {
 
-            // Agrega credenciales
             MercadoPagoConfig.setAccessToken("APP_USR-2054445966320899-062320-264f039524895893770ee6d1ea2233ec-1871978866");
 
             PreferenceItemRequest itemRequest =
@@ -86,12 +84,17 @@ public class ControladorMP {
                             .build();
 
             //
-            String expirationDateFrom = "2016-02-01T12:00:00.000-04:00";
-            // Parse the date-time string to OffsetDateTime
-            OffsetDateTime offsetDateTimeFrom = OffsetDateTime.parse(expirationDateFrom, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-            String expirationDateTo = "2016-02-01T12:00:00.000-04:00";
-            // Parse the date-time string to OffsetDateTime
-            OffsetDateTime offsetDateTimeTo = OffsetDateTime.parse(expirationDateFrom, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+//            String expirationDateFrom = "2016-02-01T12:00:00.000-04:00";
+//            // Parse the date-time string to OffsetDateTime
+//            OffsetDateTime offsetDateTimeFrom = OffsetDateTime.parse(expirationDateFrom);
+//            String expirationDateTo = "2016-02-02T12:00:00.000-04:00";
+//            // Parse the date-time string to OffsetDateTime
+//            OffsetDateTime offsetDateTimeTo = OffsetDateTime.parse(expirationDateFrom);
+
+            OffsetDateTime offsetDateTimeFrom = OffsetDateTime.of(2016, 2, 1, 12, 0, 0, 0, ZoneOffset.of("-04:00"));
+            OffsetDateTime offsetDateTimeTo = OffsetDateTime.of(2016, 2, 1, 12, 0, 0, 0, ZoneOffset.of("-04:00"));
+
+
 
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
@@ -102,16 +105,17 @@ public class ControladorMP {
                     .notificationUrl("https://www.your-site.com/ipn")
                     .statementDescriptor("MEUNEGOCIO")
                     .externalReference("Reference_1234")
-                    .expires(true)
-                    .expirationDateFrom(offsetDateTimeFrom)
-                    .expirationDateTo(offsetDateTimeTo)
+//                    .expires(true)
+//                    .expirationDateFrom(offsetDateTimeFrom)
+//                    .expirationDateTo(offsetDateTimeTo)
                     .build();
 
             PreferenceClient client = new PreferenceClient();
             Preference preference = client.create(preferenceRequest);
+
 //            return preference;
-            return preference.getInitPoint();
-//            return ResponseEntity.ok(preference);
+//            return preference.getInitPoint();
+            return ResponseEntity.ok(preference);
 
         } catch (MPException | MPApiException e) {
             throw new RuntimeException(e);
