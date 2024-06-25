@@ -1,8 +1,8 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.FechasAlquiler;
-import com.tallerwebi.dominio.ServicioAlquiler;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.dto.FechasAlquilerDTO;
+import com.tallerwebi.dominio.servicio.ServicioAlquiler;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
@@ -128,7 +128,7 @@ public class ControladorAlquilerTest {
 
     @Test
     public void queDevuelvaFechasReservadasPorPropiedad() throws Exception {
-        List<FechasAlquiler> fechasReservadas = new ArrayList<>();
+        List<FechasAlquilerDTO> fechasReservadas = new ArrayList<>();
         when(servicioAlquiler.fechasReservadasPorPropiedad(anyLong())).thenReturn(fechasReservadas);
 
         PrintWriter writer = mock(PrintWriter.class);

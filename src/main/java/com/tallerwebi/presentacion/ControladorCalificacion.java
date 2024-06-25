@@ -1,9 +1,11 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.CalificacionDenegadaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
+import com.tallerwebi.dominio.servicio.ServicioCalificacion;
+import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;

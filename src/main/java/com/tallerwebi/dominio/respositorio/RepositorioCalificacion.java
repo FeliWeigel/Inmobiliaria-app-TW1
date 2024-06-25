@@ -1,4 +1,6 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.respositorio;
+
+import com.tallerwebi.dominio.entidades.CalificacionPropiedad;
 
 import java.util.List;
 

@@ -1,10 +1,9 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.CalificacionPropiedad;
-import com.tallerwebi.dominio.RepositorioCalificacion;
+import com.tallerwebi.dominio.entidades.CalificacionPropiedad;
+import com.tallerwebi.dominio.respositorio.RepositorioCalificacion;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;

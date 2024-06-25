@@ -1,8 +1,8 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.dto;
 
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 
-public class FiltroPropiedad {
+public class FiltroPropiedadDTO {
     private Double minPrecio;
     private Double maxPrecio;
     private String ubicacion;

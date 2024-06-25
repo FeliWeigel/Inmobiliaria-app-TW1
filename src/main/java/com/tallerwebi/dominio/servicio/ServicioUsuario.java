@@ -1,9 +1,12 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicio;
 
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioInexistenteExcepcion;
+import com.tallerwebi.dominio.respositorio.RepositorioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

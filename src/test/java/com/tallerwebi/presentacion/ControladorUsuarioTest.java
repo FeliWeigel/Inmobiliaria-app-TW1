@@ -1,7 +1,11 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
+import com.tallerwebi.dominio.servicio.ServicioPropiedad;
+import com.tallerwebi.dominio.servicio.ServicioUsuario;
+import com.tallerwebi.dominio.servicio.SubirImagenServicio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;

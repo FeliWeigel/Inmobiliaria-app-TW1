@@ -1,9 +1,9 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.AlquilerPropiedad;
-import com.tallerwebi.dominio.FechasAlquiler;
-import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.AlquilerPropiedad;
+import com.tallerwebi.dominio.dto.FechasAlquilerDTO;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -102,7 +102,7 @@ public class RepositorioAlquilerTest {
         when(queryMock.setParameter(anyString(), anyLong())).thenReturn(queryMock);
         when(queryMock.getResultList()).thenReturn(alquileres);
 
-        List<FechasAlquiler> fechasAlquileres = repositorioAlquiler.getFechasByPropiedad(1L);
+        List<FechasAlquilerDTO> fechasAlquileres = repositorioAlquiler.getFechasByPropiedad(1L);
 
         assertThat(fechasAlquileres.size(), equalTo(1));
         assertThat(fechasAlquileres.get(0).getFechaInicio(), equalTo(alquiler.getFechaInicio()));

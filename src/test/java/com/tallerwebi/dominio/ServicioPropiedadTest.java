@@ -1,6 +1,11 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.dto.FiltroPropiedadDTO;
+import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
+import com.tallerwebi.dominio.servicio.ServicioPropiedad;
+import com.tallerwebi.dominio.servicio.SubirImagenServicio;
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -215,7 +220,7 @@ public class ServicioPropiedadTest {
 
     @Test
     public void queSeDevuelvanLasPropiedadesFiltradasPorPrecio() {
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setMinPrecio(1000.0);
         filtro.setMaxPrecio(25000.0);
 
@@ -230,7 +235,7 @@ public class ServicioPropiedadTest {
 
     @Test
     public void queSeDevuelvanLasPropiedadesFiltradasPorEstado() {
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setEstado(EstadoPropiedad.VENTA);
 
         when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
@@ -244,7 +249,7 @@ public class ServicioPropiedadTest {
 
     @Test
     public void queSeDevuelvanLasPropiedadesFiltradasPorSuperficie() {
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setSuperficie(100.0);
 
         when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
@@ -258,7 +263,7 @@ public class ServicioPropiedadTest {
 
     @Test
     public void queSeDevuelvanLasPropiedadesFiltradasPorUbicacion() {
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setUbicacion("Moron");
 
         when(this.repositorioPropiedad.listarPropiedades()).thenReturn(propiedadesMock);
@@ -272,7 +277,7 @@ public class ServicioPropiedadTest {
 
     @Test
     public void queSeDevuelvanLasPropiedadesFiltradasPorEstadoYPrecio() {
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setEstado(EstadoPropiedad.VENTA);
         filtro.setMinPrecio(1000.0);
         filtro.setMaxPrecio(25000.0);
@@ -289,7 +294,7 @@ public class ServicioPropiedadTest {
 
     @Test
     public void queSeDevuelvanLasPropiedadesFiltradasPorTodasLasCondiciones() {
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setMinPrecio(1000.0);
         filtro.setMaxPrecio(25000.0);
         filtro.setEstado(EstadoPropiedad.VENTA);

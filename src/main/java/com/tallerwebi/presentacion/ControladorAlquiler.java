@@ -1,9 +1,9 @@
 package com.tallerwebi.presentacion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tallerwebi.dominio.FechasAlquiler;
-import com.tallerwebi.dominio.ServicioAlquiler;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.dto.FechasAlquilerDTO;
+import com.tallerwebi.dominio.servicio.ServicioAlquiler;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
@@ -69,7 +69,7 @@ public class ControladorAlquiler {
 
     @RequestMapping(path = "/propiedad/{id}/reservas", method = RequestMethod.GET)
     public void fechasReservadasPorPropiedad(@PathVariable Long id, HttpServletResponse response) throws IOException {
-        List<FechasAlquiler> fechasReservadas = servicioAlquiler.fechasReservadasPorPropiedad(id);
+        List<FechasAlquilerDTO> fechasReservadas = servicioAlquiler.fechasReservadasPorPropiedad(id);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

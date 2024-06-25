@@ -1,7 +1,12 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.dto.FiltroPropiedadDTO;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.servicio.ServicioCalificacion;
+import com.tallerwebi.dominio.servicio.ServicioPropiedad;
+import com.tallerwebi.dominio.servicio.ServicioUsuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
@@ -143,12 +148,12 @@ public class ControladorPropiedadTest {
     @Test
     public void queSeListenLasPropiedadesFiltradas() {
         List<Propiedad> propiedadesFiltradas = crearPropiedades();
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setMinPrecio(1000.0);
         filtro.setMaxPrecio(25000.0);
         filtro.setUbicacion("Ubicacion");
 
-        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenReturn(propiedadesFiltradas);
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedadDTO.class))).thenReturn(propiedadesFiltradas);
 
         ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
         List<Propiedad> propiedadesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
@@ -160,12 +165,12 @@ public class ControladorPropiedadTest {
 
     @Test
     public void queSeMuestreMensajeDeErrorCuandoOcurreCRUDPropiedadExcepcionDuranteElFiltrado() {
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setMinPrecio(1000.0);
         filtro.setMaxPrecio(25000.0);
         filtro.setUbicacion("Ubicacion");
 
-        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenThrow(new CRUDPropiedadExcepcion("Error al filtrar propiedades"));
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedadDTO.class))).thenThrow(new CRUDPropiedadExcepcion("Error al filtrar propiedades"));
 
         ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
 
@@ -176,12 +181,12 @@ public class ControladorPropiedadTest {
 
     @Test
     public void queSeMuestreMensajeDeErrorInesperadoDuranteElFiltrado() {
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setMinPrecio(1000.0);
         filtro.setMaxPrecio(25000.0);
         filtro.setUbicacion("Ubicacion");
 
-        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenThrow(new RuntimeException("Error inesperado"));
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedadDTO.class))).thenThrow(new RuntimeException("Error inesperado"));
 
         ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
 
@@ -193,7 +198,7 @@ public class ControladorPropiedadTest {
     @Test
     public void queSeMuestreMensajeDeErrorCuandoOcurreCRUDPropiedadExcepcionDuranteObtencionDeFavoritos() {
         List<Propiedad> propiedadesFiltradas = crearPropiedades();
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setMinPrecio(1000.0);
         filtro.setMaxPrecio(25000.0);
         filtro.setUbicacion("Ubicacion");
@@ -202,7 +207,7 @@ public class ControladorPropiedadTest {
         usuarioAutenticado.setNombre("Usuario de prueba");
 
         when(session.getAttribute("usuario")).thenReturn(usuarioAutenticado);
-        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedad.class))).thenReturn(propiedadesFiltradas);
+        when(servicioPropiedad.filtrarPropiedades(any(FiltroPropiedadDTO.class))).thenReturn(propiedadesFiltradas);
         when(servicioUsuario.listarFavoritos(any(Usuario.class))).thenThrow(new CRUDPropiedadExcepcion("Error al listar favoritos"));
 
         ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
@@ -216,11 +221,11 @@ public class ControladorPropiedadTest {
 
     @Test
     public void queMuestreErrorCuandoOcurreCRUDPropiedadExcepcion() {
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setMinPrecio(1000.0);
         filtro.setMaxPrecio(25000.0);
 
-        doThrow(new CRUDPropiedadExcepcion("Error al filtrar propiedades")).when(servicioPropiedad).filtrarPropiedades(any(FiltroPropiedad.class));
+        doThrow(new CRUDPropiedadExcepcion("Error al filtrar propiedades")).when(servicioPropiedad).filtrarPropiedades(any(FiltroPropiedadDTO.class));
 
         ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
 
@@ -231,11 +236,11 @@ public class ControladorPropiedadTest {
 
     @Test
     public void queMuestreErrorCuandoOcurreExcepcionInesperada() {
-        FiltroPropiedad filtro = new FiltroPropiedad();
+        FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
         filtro.setMinPrecio(1000.0);
         filtro.setMaxPrecio(25000.0);
 
-        doThrow(new RuntimeException("Error inesperado")).when(servicioPropiedad).filtrarPropiedades(any(FiltroPropiedad.class));
+        doThrow(new RuntimeException("Error inesperado")).when(servicioPropiedad).filtrarPropiedades(any(FiltroPropiedadDTO.class));
 
         ModelAndView mav = controladorPropiedad.filtrarPropiedades(filtro, session);
 

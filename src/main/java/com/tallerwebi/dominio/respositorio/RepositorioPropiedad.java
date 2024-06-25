@@ -1,5 +1,6 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.respositorio;
 
+import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 
 import java.util.List;

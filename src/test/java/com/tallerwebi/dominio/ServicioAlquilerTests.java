@@ -1,16 +1,19 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.RepositorioAlquiler;
-import com.tallerwebi.dominio.ServicioPropiedad;
+import com.tallerwebi.dominio.entidades.AlquilerPropiedad;
+import com.tallerwebi.dominio.dto.FechasAlquilerDTO;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.respositorio.RepositorioAlquiler;
 import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
+import com.tallerwebi.dominio.servicio.ServicioAlquiler;
+import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -121,10 +124,10 @@ public class ServicioAlquilerTests {
 
     @Test
     public void queSeDevuelvenFechasReservadasPorPropiedad() {
-        List<FechasAlquiler> fechas = new ArrayList<>();
+        List<FechasAlquilerDTO> fechas = new ArrayList<>();
         when(repositorioAlquiler.getFechasByPropiedad(anyLong())).thenReturn(fechas);
 
-        List<FechasAlquiler> result = servicioAlquiler.fechasReservadasPorPropiedad(1L);
+        List<FechasAlquilerDTO> result = servicioAlquiler.fechasReservadasPorPropiedad(1L);
         assertThat(result, equalTo(fechas));
     }
 

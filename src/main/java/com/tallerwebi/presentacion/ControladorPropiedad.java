@@ -1,9 +1,13 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.CalificacionPropiedad;
+import com.tallerwebi.dominio.dto.FiltroPropiedadDTO;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
-import com.tallerwebi.dominio.excepcion.CalificacionDenegadaExcepcion;
-import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
+import com.tallerwebi.dominio.servicio.ServicioCalificacion;
+import com.tallerwebi.dominio.servicio.ServicioPropiedad;
+import com.tallerwebi.dominio.servicio.ServicioUsuario;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +70,7 @@ public class ControladorPropiedad {
     }
 
     @RequestMapping(path = "/lista-propiedades/filtro", method = RequestMethod.POST)
-    public ModelAndView filtrarPropiedades(@ModelAttribute("filtroPropiedad") FiltroPropiedad filtro, HttpSession session){
+    public ModelAndView filtrarPropiedades(@ModelAttribute("filtroPropiedad") FiltroPropiedadDTO filtro, HttpSession session){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
 

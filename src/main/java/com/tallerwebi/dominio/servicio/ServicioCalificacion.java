@@ -1,9 +1,12 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicio;
 
-import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
+import com.tallerwebi.dominio.entidades.CalificacionPropiedad;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.CalificacionDenegadaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
+import com.tallerwebi.dominio.respositorio.RepositorioCalificacion;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;

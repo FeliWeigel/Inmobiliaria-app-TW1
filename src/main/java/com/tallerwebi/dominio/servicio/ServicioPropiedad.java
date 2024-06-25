@@ -1,6 +1,9 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicio;
 
+import com.tallerwebi.dominio.dto.FiltroPropiedadDTO;
+import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
+import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.utilidad.ValidarString;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,7 +67,7 @@ public class ServicioPropiedad {
         return repositorioPropiedad.listarPropiedadesAceptadas();
     }
 
-    public List<Propiedad> filtrarPropiedades(FiltroPropiedad filtroPropiedad){
+    public List<Propiedad> filtrarPropiedades(FiltroPropiedadDTO filtroPropiedad){
         Set<Propiedad> propiedadesFiltradas = new HashSet<>(
                 this.repositorioPropiedad.listarPropiedades()
         );

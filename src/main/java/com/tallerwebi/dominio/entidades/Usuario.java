@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.entidades;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;

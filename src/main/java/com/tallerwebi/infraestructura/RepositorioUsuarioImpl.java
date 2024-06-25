@@ -1,9 +1,9 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.RepositorioPropiedad;
-import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
+import com.tallerwebi.dominio.respositorio.RepositorioUsuario;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.utilidad.ValidarString;
 import org.hibernate.Session;

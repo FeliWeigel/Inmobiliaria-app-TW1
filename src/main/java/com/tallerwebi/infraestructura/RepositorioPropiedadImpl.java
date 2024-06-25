@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.RepositorioPropiedad;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 import org.hibernate.Session;

@@ -1,6 +1,8 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.respositorio;
 
-import java.sql.Date;
+import com.tallerwebi.dominio.entidades.AlquilerPropiedad;
+import com.tallerwebi.dominio.dto.FechasAlquilerDTO;
+
 import java.util.List;
 
 public interface RepositorioAlquiler {
@@ -8,5 +10,5 @@ public interface RepositorioAlquiler {
     void nuevoAlquiler(AlquilerPropiedad alquiler);
     List<AlquilerPropiedad> getAlquileresByPropiedad(Long propiedadId);
     List<AlquilerPropiedad> getAlquileresByUsuario(Long usuarioId);
-    List<FechasAlquiler> getFechasByPropiedad(Long propiedadId);
+    List<FechasAlquilerDTO> getFechasByPropiedad(Long propiedadId);
 }

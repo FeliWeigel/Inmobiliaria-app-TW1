@@ -1,6 +1,8 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.AlquilerPropiedad;
+import com.tallerwebi.dominio.dto.FechasAlquilerDTO;
+import com.tallerwebi.dominio.respositorio.RepositorioAlquiler;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -45,13 +47,13 @@ public class RepositorioAlquilerImpl implements RepositorioAlquiler {
     }
 
     @Override
-    public List<FechasAlquiler> getFechasByPropiedad(Long propiedadId) {
+    public List<FechasAlquilerDTO> getFechasByPropiedad(Long propiedadId) {
         final Session session = sessionFactory.getCurrentSession();
         List<AlquilerPropiedad> alquileres = this.getAlquileresByPropiedad(propiedadId);
-        List<FechasAlquiler> fechasAlquileres = new ArrayList<>();
+        List<FechasAlquilerDTO> fechasAlquileres = new ArrayList<>();
 
         for (AlquilerPropiedad alquiler : alquileres){
-            FechasAlquiler nuevaFecha = new FechasAlquiler();
+            FechasAlquilerDTO nuevaFecha = new FechasAlquilerDTO();
             nuevaFecha.setFechaInicio(alquiler.getFechaInicio());
             nuevaFecha.setFechaFin(alquiler.getFechaFin());
             fechasAlquileres.add(nuevaFecha);

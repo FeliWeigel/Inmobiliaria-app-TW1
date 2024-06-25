@@ -1,8 +1,8 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.dto;
 
 import java.sql.Date;
 
-public class FechasAlquiler {
+public class FechasAlquilerDTO {
     private Date fechaInicio;
     private Date fechaFin;
 

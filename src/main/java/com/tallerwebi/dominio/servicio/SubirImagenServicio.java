@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicio;
 
 import org.springframework.web.multipart.MultipartFile;
 

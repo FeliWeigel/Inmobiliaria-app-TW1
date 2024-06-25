@@ -1,5 +1,7 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.respositorio;
 
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;

@@ -1,9 +1,13 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicio;
 
+import com.tallerwebi.dominio.entidades.AlquilerPropiedad;
+import com.tallerwebi.dominio.dto.FechasAlquilerDTO;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
-import org.hibernate.Hibernate;
+import com.tallerwebi.dominio.respositorio.RepositorioAlquiler;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -62,7 +66,7 @@ public class ServicioAlquiler {
         return repositorioAlquiler.getAlquileresByPropiedad(propiedadId);
     }
 
-    public List<FechasAlquiler> fechasReservadasPorPropiedad(Long propiedadId){
+    public List<FechasAlquilerDTO> fechasReservadasPorPropiedad(Long propiedadId){
         if(propiedadId == null){
             throw new CRUDPropiedadExcepcion("El id de la propiedad es nulo!");
         }

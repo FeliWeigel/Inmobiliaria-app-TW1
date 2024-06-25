@@ -1,9 +1,13 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
+import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
+import com.tallerwebi.dominio.respositorio.RepositorioUsuario;
+import com.tallerwebi.dominio.servicio.SubirImagenServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

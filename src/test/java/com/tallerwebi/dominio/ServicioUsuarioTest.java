@@ -1,9 +1,12 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
+import com.tallerwebi.dominio.respositorio.RepositorioUsuario;
+import com.tallerwebi.dominio.servicio.ServicioUsuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.HashSet;
