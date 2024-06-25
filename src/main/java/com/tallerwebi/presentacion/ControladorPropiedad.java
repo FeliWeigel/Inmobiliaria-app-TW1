@@ -109,10 +109,11 @@ public class ControladorPropiedad {
                 }
             }
         }
+        List<CalificacionPropiedad> calificaciones = new ArrayList<>();
 
         try {
             Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
-            List<CalificacionPropiedad> calificaciones = servicioCalificacion.listarCalificacionesPorPropiedad(id);
+            calificaciones = servicioCalificacion.listarCalificacionesPorPropiedad(id);
             model.put("calificaciones", calificaciones);
             model.put("messageSuccess", "Detalles de la Propiedad.");
             model.put("propiedad", propiedad);
@@ -126,6 +127,10 @@ public class ControladorPropiedad {
             model.put("messageError", "Error al encontrar la propiedad seleccionada.");
             model.put("propiedad", null);
             return new ModelAndView("propiedad", model);
+        }
+
+        if(calificaciones.size() == 0){
+            model.put("listEmpty", "Todavia no se han aportado reseñas de esta propiedad.");
         }
 
         return new ModelAndView("propiedad", model);

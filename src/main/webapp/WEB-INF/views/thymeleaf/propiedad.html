@@ -73,11 +73,11 @@
         <div class="calificaciones-container">
             <h3 class="calificaciones-titulo">Reseñas de la propiedad</h3>
 
-            <div style="text-align: center; font-size: 2rem" th:unless="calificaciones">
-                <h3 style="font-size: 1.9rem; margin-bottom: 1rem">Aun no se han aportado reseñas sobre esta propiedad.</h3>
+            <div th:if="${listEmpty != null}" style="text-align: center; font-size: 2rem">
+                <h3 th:text="${listEmpty}" style="font-size: 1.9rem; margin-bottom: 1rem"></h3>
                 <a class="agregar-calificacion-link" th:href="@{'/propiedad/' + ${id} + '/nueva-calificacion'}">Agregar reseña</a>
             </div>
-            <div th:if="calificaciones">
+            <div th:if="${listEmpty == null}">
                 <div class="calificaciones-lista">
                     <div th:each="calificacion : ${calificaciones}">
                         <div class="calificacion">
@@ -89,7 +89,6 @@
                             <p class="calificacion-desc" th:text="${calificacion.descripcion}"></p>
                         </div>
                     </div>
-
                 </div>
                 <div class="calificaciones-links">
                     <a class="agregar-calificacion-link" th:href="@{'/propiedad/' + ${id} + '/nueva-calificacion'}">Agregar reseña</a>
