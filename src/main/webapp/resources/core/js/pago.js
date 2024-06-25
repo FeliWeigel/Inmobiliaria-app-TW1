@@ -2,14 +2,14 @@
 //     locale: "es-AR", // The most common are: 'pt-BR', 'es-AR' and 'en-US'
 // });
 
-document.querySelector('.btnPagar').addEventListener('click', async function() {
+document.addEventListener("DOMContentLoaded", async () => {
     try {
 
         const response = await fetch('http://localhost:8080/spring/create_preference',{
-                                                method:"POST",
-                                                // headers:{"Content-Type":"application/json"},
-                                                // body: JSON.stringify({"some_data": sendData
-                                                })
+            method:"POST",
+            // headers:{"Content-Type":"application/json"},
+            // body: JSON.stringify({"some_data": sendData
+        })
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -37,4 +37,4 @@ document.querySelector('.btnPagar').addEventListener('click', async function() {
     } catch (error) {
         console.error('Error fetching preference ID:', error);
     }
-});
+})
