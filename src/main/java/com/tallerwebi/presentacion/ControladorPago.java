@@ -28,7 +28,6 @@ public class ControladorPago {
     public ResponseEntity<Preference> createPreference() {
 
         try {
-
             MercadoPagoConfig.setAccessToken("APP_USR-2054445966320899-062320-264f039524895893770ee6d1ea2233ec-1871978866");
 
             PreferenceItemRequest itemRequest =
@@ -55,12 +54,8 @@ public class ControladorPago {
             OffsetDateTime offsetDateTimeFrom = OffsetDateTime.of(2016, 2, 1, 12, 0, 0, 0, ZoneOffset.of("-04:00"));
             OffsetDateTime offsetDateTimeTo = OffsetDateTime.of(2016, 2, 1, 12, 0, 0, 0, ZoneOffset.of("-04:00"));
 
-
-
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
-                    //
-//                    .payer(payer)
                     .backUrls(backUrls)
                     .autoReturn("approved")
                     .notificationUrl("https://www.your-site.com/ipn")
