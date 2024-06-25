@@ -26,6 +26,22 @@ public class ControladorAlquiler {
         this.servicioAlquiler = servicioAlquiler;
     }
 
+//    @RequestMapping(path = "/propiedad/{id}/nuevo-alquiler", method = RequestMethod.GET)
+//    public ModelAndView vistaNuevoAlquiler(@PathVariable Long id, HttpSession session) {
+//        ModelMap model = new ModelMap();
+//        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+//        if(usuarioAutenticado == null){
+//            return new ModelAndView("redirect:/login");
+//        }
+//        if(id == null){
+//            return new ModelAndView("redirect:/home");
+//        }
+//        model.put("usuario", usuarioAutenticado);
+//        model.put("propiedadId", id);
+//        return new ModelAndView("pago", model);
+//
+//    }
+
     @RequestMapping(path = "/propiedad/{id}/nuevo-alquiler", method = RequestMethod.POST)
     public ModelAndView nuevoAlquiler(
             @PathVariable Long id, HttpSession session,
@@ -49,7 +65,7 @@ public class ControladorAlquiler {
         }
 
         model.put("success", "Alquiler efectuado correctamente! Sera contactado por el propietario en las proximas 72hs.");
-        return new ModelAndView("alquiler", model);
+        return new ModelAndView("pago", model);
     }
 
     @RequestMapping(path = "/propiedad/{id}/alquiler", method = RequestMethod.GET)
