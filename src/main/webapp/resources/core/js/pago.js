@@ -17,7 +17,7 @@ document.querySelector('.btnPagar').addEventListener('click', async function() {
         const preference = await response.json();
         const preferenceId = preference.id;
 
-        console.log(response.body());
+        console.log(response);
 
         const mp = new MercadoPago("APP_USR-ce16a581-25f1-479c-b2bb-db5ad1368dc9", {
             locale: "es-AR"

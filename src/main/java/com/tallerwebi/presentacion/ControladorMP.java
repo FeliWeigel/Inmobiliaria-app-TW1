@@ -41,8 +41,8 @@ public class ControladorMP {
                             .description("PS5")
                             .pictureUrl("http://picture.com/PS5")
                             .categoryId("games")
-                            .quantity(2)
-                            .currencyId("BRL")
+                            .quantity(1)
+                            .currencyId("AR")
                             .unitPrice(new BigDecimal("4000"))
                             .build();
             List<PreferenceItemRequest> items = new ArrayList<>();
