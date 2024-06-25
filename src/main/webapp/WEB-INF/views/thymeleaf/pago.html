@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pago de seña</title>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+
+</head>
+<body>
+
+    <h3>propiedad1</h3>
+    <p>$30000</p>
+<!--    <form th:action="@{'/create_preference'}" method="get">-->
+<!--        <button type="submit" class="btnPagar">Pagar con MP</button>-->
+<!--    </form>-->
+    <button class="btnPagar">Pagar con MP</button>
+
+    <div id="wallet_container"></div>
+
+<script th:src="@{/js/pago.js}"></script>
+
+</body>
+</html>
