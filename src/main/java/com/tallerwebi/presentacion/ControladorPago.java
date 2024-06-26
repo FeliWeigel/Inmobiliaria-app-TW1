@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,7 +25,6 @@ public class ControladorPago {
     public ResponseEntity<Preference> createPreference() {
 
         try {
-
             MercadoPagoConfig.setAccessToken("APP_USR-2054445966320899-062320-264f039524895893770ee6d1ea2233ec-1871978866");
 
             PreferenceItemRequest itemRequest =
