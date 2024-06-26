@@ -31,11 +31,11 @@ public class ControladorPago {
 
             PreferenceItemRequest itemRequest =
                     PreferenceItemRequest.builder()
-                            .id("1234")
-                            .title("Games")
-                            .description("PS5")
-                            .pictureUrl("http://picture.com/PS5")
-                            .categoryId("games")
+                            .id(String.valueOf(Math.random()))
+                            .title("Seña alquiler")
+                            .description("Seña alquiler propiedad publicada en Open Doors")
+                            .pictureUrl("https://google.com")
+                            .categoryId("Seña alquiler")
                             .quantity(1)
                             .currencyId("AR")
                             .unitPrice(new BigDecimal("4000"))
@@ -79,5 +79,5 @@ public class ControladorPago {
         } catch (MPException | MPApiException e) {
             throw new RuntimeException(e);
         }
-        }
     }
+}
