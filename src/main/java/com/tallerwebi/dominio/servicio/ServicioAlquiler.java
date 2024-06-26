@@ -11,6 +11,7 @@ import com.tallerwebi.dominio.respositorio.RepositorioAlquiler;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -35,6 +36,9 @@ public class ServicioAlquiler {
         if(fechaInicio.after(fechaFin)){
             throw new AlquilerDenegadoExcepcion("La fecha de inicio del contrato no puede ser posterior a la fecha de finalizacion del alquiler.");
         }
+        if(fechaInicio.before(Date.valueOf(LocalDate.now())) || fechaFin.before(Date.valueOf(LocalDate.now()))){
+            throw new AlquilerDenegadoExcepcion("Las fechas para el alquiler no pueden ser anteriores a la fecha actual!");
+        }
 
         Propiedad propiedadAlmacenada = servicioPropiedad.buscarPropiedad(propiedadId);
         if(propiedadAlmacenada == null){
@@ -47,6 +51,7 @@ public class ServicioAlquiler {
                 fechaInicio.equals(alquiler.getFechaInicio()) || fechaFin.equals(alquiler.getFechaFin())
                     || (fechaInicio.after(alquiler.getFechaInicio()) && fechaInicio.before(alquiler.getFechaFin()))
                         || (fechaFin.after(alquiler.getFechaInicio()) && fechaFin.before(alquiler.getFechaFin()))
+
             ){
                 throw new AlquilerDenegadoExcepcion("Las fechas seleccionadas ya estan reservadas. Intentelo nuevamente.");
             }

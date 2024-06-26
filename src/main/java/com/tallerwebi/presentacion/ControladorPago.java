@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.OffsetDateTime;
 
-
 import com.mercadopago.client.preference.*;
 import com.mercadopago.exceptions.MPApiException;
 import org.springframework.http.ResponseEntity;

@@ -4,20 +4,74 @@
     <meta charset="UTF-8">
     <title>Pago de seña</title>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
-
+    <link rel="stylesheet" th:href="@{/css/pago.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" href="../../../resources/core/css/index.css">
+    <link rel="stylesheet" href="../../../resources/core/css/header.css">
+    <link rel="stylesheet" href="../../../resources/core/css/footer.css">
+    <link rel="stylesheet" href="../../../resources/core/css/pago.css">
+    <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    <header style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
+        <a class="button-logo" th:href="@{/home}">
+            <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+        </a>
+        <nav>
+            <div th:if="${usuario}">
+                <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
+                    <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
+                </a>
+            </div>
+            <a th:href="@{/favoritos}">
+                <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
+            </a>
+            <a href="#" th:href="@{/perfil}">
+                <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
+            </a>
 
-    <h3>propiedad1</h3>
-    <p>$30000</p>
-<!--    <form th:action="@{'/create_preference'}" method="get">-->
-<!--        <button type="submit" class="btnPagar">Pagar con MP</button>-->
-<!--    </form>-->
-    <button class="btnPagar">Pagar con MP</button>
+        </nav>
+    </header>
+    <main class="pago-container">
+        <div class="bg-overlay"></div>
+        <img class="pago-bg" th:src="@{/img/home-bg.png}"/>
+        <div class="pago-content">
+            <div class="pago-info">
+                <h2 class="pago-titulo">Pago de reserva para alquiler de propiedad</h2>
+                <p class="pago-descripcion">
+                    A continuacion, se detalla monto y modalidades de pago para poder reservar la propiedad que desea alquilar.
+                    Esto, corresponde a un 5% del valor total del alquiler, el cual debe ser abonado previamente a negociar con el vendedor.
+                    Una vez abonado, la propiedad se encontrara reservada en las fechas elegidas y podra comenzar a negociar los detalles contractuales con el vendedor.
+                    En caso de que no lleguen a un acuerdo, su dinero sera reintegrado y la reserva desestimada.
+                </p>
+                <p class="pago-valor"> Valor de la reserva: $30000(AR$)</p>
+            </div>
+            <div class="pago-modalidades">
+                <p class="modalidades-titulo">Modalidades de pago: </p>
+                <a class="modalidad-ftvo">
+                    <i class="fa-regular fa-money-bill-1"></i> Pago en efectivo
+                </a>
+                <div id="wallet_container"></div>
+            </div>
+        </div>
 
-    <div id="wallet_container"></div>
+    </main>
+
+    <footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
+        <div class="social">
+            <a href="https://www.instagram.com">
+                <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>
+            </a>
+            <a href="https://www.whatsapp.com">
+                <i class="fa-brands fa-whatsapp" style="color: #f8f1f1;"></i>
+            </a>
+        </div>
+    </footer>
 
 <script th:src="@{/js/pago.js}"></script>
+    <script src="../../../resources/core/js/pago.js"></script>
 
 </body>
 </html>

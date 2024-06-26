@@ -82,8 +82,10 @@
                     <div th:each="calificacion : ${calificaciones}">
                         <div class="calificacion">
                             <div class="calificacion-nombre">
+                                <img class="calificacion-img" th:src="@{'/img/usuarios/' + ${calificacion.usuario.id} + '/' + ${calificacion.usuario.fotoPerfil}}" />
                                 <p th:text="${calificacion.usuario.nombre}"></p>
                                 <p th:text="${calificacion.usuario.apellido}"></p>
+                                <p class="calificacion-puntaje" th:text="' - Puntaje: ' + ${calificacion.puntaje}"></p>
                             </div>
                             <p class="calificacion-fecha" th:text="${calificacion.fecha}"></p>
                             <p class="calificacion-desc" th:text="${calificacion.descripcion}"></p>
