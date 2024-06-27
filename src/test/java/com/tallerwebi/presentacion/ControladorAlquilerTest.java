@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
+import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,6 +31,7 @@ public class ControladorAlquilerTest {
     private HttpSession session;
     private Usuario usuario;
     private HttpServletResponse response;
+    private ServicioPropiedad servicioPropiedad;
 
     private Date fechaInicio;
     private Date fechaFin;
@@ -37,7 +39,8 @@ public class ControladorAlquilerTest {
     @BeforeEach
     public void init() {
         servicioAlquiler = mock(ServicioAlquiler.class);
-        controladorAlquiler = new ControladorAlquiler(servicioAlquiler);
+        servicioPropiedad = mock(ServicioPropiedad.class);
+        controladorAlquiler = new ControladorAlquiler(servicioAlquiler, servicioPropiedad);
         session = mock(HttpSession.class);
         usuario = mock(Usuario.class);
         response = mock(HttpServletResponse.class);

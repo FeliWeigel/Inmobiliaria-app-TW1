@@ -2,11 +2,13 @@ package com.tallerwebi.presentacion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tallerwebi.dominio.dto.FechasAlquilerDTO;
+import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.servicio.ServicioAlquiler;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
+import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +24,10 @@ import java.util.List;
 @Controller
 public class ControladorAlquiler {
     private final ServicioAlquiler servicioAlquiler;
-    public ControladorAlquiler(ServicioAlquiler servicioAlquiler) {
+    private final ServicioPropiedad servicioPropiedad;
+    public ControladorAlquiler(ServicioAlquiler servicioAlquiler, ServicioPropiedad servicioPropiedad) {
         this.servicioAlquiler = servicioAlquiler;
+        this.servicioPropiedad = servicioPropiedad;
     }
 
 //    @RequestMapping(path = "/propiedad/{id}/nuevo-alquiler", method = RequestMethod.GET)
@@ -64,7 +68,8 @@ public class ControladorAlquiler {
             return new ModelAndView("alquiler", model);
         }
 
-        model.put("success", "Alquiler efectuado correctamente! Sera contactado por el propietario en las proximas 72hs.");
+        Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
+        model.put("precioReserva", propiedad.getPrecio() * 0.05);
         return new ModelAndView("pago", model);
     }
 

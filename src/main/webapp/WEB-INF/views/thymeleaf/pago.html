@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <title>Pago de seña</title>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
-    <link rel="stylesheet" th:href="@{/css/pago.css}">
     <link rel="stylesheet" th:href="@{/css/index.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
-    <link rel="stylesheet" href="../../../resources/core/css/index.css">
-    <link rel="stylesheet" href="../../../resources/core/css/header.css">
-    <link rel="stylesheet" href="../../../resources/core/css/footer.css">
-    <link rel="stylesheet" href="../../../resources/core/css/pago.css">
+    <link rel="stylesheet" th:href="@{/css/pago.css}">
     <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
+    <style>
+        .pago-error, .pago-success {
+            z-index: 100000 !important;
+        }
+    </style>
 </head>
 <body>
     <header style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
@@ -46,7 +47,7 @@
                     Una vez abonado, la propiedad se encontrara reservada en las fechas elegidas y podra comenzar a negociar los detalles contractuales con el vendedor.
                     En caso de que no lleguen a un acuerdo, su dinero sera reintegrado y la reserva desestimada.
                 </p>
-                <p class="pago-valor"> Valor de la reserva: $30000(AR$)</p>
+                <p class="pago-valor" th:text="'Valor de la reserva: $' + ${precioReserva} + '(AR$ por mes)'"></p>
             </div>
             <div class="pago-modalidades">
                 <p class="modalidades-titulo">Modalidades de pago: </p>
@@ -54,9 +55,14 @@
                     <i class="fa-regular fa-money-bill-1"></i> Pago en efectivo
                 </a>
                 <div id="wallet_container"></div>
+                <form method="post" th:action="@{/propiedad/nuevo-alquiler/pago}">
+                    <button class="pago-btn" type="submit">Enviar solicitud</button>
+                </form>
             </div>
         </div>
 
+        <p id="pago-error" class="pago-error" th:if="${error}" th:text="${error}"></p>
+        <p id="pago-success" class="pago-success" th:if="${success}" th:text="${success}"></p>
     </main>
 
     <footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
@@ -69,9 +75,7 @@
             </a>
         </div>
     </footer>
-
-<script th:src="@{/js/pago.js}"></script>
-    <script src="../../../resources/core/js/pago.js"></script>
+    <script th:src="@{/js/pago.js}"></script>
 
 </body>
 </html>
