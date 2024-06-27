@@ -13,7 +13,10 @@ import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -52,17 +55,29 @@ public class ServicioAlquilerTests {
         fechaFin = new java.sql.Date(utilDateFin.getTime());
     }
 
+
     @Test
     public void queSeAgregueNuevoAlquiler() throws Exception {
+
+        // Horario de hoy
+        LocalDate today = LocalDate.now();
+        Date fechaInicioDate = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date fechaFinDate = Date.from(today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        // Pasarlo a sql Date
+        java.sql.Date fechaInicioReal = new java.sql.Date(fechaInicioDate.getTime());
+        java.sql.Date fechaFinReal = new java.sql.Date(fechaFinDate.getTime());
+
         when(servicioPropiedad.buscarPropiedad(anyLong())).thenReturn(propiedad);
         when(repositorioAlquiler.getAlquileresByPropiedad(anyLong())).thenReturn(new ArrayList<>());
 
-        servicioAlquiler.agregarNuevoAlquiler(usuario, 1L, fechaInicio, fechaFin);
+        servicioAlquiler.agregarNuevoAlquiler(usuario, 1L, fechaInicioReal, fechaFinReal);
 
         verify(repositorioAlquiler, times(1)).nuevoAlquiler(any(AlquilerPropiedad.class));
         assertThat(usuario.getAlquileres().size(), equalTo(1));
         assertThat(propiedad.getAlquileres().size(), equalTo(1));
     }
+
 
     @Test
     public void queSeLanceExcepcionCuandoUsuarioNoIdentificado() {
@@ -92,7 +107,7 @@ public class ServicioAlquilerTests {
     public void queSeLanceExcepcionCuandoPropiedadNoEncontrada() {
         when(servicioPropiedad.buscarPropiedad(anyLong())).thenReturn(null);
 
-        assertThrows(CRUDPropiedadExcepcion.class, () -> {
+        assertThrows(AlquilerDenegadoExcepcion.class, () -> {
             servicioAlquiler.agregarNuevoAlquiler(usuario, 1L, fechaInicio, fechaFin);
         });
     }
