@@ -49,4 +49,5 @@ public class CalificacionPropiedad {
     public void setPropiedad(Propiedad propiedad) {
         this.propiedad = propiedad;
     }
+
 }

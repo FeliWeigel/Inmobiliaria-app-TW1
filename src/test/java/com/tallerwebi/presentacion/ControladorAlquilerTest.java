@@ -48,6 +48,19 @@ public class ControladorAlquilerTest {
         fechaFin = new Date(utilDateFin.getTime());
     }
 
+
+    @Test
+    public void queAgregueNuevoAlquilerCorrectamente() throws Exception {
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        ModelAndView mav = controladorAlquiler.nuevoAlquiler(1L, session, fechaInicio, fechaFin);
+
+        verify(servicioAlquiler, times(1)).agregarNuevoAlquiler(any(Usuario.class), anyLong(), any(Date.class), any(Date.class));
+        assertThat(mav.getViewName(), equalTo("pago"));
+        assertThat(mav.getModel().get("success"), equalTo("Alquiler efectuado correctamente! Sera contactado por el propietario en las proximas 72hs."));
+    }
+
+
     @Test
     public void queRedirijaAlLoginCuandoUsuarioNoAutenticado() {
         when(session.getAttribute("usuario")).thenReturn(null);
@@ -57,15 +70,6 @@ public class ControladorAlquilerTest {
         assertThat(mav.getViewName(), equalTo("redirect:/login"));
     }
 
-    @Test
-    public void queAgregueNuevoAlquilerCorrectamente() throws Exception {
-        when(session.getAttribute("usuario")).thenReturn(usuario);
-
-        ModelAndView mav = controladorAlquiler.nuevoAlquiler(1L, session, fechaInicio, fechaFin);
-
-        verify(servicioAlquiler, times(1)).agregarNuevoAlquiler(any(Usuario.class), anyLong(), any(Date.class), any(Date.class));
-        assertThat(mav.getModel().get("success"), equalTo("Alquiler efectuado correctamente! Sera contactado por el propietario en las proximas 72hs."));
-    }
 
     @Test
     public void queMuestreErrorCuandoOcurreUsuarioNoIdentificadoExcepcion() throws Exception {

@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 @Service("MercadoPagoService")
 @Transactional
 public class MercadoPagoServiceImpl implements MercadoPagoServicio{
+
     @Override
     public String comprar(Double precio) {
         return null;
