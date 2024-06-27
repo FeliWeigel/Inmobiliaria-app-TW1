@@ -1,35 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de la Propiedad</title>
-    <link rel="stylesheet" th:href="@{/css/propiedad.css}"/>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" th:href="@{/css/propiedad.css}"/>
+    <link rel="stylesheet" th:href="@{/css/calificaciones.css}"/>
     <script src="https://kit.fontawesome.com/9168d5dbac.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" th:href="@{/css/index.css}">
 </head>
 <body>
 
-    <header>
+    <header style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
         <a class="button-logo" th:href="@{/home}">
             <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
         </a>
         <nav>
+            <div th:if="${usuario}">
+                <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
+                    <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
+                </a>
+            </div>
             <a th:href="@{/favoritos}">
                 <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
             </a>
-            <!--
-               <a href="#">
-                    <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
-               </a>
-             -->
-            <!--
-               <a href="#">
-                     <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>
-               </a>
-            -->
             <a href="#" th:href="@{/perfil}">
                 <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
             </a>
@@ -39,27 +35,75 @@
     <div th:if="${messageError != null}" style="height: 90vh;display: flex;align-items: center;justify-content: center;">
         <p style="font-size: 2.3rem" th:text="${messageError}"></p>
     </div>
-    <main th:if="${propiedad != null}" class="detalles-propiedad">
+    <main class="detalles-propiedad">
+        <a class="back-btn" th:href="@{/lista-propiedades}"><i class="fa-solid fa-arrow-left-long"></i> Volver</a>
         <div class="img-container">
-            <img th:src="@{/img/casa-2.jpg}" class="img-propiedad" alt="casa-img">
-            <!-- <button class="alquilar-btn">Alquilar</button> -->
+            <img th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}" class="img-propiedad" alt="casa-img">
+            <div class="alquilar-content">
+                <h2 style="margin-bottom: 1rem" th:text="${propiedad.nombre}"></h2>
+                <a th:if="${propiedad.estado.toString() == 'ALQUILER'}" th:href="@{'/propiedad/' + ${propiedad.id} + '/alquiler'}" class="alquilar-btn">Alquilar propiedad</a>
+                <a th:unless="${propiedad.estado.toString() == 'ALQUILER'}" th:href="@{'/propiedad/' + ${propiedad.id} + '/compra'}" class="alquilar-btn">Adquirir propiedad</a>
+            </div>
         </div>
 
         <div class="propiedad">
-            <h1 class="message" th:if="${messageSuccess != null}" th:text="${messageSuccess}">Detalles de la Propiedad</h1>
-            <h3 class="nombre" th:text="${propiedad.nombre}"></h3>
-            <p class="propiedad-estado">En <span th:text="${propiedad.estado}"></span></p>
-            <p><i style="margin-right: .5rem" class="fa-solid fa-location-dot"></i>Ubicacion: <span th:text="${propiedad.ubicacion}"></span></p>
-            <p><i style="margin-right: .5rem" class="fa-solid fa-layer-group"></i>Pisos: <span th:text="${propiedad.pisos}"></span></p>
-            <p><i style="margin-right: .5rem" class="fa-solid fa-bath"></i>Baños: <span th:text="${propiedad.banios}"></span></p>
-            <p><i style="margin-right: .5rem" class="fa-solid fa-person-shelter"></i>Habitaciones: <span th:text="${propiedad.habitaciones}"></span></p>
-            <p><i style="margin-right: .5rem" class="fa-brands fa-codepen"></i>Superficie: <span th:text="${propiedad.superficie}"></span> (m2)</p>
+            <h1 class="message" th:if="${messageSuccess != null}">Detalles de la Propiedad</h1>
+            <div class="propiedad-content">
+                <div class="propiedad-info">
+                    <p class="propiedad-estado">En <span th:text="${propiedad.estado}"></span></p>
+                    <p><i style="margin-right: .5rem" class="fa-solid fa-location-dot"></i>Ubicacion: <span th:text="${propiedad.ubicacion}"></span></p>
+                    <p><i style="margin-right: .5rem" class="fa-solid fa-layer-group"></i>Pisos: <span th:text="${propiedad.pisos}"></span></p>
+                    <p><i style="margin-right: .5rem" class="fa-solid fa-bath"></i>Baños: <span th:text="${propiedad.banios}"></span></p>
+                    <p><i style="margin-right: .5rem" class="fa-solid fa-person-shelter"></i>Habitaciones: <span th:text="${propiedad.habitaciones}"></span></p>
+                    <p><i style="margin-right: .5rem" class="fa-brands fa-codepen"></i>Superficie: <span th:text="${propiedad.superficie} + '(m2.)'"></span></p>
+                </div>
+                <div class="propiedad-galeria">
+                    <h4 class="galeria-title">Galeria de imagenes:</h4>
+                    <div>
+                        <img id="img-principal" class="galeria-img-principal" th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}">
+                    </div>
+                    <div class="galeria-seleccion">
+                        <div th:each="imagen : ${imagenes}">
+                            <img onclick="seleccionarImagen(this)" class="galeria-img-sec" th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${imagen}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <h5 class="prop-det-price" th:text="${propiedad.precio} + '$ (Por Noche)'"></h5>
+        <h5 class="prop-det-price" th:text="'$' + ${propiedad.precio} + '(AR$ por mes)'"></h5>
+        <div class="calificaciones-container">
+            <h3 class="calificaciones-titulo">Reseñas de la propiedad</h3>
+
+            <div th:if="${listEmpty != null}" style="text-align: center; font-size: 2rem">
+                <h3 th:text="${listEmpty}" style="font-size: 1.9rem; margin-bottom: 1rem"></h3>
+                <a class="agregar-calificacion-link" th:href="@{'/propiedad/' + ${id} + '/nueva-calificacion'}">Agregar reseña</a>
+            </div>
+            <div th:if="${listEmpty == null}">
+                <div class="calificaciones-lista">
+                    <div th:each="calificacion : ${calificaciones}">
+                        <div class="calificacion">
+                            <div class="calificacion-nombre">
+                                <img class="calificacion-img" th:src="@{'/img/usuarios/' + ${calificacion.usuario.id} + '/' + ${calificacion.usuario.fotoPerfil}}" />
+                                <p th:text="${calificacion.usuario.nombre}"></p>
+                                <p th:text="${calificacion.usuario.apellido}"></p>
+                                <p class="calificacion-puntaje" th:text="' - Puntaje: ' + ${calificacion.puntaje}"></p>
+                            </div>
+                            <p class="calificacion-fecha" th:text="${calificacion.fecha}"></p>
+                            <p class="calificacion-desc" th:text="${calificacion.descripcion}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="calificaciones-links">
+                    <a class="agregar-calificacion-link" th:href="@{'/propiedad/' + ${id} + '/nueva-calificacion'}">Agregar reseña</a>
+                    <a class="agregar-calificacion-link" th:href="@{'/propiedad/' + ${id} + '/calificaciones'}">Ver todas las reseñas</a>
+                </div>
+            </div>
+
+        </div>
     </main>
 
 
-    <footer>
+    <footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
         <div class="social">
             <a href="https://www.instagram.com">
                 <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>
@@ -69,6 +113,8 @@
             </a>
         </div>
     </footer>
+
+    <script th:src="@{/js/detalle-propiedad.js}"></script>
 
 </body>
 </html>

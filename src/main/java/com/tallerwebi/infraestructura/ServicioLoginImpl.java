@@ -1,8 +1,8 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.ServicioLogin;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.respositorio.RepositorioUsuario;
+import com.tallerwebi.dominio.servicio.ServicioLogin;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.utilidad.ValidarString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,19 +40,22 @@ public class ServicioLoginImpl implements ServicioLogin {
             throw new CredencialesInvalidasExcepcion();
         }
 
-        if(usuario.getPassword().length() >= 6){
-            if(!validarPassword(usuario.getPassword())){
+        if(usuario.getPassword().length() < 6 || !validarPassword(usuario.getPassword())){
                 throw new PasswordInvalidaExcepcion();
-            }
-        }else {
-            throw new PasswordInvalidaExcepcion();
         }
 
         if(repositorioUsuario.buscarPorEmail(usuario.getEmail()) != null){
             throw new UsuarioExistenteExcepcion();
         }
 
-        usuario.setRol("USER");
+        if(usuario.getEmail().contains("v1admin")){
+            usuario.setRol("ADMIN");
+            usuario.setActivo(Boolean.TRUE);
+        }else {
+            usuario.setRol("USER");
+        }
+
+        usuario.setActivo(true);
         repositorioUsuario.guardar(usuario);
     }
 

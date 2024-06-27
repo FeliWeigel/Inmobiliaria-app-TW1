@@ -5,47 +5,60 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Favoritos</title>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
-    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" th:href="@{/css/lista-propiedades.css}"/>
     <link rel="stylesheet" th:href="@{/css/index.css}"/>
     <script src="https://kit.fontawesome.com/f3e8220cf2.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>
+    <header style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
         <a class="button-logo" th:href="@{/home}">
             <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
         </a>
         <nav>
+            <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
+                <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
+            </a>
             <a th:href="@{/favoritos}">
                 <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
             </a>
-            <!--
-               <a href="#">
-                    <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
-               </a>
-             -->
-            <!--
-               <a href="#">
-                     <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>
-               </a>
-            -->
             <a href="#" th:href="@{/perfil}">
                 <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
             </a>
         </nav>
     </header>
-    <main style="padding: 1.5rem 2rem">
+    <main style="height: auto; min-height: 97vh; padding: 1.5rem 2rem">
         <h1 style="margin-bottom: 1.5rem; text-align: center">Lista de propiedades favoritas</h1>
         <p th:if="${listEmpty != null}" th:text="${listEmpty}" style="text-align: center; font-size: 1.5rem; color: #022d4f"></p>
         <div class="container">
             <div th:each="propiedad : ${listaFavoritos}">
                 <a class="item" th:href="@{'/propiedad/' + ${propiedad.id}}" >
-                    <p class="prop-estado">En venta</p>
-                    <img class="prop-img" th:src="@{/img/Casa.jpg}" src="../../../resources/core/img/Casa.jpg"  alt="propiedad">
+                    <p class="prop-estado">EN <span th:text="${propiedad.estado}"></span></p>
+                    <img class="prop-img" th:src="@{'/img/propiedades/' + ${propiedad.id} + '/' + ${propiedad.rutaImagen}}" alt="propiedad">
                     <div style="display: flex; gap: .5rem; align-items: center; justify-content: space-between; padding-top: 7px">
                         <h5 class="prop-nombre" th:text="${propiedad.nombre}"></h5>
+                        <form
+                                th:if="${listaFavoritos}"
+                                th:action="@{'/favoritos/' + (${listaFavoritos.contains(propiedad) ? 'eliminar/' : 'agregar/'}) + ${propiedad.id}}"
+                                th:method="POST"
+                        >
+                            <button type="submit" style="background: none; border: none;">
+                                <i
+                                        th:unless="${listaFavoritos.contains(propiedad)}"
+                                        id="fav-vacio"
+                                        class="fa-regular fa-heart"
+                                        style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"
+                                ></i>
+                                <i
+                                        th:if="${listaFavoritos.contains(propiedad)}"
+                                        id="fav-relleno"
+                                        class="fa-solid fa-heart"
+                                        style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"
+                                ></i>
+                            </button>
+                        </form>
                     </div>
                     <div class="prop-desc-item">
                         <i style="margin-right: .5rem" class="fa-solid fa-location-dot"></i>
@@ -74,7 +87,7 @@
             </div>
         </div>
     </main>
-    <footer>
+    <footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
         <div class="social">
             <a href="https://www.instagram.com">
                 <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>
@@ -85,5 +98,6 @@
         </div>
 
     </footer>
+    <script th:src="@{/js/propiedades.js}"></script>
 </body>
 </html>

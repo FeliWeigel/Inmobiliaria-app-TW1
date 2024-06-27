@@ -1,13 +1,13 @@
 package com.tallerwebi.integracion;
 
-import com.tallerwebi.dominio.ServicioLogin;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.servicio.ServicioLogin;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
 import com.tallerwebi.dominio.excepcion.EdadInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
 import com.tallerwebi.presentacion.ControladorLogin;
-import com.tallerwebi.presentacion.DatosLogin;
+import com.tallerwebi.dominio.dto.DatosLoginDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,7 +23,7 @@ public class ControladorLoginTest {
 
 	private ControladorLogin controladorLogin;
 	private Usuario usuarioMock;
-	private DatosLogin datosLoginMock;
+	private DatosLoginDTO datosLoginMock;
 	private HttpServletRequest requestMock;
 	private HttpSession sessionMock;
 	private ServicioLogin servicioLoginMock;
@@ -31,7 +31,7 @@ public class ControladorLoginTest {
 
 	@BeforeEach
 	public void init(){
-		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
+		datosLoginMock = new DatosLoginDTO("dami@unlam.com", "123");
 		usuarioMock = mock(Usuario.class);
 		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
 		requestMock = mock(HttpServletRequest.class);
@@ -60,6 +60,7 @@ public class ControladorLoginTest {
 		// preparacion
 		Usuario usuarioEncontradoMock = mock(Usuario.class);
 		when(usuarioEncontradoMock.getRol()).thenReturn("ADMIN");
+		when(usuarioEncontradoMock.getActivo()).thenReturn(true);
 
 		when(requestMock.getSession()).thenReturn(sessionMock);
 		when(servicioLoginMock.consultarUsuario(anyString(), anyString())).thenReturn(usuarioEncontradoMock);

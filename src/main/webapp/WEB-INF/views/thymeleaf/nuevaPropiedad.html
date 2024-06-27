@@ -19,96 +19,93 @@
 </head>
 
 <body>
-  <header>
+  <header style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
     <a class="button-logo" th:href="@{/home}">
       <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
     </a>
     <nav>
+      <div th:if="${usuario}">
+        <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
+          <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
+        </a>
+      </div>
       <a th:href="@{/favoritos}">
         <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
       </a>
-      <!--
-         <a href="#">
-              <i class="fa-regular fa-bell" style="color: #f8f1f1;"></i>
-         </a>
-       -->
-      <!--
-         <a href="#">
-               <i class="fa-regular fa-envelope" style="color: #f8f1f1;"></i>
-         </a>
-      -->
       <a href="#" th:href="@{/perfil}">
         <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
       </a>
     </nav>
   </header>
   <main>
-    <form action="#" enctype="multipart/form-data" th:action="@{/agregar-propiedad}" method="POST" th:object="${propiedad}">
-      <h3>Agregar Propiedad</h3>
-
-      <label for="nombre">Nombre</label>
-      <input th:field="*{nombre}" id="nombre" type="text" required/>
-      <label for="ubicacion">Ubicacion</label>
-      <input th:field="*{ubicacion}" id="ubicacion" type="text" required/>
-
-      <div class="form-flex">
-        <div>
-          <label for="pisos">Pisos</label>
-          <input th:field="*{pisos}" id="pisos" type="number" required/>
-        </div>
-        <div>
-          <label for="banios">Baños</label>
-          <input th:field="*{banios}" id="banios" type="number" required/>
-        </div>
-        <div>
-          <label for="superficie">Superficie(m2)</label>
-          <input th:field="*{superficie}" id="superficie" type="number" required/>
-        </div>
+    <div class="bg-overlay"></div>
+    <img class="agregar-bg" th:src="@{/img/agregar-bg.png}"/>
+    <div class="agregar-contenido">
+      <div class="agregar-textos">
+        <h3>Pone en venta/alquiler tu propiedad!</h3>
+        <p>Ingresa datos e imagenes de la vivienda, publicala, y una vez que se verifiquen los datos y la publicacion sea habilitada espera a que un interesado se contacte con vos para negociar.</p>
       </div>
+      <form style="z-index: 1000" action="#" enctype="multipart/form-data" th:action="@{/agregar-propiedad}" method="POST" th:object="${propiedad}">
+        <h3>Datos de la propiedad</h3>
 
-      <div class="form-flex">
-        <div>
-          <label for="precio">Precio</label>
-          <input th:field="*{precio}" id="precio" type="number" placeholder="$" required/>
-        </div>
-        <div>
-          <label for="habitaciones">Habitaciones</label>
-          <input th:field="*{habitaciones}" id="habitaciones" type="number" required/>
-        </div>
-        <div style="margin-left: .5rem">
-          <label>Estado:</label>
-          <div style="display: flex; flex-direction: row; align-items: center; font-size: .9rem">
-            En alquiler
-            <input type="radio" value="ALQUILER" name="estado" th:field="*{estado}">
+        <label for="nombre">Nombre</label>
+        <input th:field="*{nombre}" id="nombre" type="text" required/>
+        <label for="ubicacion">Ubicacion</label>
+        <input th:field="*{ubicacion}" id="ubicacion" type="text" required/>
+
+        <div class="form-flex">
+          <div>
+            <label for="pisos">Pisos</label>
+            <input th:field="*{pisos}" id="pisos" type="number" required/>
           </div>
-          <div style="display: flex; flex-direction: row; align-items: center; font-size: .9rem">
-            En venta
-            <input type="radio" value="VENTA" name="estado" th:field="*{estado}">
+          <div>
+            <label for="banios">Baños</label>
+            <input th:field="*{banios}" id="banios" type="number" required/>
+          </div>
+          <div>
+            <label for="superficie">Superficie(m2)</label>
+            <input th:field="*{superficie}" id="superficie" type="number" required/>
           </div>
         </div>
-      </div>
 
-      <label for="imagen">Imagen:</label>
-      <input name="imagen" id="imagen" type="file" required/>
+        <div class="form-flex">
+          <div>
+            <label for="precio">Precio</label>
+            <input th:field="*{precio}" id="precio" type="number" max="1000000" required/>
+          </div>
+          <div>
+            <label for="habitaciones">Habitaciones</label>
+            <input th:field="*{habitaciones}" id="habitaciones" type="number" required/>
+          </div>
+          <div style="margin-left: .5rem">
+            <label>Estado:</label>
+            <div style="display: flex; flex-direction: row; align-items: center; font-size: .9rem">
+              En alquiler
+              <input id="input-alquiler" type="radio" value="ALQUILER" name="estado" th:field="*{estado}" checked>
+            </div>
+            <div style="display: flex; flex-direction: row; align-items: center; font-size: .9rem">
+              En venta
+              <input id="input-venta" type="radio" value="VENTA" name="estado" th:field="*{estado}">
+            </div>
+          </div>
+        </div>
 
-      <p
-              class="alert"
-              th:if="${error != null}"
-              th:text="${error}"
-      >
-      </p>
+        <label for="imagen">Imagen:</label>
+        <input name="imagen" id="imagen" type="file" required/>
 
-      <p
-              class="success"
-              th:if="${success != null}"
-              th:text="${success}"
-      >
-      </p>
-      <button type="Submit">Agregar propiedad</button>
-    </form>
+        <p
+                class="alert"
+                th:if="${error != null}"
+                th:text="${error}"
+        >
+        </p>
+        <button type="Submit">Agregar propiedad</button>
+      </form>
+    </div>
+    <p id="successMessage" class="fav-alert-success" th:if="${success != null}" th:text="${success}"></p>
   </main>
 
-  <footer>
+  <footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
     <div class="social">
       <a href="https://www.instagram.com">
         <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>
@@ -118,6 +115,8 @@
       </a>
     </div>
   </footer>
+
+  <script th:src="@{/js/propiedades.js}"></script>
 
 </body>
 </html>

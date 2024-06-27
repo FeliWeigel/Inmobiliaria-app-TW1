@@ -1,9 +1,9 @@
 package com.tallerwebi.presentacion;
 
 
-import com.tallerwebi.dominio.ServicioLogin;
-import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.dto.DatosLoginDTO;
+import com.tallerwebi.dominio.servicio.ServicioLogin;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,8 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class ControladorLogin {
@@ -31,7 +29,7 @@ public class ControladorLogin {
     @RequestMapping("/login")
     public ModelAndView irALogin() {
         ModelMap modelo = new ModelMap();
-        modelo.put("datosLogin", new DatosLogin());
+        modelo.put("datosLogin", new DatosLoginDTO());
         return new ModelAndView("login", modelo);
     }
 
@@ -59,19 +57,24 @@ public class ControladorLogin {
     }
 
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
-    public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
+    public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLoginDTO datosLogin, HttpServletRequest request) {
         ModelMap model = new ModelMap();
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
-            request.getSession().setAttribute("usuario", usuarioBuscado);
-            request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
-            return new ModelAndView("redirect:/home");
+            if (usuarioBuscado.getActivo()) {
+                request.getSession().setAttribute("usuario", usuarioBuscado);
+                request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
+                return new ModelAndView("redirect:/home");
+            } else {
+                model.put("error", "El usuario se encuentra bloqueado");
+            }
         } else {
             model.put("error", "Usuario o clave incorrecta");
         }
         return new ModelAndView("login", model);
     }
+
 
     @RequestMapping(path = "/registrarse", method = RequestMethod.POST)
     public ModelAndView registrarse(@ModelAttribute("usuario") Usuario usuario) {

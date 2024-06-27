@@ -1,29 +1,33 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
-import org.dom4j.rule.Mode;
+import com.tallerwebi.dominio.servicio.ServicioPropiedad;
+import com.tallerwebi.dominio.servicio.ServicioUsuario;
+import com.tallerwebi.dominio.servicio.SubirImagenServicio;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Controller
 public class ControladorUsuario {
-    private final RepositorioUsuario repositorioUsuario;
+    private final ServicioUsuario servicioUsuario;
     private final ServicioPropiedad servicioPropiedad;
+    private final SubirImagenServicio imagenServicio;
 
-    public ControladorUsuario(RepositorioUsuario repositorioUsuario, ServicioPropiedad servicioPropiedad) {
-        this.repositorioUsuario = repositorioUsuario;
+    public ControladorUsuario(ServicioUsuario servicioUsuario, ServicioPropiedad servicioPropiedad, SubirImagenServicio imagenServicio) {
+        this.servicioUsuario = servicioUsuario;
         this.servicioPropiedad = servicioPropiedad;
+        this.imagenServicio = imagenServicio;
     }
 
     @RequestMapping(path = "/favoritos", method = RequestMethod.GET)
@@ -37,7 +41,7 @@ public class ControladorUsuario {
         }
 
         try {
-            favoritos = repositorioUsuario.listarFavoritos(usuarioAutenticado);
+            favoritos = servicioUsuario.listarFavoritos(usuarioAutenticado);
             model.put("listaFavoritos", favoritos);
         }catch(CRUDPropiedadExcepcion e){
             model.put("error", e.getMessage());
@@ -58,28 +62,28 @@ public class ControladorUsuario {
     public ModelAndView agregarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-        List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+        List<Propiedad> propiedades = servicioPropiedad.listarPropiedadesAceptadas();
 
         if (usuarioAutenticado == null){
             return new ModelAndView("redirect:/login");
         }
 
         try {
-            repositorioUsuario.agregarFavorito(usuarioAutenticado, propiedadId);
+            servicioUsuario.agregarFavorito(usuarioAutenticado, propiedadId);
             model.put("success", "La propiedad ha sido agregada a tu lista de favoritos correctamente!");
         }catch(CRUDPropiedadExcepcion e){
             model.put("error", e.getMessage());
         }
 
         try{
-            Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+            Set<Propiedad> favoritos =  servicioUsuario.listarFavoritos(usuarioAutenticado);
             model.put("favoritos", favoritos);
         }catch(CRUDPropiedadExcepcion e){
             model.put("error", e.getMessage());
         }
 
         model.put("propiedades", propiedades);
-        return new ModelAndView("home", model);
+        return new ModelAndView("lista-propiedades", model);
     }
 
 
@@ -87,28 +91,28 @@ public class ControladorUsuario {
     public ModelAndView eliminarFavorito(@PathVariable Long propiedadId, HttpSession session){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-        List<Propiedad> propiedades = servicioPropiedad.listarPropiedades();
+        List<Propiedad> propiedades = servicioPropiedad.listarPropiedadesAceptadas();
 
         if (usuarioAutenticado == null){
             return new ModelAndView("redirect:/login");
         }
 
         try {
-            repositorioUsuario.eliminarFavorito(usuarioAutenticado, propiedadId);
+            servicioUsuario.eliminarFavorito(usuarioAutenticado, propiedadId);
             model.put("success", "La propiedad ha sido eliminada de tu lista de favoritos correctamente.");
         }catch(CRUDPropiedadExcepcion e){
             model.put("error", e.getMessage());
         }
 
         try{
-            Set<Propiedad> favoritos =  repositorioUsuario.listarFavoritos(usuarioAutenticado);
+            Set<Propiedad> favoritos =  servicioUsuario.listarFavoritos(usuarioAutenticado);
             model.put("favoritos", favoritos);
         }catch(CRUDPropiedadExcepcion e){
             model.put("error", e.getMessage());
         }
 
         model.put("propiedades", propiedades);
-        return new ModelAndView("home", model);
+        return new ModelAndView("lista-propiedades", model);
     }
 
 
@@ -125,6 +129,22 @@ public class ControladorUsuario {
         return new ModelAndView("perfil", model);
     }
 
+    @RequestMapping(path = "/perfil/editar/foto-perfil", method = RequestMethod.POST)
+    public ModelAndView nuevaFotoPerfil(@RequestParam("foto")MultipartFile foto, HttpSession session) throws IOException, UsuarioInexistenteExcepcion {
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+
+        if(usuarioAutenticado == null){
+            return new ModelAndView("redirect:/login");
+        }
+
+        imagenServicio.subirImagenUsuario(usuarioAutenticado.getId(), foto);
+        Usuario usuarioActualizado = servicioUsuario.buscarPorId(usuarioAutenticado.getId());
+        session.setAttribute("usuario", usuarioActualizado);
+        model.put("usuario", usuarioActualizado);
+
+        return new ModelAndView("perfil", model);
+    }
 
     @RequestMapping(path = "/editar-perfil", method = RequestMethod.POST)
     public ModelAndView perfil(@ModelAttribute("usuario") Usuario usuario, HttpSession session) throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, EdadInvalidaExcepcion {
@@ -133,7 +153,7 @@ public class ControladorUsuario {
         usuario.setId(usuarioAutenticado.getId());
 
         try {
-            repositorioUsuario.editarPerfil(usuario);
+            servicioUsuario.editarPerfil(usuario);
         }catch(PasswordInvalidaExcepcion e){
             model.put("error", "Error! La contraseña debe contener al menos: 6 digitos, una mayuscula, un numero y un caracter especial.");
             return new ModelAndView("perfil", model);

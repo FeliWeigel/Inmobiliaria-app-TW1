@@ -1,1 +1,0 @@
-INSERT INTO Usuario(id, nombre, apellido, fechaNacimiento, email, password, rol, activo) VALUES(null, 'test', 'test', null, 'test@unlam.edu.ar', 'test', 'ADMIN', true);

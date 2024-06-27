@@ -107,6 +107,7 @@
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
+
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
@@ -119,6 +120,38 @@
             <version>${playwright.version}</version>
             <scope>test</scope>
         </dependency>
+
+
+        <!-- INICIO DE LAS DEPENDENCIAS PARA SERVICIO DE EMAIL -->
+
+
+        <!-- Para la explicación de como funciona leer los comentarios de las clases EmailConfig,
+         EmailServiceImpl y de la función "bloquearUsuario" de la clase ServicioUsuario (En ese orden). -->
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.2.22.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>5.2.22.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
+        <!-- FIN DE LAS DEPENDENCIAS PARA SERVICIO DE EMAIL -->
+
+
+
+        <!-- Dependencia para poder leer y escribir json principalmente desde los controladores -->
+
         <!-- compile only, deployed container will provide this -->
         <!--
         <dependency>
@@ -128,6 +161,32 @@
             <scope>provided</scope>
         </dependency>
         -->
+
+        <dependency>
+            <groupId>com.mercadopago</groupId>
+            <artifactId>sdk-java</artifactId>
+            <version>2.1.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

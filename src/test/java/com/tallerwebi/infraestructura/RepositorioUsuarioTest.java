@@ -1,14 +1,12 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.RepositorioPropiedad;
-import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +16,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
@@ -27,8 +28,7 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateTestInfraestructuraConfig.class})
@@ -79,7 +79,7 @@ public class RepositorioUsuarioTest {
 
         this.repositorioUsuarioImpl.guardar(nuevoUsuario);
 
-        Usuario usuarioGuardado = (Usuario) this.sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+        Usuario usuarioGuardado = (Usuario) session.createCriteria(Usuario.class)
                 .add(Restrictions.eq("email", "newuser@example.com"))
                 .uniqueResult();
 
@@ -117,6 +117,31 @@ public class RepositorioUsuarioTest {
         assertThat(usuarioModificado.getPassword(), is("newPassword.456"));
     }
 
+//    @Test
+//    @Transactional
+//    @Rollback
+//    public void queSePuedaEliminarUnUsuario() throws UsuarioInexistenteExcepcion {
+//        Usuario nuevoUsuario = new Usuario();
+//        nuevoUsuario.setEmail("newuser@example.com");
+//        nuevoUsuario.setPassword("newpassword123");
+//        nuevoUsuario.setId(3L);
+//        this.repositorioUsuarioImpl.guardar(nuevoUsuario);
+//
+//        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//        CriteriaQuery<Usuario> criteriaQuery = criteriaBuilder.createQuery(Usuario.class);
+//        Root<Usuario> root = criteriaQuery.from(Usuario.class);
+//        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("email"), "newuser@example.com"));
+//
+//        Usuario usuarioAEliminar = session.createQuery(criteriaQuery).uniqueResult();
+//        if(usuarioAEliminar==null){
+//            throw new UsuarioInexistenteExcepcion();
+//        }
+//
+//        repositorioUsuarioImpl.eliminarUsuario(usuarioAEliminar.getId());
+//        Usuario usuarioEliminado = session.createQuery(criteriaQuery).uniqueResult();
+//        assertThat(usuarioEliminado, is(nullValue()));
+//    }
+//
 
     @Test
     @Transactional
@@ -329,5 +354,62 @@ public class RepositorioUsuarioTest {
             this.repositorioUsuarioImpl.listarFavoritos(usuarioNoExistente);
         });
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queListeUsuariosDesbloqueados() {
+        Usuario usuario1 = new Usuario();
+        usuario1.setActivo(true);
+        sessionFactory.getCurrentSession().save(usuario1);
+
+        List<Usuario> usuariosDesbloqueados = repositorioUsuarioImpl.listarUsuariosDesbloqueados();
+
+        assertThat(usuariosDesbloqueados, contains(usuario1));
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaBloquearUnUsuarioExistente() {
+        Usuario usuario = new Usuario();
+        usuario.setActivo(true);
+        sessionFactory.getCurrentSession().save(usuario);
+
+        repositorioUsuarioImpl.bloquearUsuario(usuario.getId());
+
+        Usuario usuarioBloqueado = sessionFactory.getCurrentSession().get(Usuario.class, usuario.getId());
+        assertThat(usuarioBloqueado.getActivo(), is(false));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaDesbloquearUnUsuarioExistente() {
+        Usuario usuario = new Usuario();
+        usuario.setActivo(false);
+        sessionFactory.getCurrentSession().save(usuario);
+
+        repositorioUsuarioImpl.desbloquearUsuario(usuario.getId());
+
+        Usuario usuarioDesbloqueado = sessionFactory.getCurrentSession().get(Usuario.class, usuario.getId());
+        assertThat(usuarioDesbloqueado.getActivo(), is(true));
+    }
+
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queListeUsuariosBloqueados() {
+        this.usuario.setActivo(false);
+
+        List<Usuario> usuariosBloqueados = this.repositorioUsuarioImpl.listarUsuariosBloqueados();
+
+        assertThat(usuariosBloqueados.size(), is(1) );
+    }
+
 
 }

@@ -1,19 +1,21 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Propiedad;
-import com.tallerwebi.dominio.RepositorioPropiedad;
-import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
+import com.tallerwebi.dominio.respositorio.RepositorioUsuario;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.utilidad.ValidarString;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,7 +23,6 @@ import java.util.regex.Pattern;
 @Repository("RepositorioUsuario")
 @Transactional
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
-
     private final SessionFactory sessionFactory;
     private final RepositorioPropiedad repositorioPropiedad;
 
@@ -40,12 +41,18 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .uniqueResult();
     }
 
-
     @Override
     public void guardar(Usuario usuario) {
         sessionFactory.getCurrentSession().save(usuario);
     }
 
+    @Override
+    public void eliminarUsuario(Long id) {
+        Usuario usuario = this.buscarPorId(id);
+        if(usuario!=null && !usuario.getActivo()){
+          sessionFactory.getCurrentSession().delete(usuario);
+        }
+    }
 
     @Override
     public Usuario buscarPorEmail(String email) {
@@ -54,7 +61,12 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .uniqueResult();
     }
 
-
+    @Override
+    public Usuario buscarPorId(Long id) {
+        return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+                .add(Restrictions.eq("id", id))
+                .uniqueResult();
+    }
 
     @Override
     public void editarPerfil(Usuario usuario) throws CredencialesInvalidasExcepcion, PasswordInvalidaExcepcion, UsuarioExistenteExcepcion {
@@ -65,6 +77,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         if(usuarioAlmacenado == null){
             throw new CRUDPropiedadExcepcion("Error! El usuario no pudo ser encontrado.");
         }
+
         if(validarString.tieneNumeros(usuario.getNombre()) || validarString.tieneNumeros(usuario.getApellido())){
             throw new CredencialesInvalidasExcepcion();
         }
@@ -85,9 +98,11 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         usuarioAlmacenado.setPassword(usuario.getPassword());
         usuarioAlmacenado.setNombre(usuario.getNombre());
         usuarioAlmacenado.setApellido(usuario.getApellido());
+        usuarioAlmacenado.setFotoPerfil(usuario.getFotoPerfil());
 
         session.update(usuarioAlmacenado);
     }
+
 
 
     @Override
@@ -113,7 +128,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
     }
 
-
     @Override
     @Transactional
     public void eliminarFavorito(Usuario usuario, Long propiedadId) {
@@ -133,7 +147,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
 
     }
-
 
     @Override
     @Transactional
@@ -159,6 +172,39 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
     }
 
+    @Override
+    public void bloquearUsuario(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        Usuario usuario = session.get(Usuario.class, id);
+        if (usuario != null) {
+            usuario.setActivo(false);
+            session.update(usuario);
+        }
+    }
+
+    @Override
+    public void desbloquearUsuario(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        Usuario usuario = session.get(Usuario.class, id);
+        if (usuario != null) {
+            usuario.setActivo(true);
+            session.update(usuario);
+        }
+    }
+
+    @Override
+    public List<Usuario> listarUsuariosDesbloqueados() {
+        Session session = sessionFactory.getCurrentSession();
+        Query<Usuario> query = session.createQuery("FROM Usuario WHERE activo = true", Usuario.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Usuario> listarUsuariosBloqueados() {
+        Session session = sessionFactory.getCurrentSession();
+        Query<Usuario> query = session.createQuery("FROM Usuario WHERE activo = false", Usuario.class);
+        return query.getResultList();
+    }
 
     private Boolean validarPassword(String password){
         boolean esMayuscula = false, esNumero = false, esCaracterEspecial = false;
@@ -182,6 +228,5 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
         return esMayuscula && esNumero && esCaracterEspecial;
     }
-
 
 }
