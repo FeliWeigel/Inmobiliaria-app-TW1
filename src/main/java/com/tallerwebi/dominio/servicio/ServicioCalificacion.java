@@ -53,4 +53,17 @@ public class ServicioCalificacion {
 
         return repositorioCalificacion.listarCalificacionesPorPropiedad(propiedadId);
     }
+
+    public CalificacionPropiedad getCalificacion(Long calificacionId){
+        if(calificacionId == null){
+            throw new CalificacionDenegadaExcepcion("Error! No se ha encontrado la calificacion, el ID es nulo!");
+        }
+        CalificacionPropiedad calificacion = repositorioCalificacion.getCalificacionPorId(calificacionId);
+
+        if(calificacion == null){
+            throw new CalificacionDenegadaExcepcion("La calificacion de id: " + calificacionId + " no ha sido encontrada.");
+        }
+
+        return calificacion;
+    }
 }

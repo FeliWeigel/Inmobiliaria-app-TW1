@@ -1,5 +1,7 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidades.CalificacionPropiedad;
+import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.CalificacionDenegadaExcepcion;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ControladorCalificacion {
@@ -59,5 +63,46 @@ public class ControladorCalificacion {
         }
 
         return new ModelAndView("agregarCalificacion", model);
+    }
+
+    @GetMapping("/propiedad/{id}/calificaciones")
+    public ModelAndView listarCalificaciones(
+            @PathVariable("id") Long id
+    ){
+        ModelMap model = new ModelMap();
+        List<CalificacionPropiedad> calificaciones = new ArrayList<>();
+
+        try {
+            Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
+            calificaciones = servicioCalificacion.listarCalificacionesPorPropiedad(id);
+            model.put("calificaciones", calificaciones);
+        } catch (CRUDPropiedadExcepcion e) {
+            model.put("messageError", e.getMessage());
+            return new ModelAndView("propiedad", model);
+        }
+
+        if(calificaciones.size() == 0){
+            model.put("listEmpty", "Todavia no se han aportado reseñas de esta propiedad.");
+        }
+
+        return new ModelAndView("listaCalificaciones",model);
+    }
+
+    @GetMapping("/propiedad/calificacion/{propiedadId}/{id}")
+    public ModelAndView verCalificacion(
+            @PathVariable("id") Long id,
+            @PathVariable("propiedadId") Long propiedadId
+    ){
+        ModelMap model = new ModelMap();
+
+        try {
+            CalificacionPropiedad calificacion = servicioCalificacion.getCalificacion(id);
+            model.put("calificacion", calificacion);
+        } catch (CalificacionDenegadaExcepcion e) {
+            model.put("messageError", e.getMessage());
+            return new ModelAndView("propiedad", model);
+        }
+
+        return new ModelAndView("calificacion", model);
     }
 }

@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.entidades.CalificacionPropiedad;
 import com.tallerwebi.dominio.respositorio.RepositorioCalificacion;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -35,6 +36,14 @@ public class RepositorioCalificacionImpl implements RepositorioCalificacion {
         return session.createQuery(query, CalificacionPropiedad.class)
                 .setParameter("usuarioId", usuarioId)
                 .getResultList();
+    }
+
+    @Override
+    public CalificacionPropiedad getCalificacionPorId(Long calificacionId) {
+        final Session session = sessionFactory.getCurrentSession();
+        return (CalificacionPropiedad) session.createCriteria(CalificacionPropiedad.class)
+                .add(Restrictions.eq("id", calificacionId))
+                .uniqueResult();
     }
 
     @Override

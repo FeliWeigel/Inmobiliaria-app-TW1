@@ -19,6 +19,14 @@ public class CalificacionPropiedad {
     @JoinColumn(name = "propiedadId", nullable = false)
     private Propiedad propiedad;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Date getFecha() {
         return fecha;
     }

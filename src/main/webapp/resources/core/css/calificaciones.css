@@ -1,0 +1,222 @@
+.nueva-calificacion-container {
+    height: 90vh;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.nueva-calificacion-container h2 {
+    margin-bottom: 1rem;
+    color: rgba(1, 20, 35, 0.94);
+    font-size: 2rem;
+}
+
+.calificacion-form {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 4px 0px #011d33;
+    padding: 1rem 2rem 1.5rem 2rem;
+    row-gap: .8rem;
+}
+
+.input-puntaje, .textarea-descripcion {
+    padding: .5rem;
+}
+
+.textarea-descripcion {
+    font-family: 'Poppins', sans-serif;
+    height: 200px;
+    max-height: 200px;
+    width: 100%;
+    max-width: 390px;
+}
+
+.input-puntaje {
+    width: 25%;
+    margin-top: .3rem;
+}
+
+.calificacion-btn {
+    padding: .5rem;
+    width: 140px;
+    margin: 0 auto;
+    background-color: #011d33;
+    color: #fff;
+    transition: .4s;
+    font-size: 1.05rem;
+    border-radius: 20px;
+    border: none;
+}
+
+.calificacion-btn:hover {
+    background-color: rgba(1, 29, 51, 0.85);
+}
+
+.calificacion-error, .calificacion-success {
+    position: fixed;
+    top: 4rem;
+    right: 2rem;
+    width: 300px;
+    padding: 1rem;
+    color: #fff;
+    border-radius: 5px;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0;
+    z-index: 1000;
+}
+
+.calificacion-error {
+    background-color: #8c0000;
+}
+
+.calificacion-success {
+    background-color: #017201;
+}
+
+.calificaciones-container {
+    height: auto;
+    min-height: 70vh;
+    max-height: 110vh;
+    padding: 2rem;
+    border-top: 1px solid #ddd;
+}
+
+.calificaciones-titulo {
+    font-size: 1.7rem;
+    margin-bottom: .7rem;
+}
+
+.agregar-calificacion-link {
+    font-size: 1.1rem;
+    background-color: #011423;
+    color: #fff;
+    font-weight: 500;
+    padding: .5rem 1rem;
+    border-radius: 20px;
+    transition: .4s;
+}
+
+.agregar-calificacion-link:hover {
+    background-color: rgba(1, 20, 35, 0.82);
+}
+
+.calificaciones-lista {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding: .8rem;
+    overflow: hidden;
+    max-height: 70vh;
+    margin-bottom: 1rem;
+}
+
+.calificacion {
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: .3rem;
+    width: 350px;
+    height: 165px;
+    box-shadow: 0px 0px 4px 0px #011d33;
+    justify-self: flex-start;
+}
+
+.calificacion-nombre {
+    display: flex;
+    align-items: center;
+    column-gap: .5rem;
+    font-weight: 600;
+    color: #000;
+}
+
+.calificacion-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: .3rem;
+}
+
+.calificacion-fecha {
+    color: rgba(0, 10, 17, 0.76);
+    font-size: 1rem;
+}
+
+.calificacion-desc {
+    font-size: 1rem;
+    overflow: hidden;
+    color: rgba(1, 14, 24, 0.84);
+}
+
+.calificaciones-links {
+    display: flex;
+    justify-content: space-between;
+}
+
+.calificacion-puntaje {
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(0, 10, 17, 0.68);
+}
+
+.lista-cal-container {
+    height: auto;
+    width: 100%;
+    min-height: 95vh;
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 0;
+}
+
+.lista-cal-content {
+    width: 90%;
+    height: 100%;
+}
+
+.calificacion-container {
+    height: 85vh;
+    position: relative;
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calificacion-tarjeta {
+    padding: 1.7rem 2rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: .3rem;
+    width: 600px;
+    height: auto;
+    box-shadow: 0px 0px 4px 0px #011d33;
+}
+
+.calificacion-img-dist {
+    width: 60px;
+    height: 60px;
+}
+
+.calificacion-nombre-dist, .calificacion-fecha-dist, .calificacion-puntaje-dist {
+    font-size: 1.3rem;
+}
+
+.calificacion-desc-dist {
+    font-size: 1.15rem;
+}
+
+.calificacion-back {
+    font-size: 1.6rem;
+    position: absolute;
+    top: 1.5rem;
+    left: 2rem;
+    padding: 10px;
+    color: #011d33;
+    transition: .4s;
+    z-index: 1000;
+    cursor: pointer;
+}
