@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.servicio.ServicioCalificacion;
+import com.tallerwebi.dominio.servicio.ServicioHistorial;
 import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import com.tallerwebi.dominio.servicio.ServicioUsuario;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,7 @@ public class ControladorPropiedadTest {
     private ServicioCalificacion servicioCalificacion;
     private HttpSession session;
     private Usuario usuario;
+    private ServicioHistorial servicioHistorial;
 
     @BeforeEach
     public void init(){
@@ -40,7 +42,7 @@ public class ControladorPropiedadTest {
         this.session = mock(HttpSession.class);
         this.servicioUsuario = mock(ServicioUsuario.class);
         this.usuario = mock(Usuario.class);
-        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, servicioUsuario, servicioCalificacion);
+        this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, servicioUsuario, servicioCalificacion, servicioHistorial);
     }
 
 

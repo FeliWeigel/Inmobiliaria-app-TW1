@@ -1,11 +1,14 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.dto.DatosLoginDTO;
 import com.tallerwebi.dominio.entidades.CalificacionPropiedad;
 import com.tallerwebi.dominio.dto.FiltroPropiedadDTO;
 import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.entidades.Visita;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.servicio.ServicioCalificacion;
+import com.tallerwebi.dominio.servicio.ServicioHistorial;
 import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import com.tallerwebi.dominio.servicio.ServicioUsuario;
 import org.springframework.stereotype.Controller;
@@ -26,13 +29,15 @@ public class ControladorPropiedad {
 
     private final ServicioPropiedad servicioPropiedad;
     private final ServicioUsuario servicioUsuario;
+    private final ServicioHistorial servicioHistorial;
     private final ServicioCalificacion servicioCalificacion;
     private final String CARPETA_IMAGENES = "src/main/webapp/resources/core/img/propiedades/";
 
-    public ControladorPropiedad(ServicioPropiedad servicioPropiedad, ServicioUsuario servicioUsuario, ServicioCalificacion servicioCalificacion) {
+    public ControladorPropiedad(ServicioPropiedad servicioPropiedad, ServicioUsuario servicioUsuario, ServicioCalificacion servicioCalificacion, ServicioHistorial servicioHistorial) {
         this.servicioPropiedad = servicioPropiedad;
         this.servicioUsuario = servicioUsuario;
         this.servicioCalificacion = servicioCalificacion;
+        this.servicioHistorial = servicioHistorial;
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -137,6 +142,8 @@ public class ControladorPropiedad {
             model.put("listEmpty", "Todavia no se han aportado reseñas de esta propiedad.");
         }
 
+        servicioHistorial.registrarVisita(usuarioAutenticado, servicioPropiedad.buscarPropiedad(id));
+
         return new ModelAndView("propiedad", model);
     }
 
@@ -172,6 +179,20 @@ public class ControladorPropiedad {
         return new ModelAndView("nuevaPropiedad", model);
     }
 
+
+    @RequestMapping(path = "/historial", method = RequestMethod.GET)
+    public ModelAndView irAlHistorial(HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        ModelMap model = new ModelMap();
+        if(usuario==null){
+            DatosLoginDTO datosLogin = new DatosLoginDTO();
+            model.put("datosLogin", datosLogin);
+            return new ModelAndView("login", model);
+        }
+        List<Visita> historial = servicioHistorial.obtenerHistorial(usuario.getId());
+        model.put("historial", historial);
+        return new ModelAndView("historial", model);
+    }
 }
 
 
