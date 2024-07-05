@@ -116,5 +116,9 @@ public class ServicioPropiedad {
         }
     }
 
+    public List<Propiedad> listarNovedades(){
+        return repositorioPropiedad.listarNovedades();
+    }
+
 
 }

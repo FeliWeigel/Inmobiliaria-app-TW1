@@ -7,6 +7,7 @@ import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -144,6 +145,15 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
         return session.createQuery(query, Propiedad.class).getResultList();
     }
 
+    @Override
+    public List<Propiedad> listarNovedades() {
+        final Session session = sessionFactory.getCurrentSession();
+        String queryString = "FROM Propiedad WHERE aceptada = true ORDER BY id DESC";
+        Query query = session.createQuery(queryString);
+        query.setMaxResults(3);
+        List<Propiedad> resultado = query.list();
+        return resultado;
+    }
 
 
 }

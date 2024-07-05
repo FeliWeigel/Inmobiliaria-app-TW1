@@ -16,8 +16,7 @@ public interface RepositorioPropiedad {
     List<Propiedad> listarPorUbicacion(String ubicacion);
     List<Propiedad> listarPorEstado(EstadoPropiedad estado);
     List<Propiedad> listarPorSuperficie(Double superficie);
-
     List<Propiedad> listarPropiedadesAceptadas();
-
     List<Propiedad> listarPropiedadesPendientes();
+    List<Propiedad> listarNovedades();
 }

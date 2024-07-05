@@ -56,7 +56,9 @@ public class ControladorPropiedad {
 
         try {
             List<Propiedad> propiedades = servicioPropiedad.listarPropiedadesAceptadas();
+            List<Propiedad> novedades = servicioPropiedad.listarNovedades();
             model.put("propiedades", propiedades);
+            model.put("novedades", novedades);
             model.put("usuario", usuarioAutenticado);
         } catch (Exception e){
             model.put("message", "Ha Ocurrido un Error Inesperado");
