@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <div th:if="${recomendaciones.size()!=0}">
+        <div th:if="${recomendaciones && recomendaciones.size()!=0}">
             <h3 class="sectionTitle">Recomendaciones</h3>
             <div class="recomendaciones">
                 <div class="propNueva" th:each="recomendacion : ${recomendaciones}">

@@ -12,10 +12,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service("repositorioPropiedad")
 @Transactional
@@ -163,37 +160,49 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
     public List<Propiedad> listarRecomendaciones(Long usuarioId) {
         final Session session = sessionFactory.getCurrentSession();
 
-        // HQL para obtener las últimas tres propiedades visitadas por el usuario
-        String hqlUltimasVisitas = "SELECT V.propiedad FROM Visita V WHERE V.usuario.id = :usuarioId ORDER BY V.fechaVisita DESC";
-        List<Propiedad> ultimasPropiedadesVisitadas = session.createQuery(hqlUltimasVisitas, Propiedad.class)
+        // Últimas tres propiedades visitadas por el usuario
+        String ultimasVisitas = "SELECT DISTINCT V.propiedad FROM Visita V WHERE V.usuario.id = :usuarioId ORDER BY V.fechaVisita DESC";
+        List<Propiedad> ultimasPropiedadesVisitadas = session.createQuery(ultimasVisitas, Propiedad.class)
                 .setParameter("usuarioId", usuarioId)
                 .setMaxResults(3)
                 .getResultList();
 
-        // Lista para almacenar las recomendaciones
-        List<Propiedad> recomendaciones = new ArrayList<>();
+        // LinkedHashMap para evitar duplicados y mantener el orden de inserción
+        Map<Long, Propiedad> recomendacionesMap = new LinkedHashMap<>();
 
-        // Para cada una de las últimas tres propiedades visitadas, encontrar propiedades similares
+        // Obtener precios y ubicaciones de historial
         for (Propiedad propiedadVisitada : ultimasPropiedadesVisitadas) {
             String ubicacion = propiedadVisitada.getUbicacion();
-            double precio = propiedadVisitada.getPrecio();
-            double precioMin = precio * 0.9;
-            double precioMax = precio * 1.1;
+            Double precio = propiedadVisitada.getPrecio();
+            Double precioMin = precio * 0.5;
+            Double precioMax = precio * 1.5;
 
-            // HQL para encontrar propiedades similares
-            String hqlSimilares = "SELECT P FROM Propiedad P WHERE P.ubicacion = :ubicacion AND P.precio BETWEEN :precioMin AND :precioMax AND P.id != :propiedadId";
-            List<Propiedad> propiedadesSimilares = session.createQuery(hqlSimilares, Propiedad.class)
+            // Encontrar propiedades similares
+            String similares = "SELECT P FROM Propiedad P WHERE P.ubicacion = :ubicacion AND P.precio BETWEEN :precioMin AND :precioMax AND P.id != :propiedadId";
+            List<Propiedad> propiedadesSimilares = session.createQuery(similares, Propiedad.class)
                     .setParameter("ubicacion", ubicacion)
                     .setParameter("precioMin", precioMin)
                     .setParameter("precioMax", precioMax)
                     .setParameter("propiedadId", propiedadVisitada.getId())
                     .getResultList();
 
-            recomendaciones.addAll(propiedadesSimilares);
+            // Agregar propiedades similares al mapa
+            for (Propiedad propiedad : propiedadesSimilares) {
+                recomendacionesMap.put(propiedad.getId(), propiedad);
+                if (recomendacionesMap.size() >= 3) {
+                    break;
+                }
+            }
+            
+            // Detener si ya tenemos tres recomendaciones
+            if (recomendacionesMap.size() >= 3) {
+                break;
+            }
         }
-
-        return recomendaciones;
+        return new ArrayList<>(recomendacionesMap.values());
     }
+
+
 
 
 
