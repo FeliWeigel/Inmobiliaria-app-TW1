@@ -2,9 +2,11 @@ package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.dto.FiltroPropiedadDTO;
 import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.excepcion.AlquilerRegistradoException;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.utilidad.ValidarString;
+import com.tallerwebi.infraestructura.RepositorioHistorialImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -101,7 +103,12 @@ public class ServicioPropiedad {
 
     public void rechazarPropiedad(Long idPropiedad) {
         if (idPropiedad != null) {
-            repositorioPropiedad.eliminarPropiedad(idPropiedad);
+            try {
+                repositorioPropiedad.eliminarVisitasPorPropiedadId(idPropiedad);
+                repositorioPropiedad.eliminarPropiedad(idPropiedad);
+            } catch (AlquilerRegistradoException e) {
+                throw e;
+            }
         } else {
             throw new CRUDPropiedadExcepcion("La propiedad no existe.");
         }

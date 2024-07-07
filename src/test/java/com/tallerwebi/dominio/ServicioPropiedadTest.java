@@ -7,6 +7,7 @@ import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import com.tallerwebi.dominio.servicio.SubirImagenServicio;
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
+import com.tallerwebi.infraestructura.RepositorioHistorialImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.*;
 public class ServicioPropiedadTest {
     private RepositorioPropiedad repositorioPropiedad;
     private ServicioPropiedad servicioPropiedad;
+    private RepositorioHistorialImpl repositorioHistorial;
 
     List<Propiedad> propiedadesMock;
     List<Propiedad> propiedadesMockAceptadas;
@@ -34,7 +36,8 @@ public class ServicioPropiedadTest {
     public void init() {
         this.repositorioPropiedad = mock(RepositorioPropiedad.class);
         this.imagenServicio= mock(SubirImagenServicio.class);
-        this.servicioPropiedad = new ServicioPropiedad(this.repositorioPropiedad, imagenServicio);
+        this.repositorioHistorial = mock(RepositorioHistorialImpl.class);
+        this.servicioPropiedad = new ServicioPropiedad(this.repositorioPropiedad,imagenServicio);
 
         propiedadesMock = new ArrayList<>();
         propiedadesMock.add(new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1"));

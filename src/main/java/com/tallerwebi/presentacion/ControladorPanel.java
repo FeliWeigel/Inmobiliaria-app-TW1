@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.excepcion.AlquilerRegistradoException;
 import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import com.tallerwebi.dominio.servicio.ServicioUsuario;
 import com.tallerwebi.dominio.entidades.Usuario;
@@ -76,12 +77,19 @@ public class ControladorPanel {
 
         try {
             this.servicioPropiedad.rechazarPropiedad(propiedadId);
-        } catch (CRUDPropiedadExcepcion e) {
+        } catch (AlquilerRegistradoException | CRUDPropiedadExcepcion e) {
+            List<Propiedad> propiedadesPendientes = servicioPropiedad.listarPropiedadesPendientes();
+            List<Propiedad> propiedadesAceptadas = servicioPropiedad.listarPropiedadesAceptadas();
+
+            model.put("propiedadesPendientes", propiedadesPendientes);
+            model.put("propiedadesAceptadas", propiedadesAceptadas);
             model.put("error", e.getMessage());
-            return new ModelAndView("redirect:/panel-admin/propiedades", model);
+            return new ModelAndView("panelAdminPropiedades", model);
         }
+
         return new ModelAndView("redirect:/panel-admin/propiedades");
     }
+
 
 
     @RequestMapping(path = "/panel-admin/modificar-propiedad", method = RequestMethod.POST)
@@ -176,13 +184,21 @@ public class ControladorPanel {
 
         try {
             this.servicioUsuario.eliminarUsuario(usuarioId);
-        } catch (CRUDPropiedadExcepcion e) {
+        } catch (AlquilerRegistradoException | CRUDPropiedadExcepcion e) {
+
+            List<Usuario> usuariosBloqueados = servicioUsuario.listarUsuariosBloqueados();
+            List<Usuario> usuariosDesbloqueados = servicioUsuario.listarUsuariosDesbloqueados();
+
+            model.put("usuariosBloqueados", usuariosBloqueados);
+            model.put("usuariosDesbloqueados", usuariosDesbloqueados);
+
             model.put("error", e.getMessage());
-            return new ModelAndView("redirect:/panel-admin/usuarios", model);
+            return new ModelAndView("panelAdminUsuarios", model);
         }
 
         return new ModelAndView("redirect:/panel-admin/usuarios");
     }
+
 
 
     @RequestMapping(path = "/panel-admin/desbloquear-usuario", method = RequestMethod.POST)

@@ -46,4 +46,8 @@ public class Visita {
     public void setPropiedad(Propiedad propiedad) {
         this.propiedad = propiedad;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

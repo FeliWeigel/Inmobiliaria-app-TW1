@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.excepcion.AlquilerRegistradoException;
 import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
@@ -117,11 +118,23 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
         final Session session = sessionFactory.getCurrentSession();
         Propiedad propiedadAEliminar = buscarPropiedad(propiedadId);
 
-        if(propiedadAEliminar != null){
+        if (propiedadAEliminar != null) {
+            if (!propiedadAEliminar.getAlquileres().isEmpty()) {
+                throw new AlquilerRegistradoException("La propiedad no puede eliminarse, tiene fechas de alquileres pendientes.");
+            }
             session.delete(propiedadAEliminar);
         } else {
-            throw new CRUDPropiedadExcepcion("La propiedad seleccionda para eliminar no existe en la base de datos.");
+            throw new CRUDPropiedadExcepcion("La propiedad seleccionada para eliminar no existe en la base de datos.");
         }
+    }
+
+
+    @Override
+    public void eliminarVisitasPorPropiedadId(Long propiedadId) {
+        String hql = "DELETE FROM Visita WHERE propiedadId = :propiedadId";
+        sessionFactory.getCurrentSession().createQuery(hql)
+                .setParameter("propiedadId", propiedadId)
+                .executeUpdate();
     }
 
 

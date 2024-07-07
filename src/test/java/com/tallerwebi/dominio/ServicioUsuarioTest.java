@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.respositorio.RepositorioUsuario;
 import com.tallerwebi.dominio.servicio.ServicioUsuario;
+import com.tallerwebi.infraestructura.RepositorioHistorialImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +23,7 @@ public class ServicioUsuarioTest {
 
     private ServicioUsuario servicioUsuario;
     private RepositorioUsuario repositorioUsuario;
+    private RepositorioHistorialImpl repositorioHistorial;
     Long idUsuario;
     Usuario usuario;
 
@@ -29,6 +31,7 @@ public class ServicioUsuarioTest {
     @BeforeEach
     public void init() {
         this.repositorioUsuario = mock(RepositorioUsuario.class);
+        this.repositorioHistorial = mock(RepositorioHistorialImpl.class);
         this.servicioUsuario = new ServicioUsuario(repositorioUsuario);
 
         this.idUsuario = 1L;
