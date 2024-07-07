@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.excepcion.AlquilerRegistradoException;
+import com.tallerwebi.dominio.entidades.Visita;
 import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
@@ -12,7 +13,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.*;
 
 @Service("repositorioPropiedad")
 @Transactional
@@ -167,6 +168,57 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
         List<Propiedad> resultado = query.list();
         return resultado;
     }
+
+    @Override
+    public List<Propiedad> listarRecomendaciones(Long usuarioId) {
+        final Session session = sessionFactory.getCurrentSession();
+
+        // Últimas tres propiedades visitadas por el usuario
+        String ultimasVisitas = "SELECT DISTINCT V.propiedad FROM Visita V WHERE V.usuario.id = :usuarioId ORDER BY V.fechaVisita DESC";
+        List<Propiedad> ultimasPropiedadesVisitadas = session.createQuery(ultimasVisitas, Propiedad.class)
+                .setParameter("usuarioId", usuarioId)
+                .setMaxResults(3)
+                .getResultList();
+
+        // LinkedHashMap para evitar duplicados y mantener el orden de inserción
+        Map<Long, Propiedad> recomendacionesMap = new LinkedHashMap<>();
+
+        // Obtener precios y ubicaciones de historial
+        for (Propiedad propiedadVisitada : ultimasPropiedadesVisitadas) {
+            String ubicacion = propiedadVisitada.getUbicacion();
+            Double precio = propiedadVisitada.getPrecio();
+            Double precioMin = precio * 0.5;
+            Double precioMax = precio * 1.5;
+
+            // Encontrar propiedades similares
+            String similares = "SELECT P FROM Propiedad P WHERE P.ubicacion = :ubicacion AND P.precio BETWEEN :precioMin AND :precioMax AND P.id != :propiedadId";
+            List<Propiedad> propiedadesSimilares = session.createQuery(similares, Propiedad.class)
+                    .setParameter("ubicacion", ubicacion)
+                    .setParameter("precioMin", precioMin)
+                    .setParameter("precioMax", precioMax)
+                    .setParameter("propiedadId", propiedadVisitada.getId())
+                    .getResultList();
+
+            // Agregar propiedades similares al mapa
+            for (Propiedad propiedad : propiedadesSimilares) {
+                recomendacionesMap.put(propiedad.getId(), propiedad);
+                if (recomendacionesMap.size() >= 3) {
+                    break;
+                }
+            }
+            
+            // Detener si ya tenemos tres recomendaciones
+            if (recomendacionesMap.size() >= 3) {
+                break;
+            }
+        }
+        return new ArrayList<>(recomendacionesMap.values());
+    }
+
+
+
+
+
 
 
 }
