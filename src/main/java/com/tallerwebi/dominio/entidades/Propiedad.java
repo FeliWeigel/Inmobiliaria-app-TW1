@@ -182,4 +182,5 @@ public class Propiedad {
     public void setUsuariosFavoritos(Set<Usuario> usuariosFavoritos) {
         this.usuariosFavoritos = usuariosFavoritos;
     }
+
 }

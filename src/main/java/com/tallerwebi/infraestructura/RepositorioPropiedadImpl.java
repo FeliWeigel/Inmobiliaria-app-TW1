@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Visita;
 import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
@@ -11,7 +12,10 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service("repositorioPropiedad")
 @Transactional
@@ -154,6 +158,45 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
         List<Propiedad> resultado = query.list();
         return resultado;
     }
+
+    @Override
+    public List<Propiedad> listarRecomendaciones(Long usuarioId) {
+        final Session session = sessionFactory.getCurrentSession();
+
+        // HQL para obtener las últimas tres propiedades visitadas por el usuario
+        String hqlUltimasVisitas = "SELECT V.propiedad FROM Visita V WHERE V.usuario.id = :usuarioId ORDER BY V.fechaVisita DESC";
+        List<Propiedad> ultimasPropiedadesVisitadas = session.createQuery(hqlUltimasVisitas, Propiedad.class)
+                .setParameter("usuarioId", usuarioId)
+                .setMaxResults(3)
+                .getResultList();
+
+        // Lista para almacenar las recomendaciones
+        List<Propiedad> recomendaciones = new ArrayList<>();
+
+        // Para cada una de las últimas tres propiedades visitadas, encontrar propiedades similares
+        for (Propiedad propiedadVisitada : ultimasPropiedadesVisitadas) {
+            String ubicacion = propiedadVisitada.getUbicacion();
+            double precio = propiedadVisitada.getPrecio();
+            double precioMin = precio * 0.9;
+            double precioMax = precio * 1.1;
+
+            // HQL para encontrar propiedades similares
+            String hqlSimilares = "SELECT P FROM Propiedad P WHERE P.ubicacion = :ubicacion AND P.precio BETWEEN :precioMin AND :precioMax AND P.id != :propiedadId";
+            List<Propiedad> propiedadesSimilares = session.createQuery(hqlSimilares, Propiedad.class)
+                    .setParameter("ubicacion", ubicacion)
+                    .setParameter("precioMin", precioMin)
+                    .setParameter("precioMax", precioMax)
+                    .setParameter("propiedadId", propiedadVisitada.getId())
+                    .getResultList();
+
+            recomendaciones.addAll(propiedadesSimilares);
+        }
+
+        return recomendaciones;
+    }
+
+
+
 
 
 }

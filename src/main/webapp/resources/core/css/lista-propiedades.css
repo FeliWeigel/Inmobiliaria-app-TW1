@@ -4,7 +4,7 @@
 /*    justify-content: center;*/
 /*}*/
 
-.container, .novedades{
+.container, .novedades, .recomendaciones{
     height: auto;
     width: 100%;
     display: flex;
@@ -142,7 +142,7 @@
     opacity: 0;
 }
 
-.novedades{
+.novedades, .recomendaciones{
     margin-bottom: 2rem;
 }
 

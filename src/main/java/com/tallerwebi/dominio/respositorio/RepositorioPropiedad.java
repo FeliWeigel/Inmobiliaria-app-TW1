@@ -19,4 +19,5 @@ public interface RepositorioPropiedad {
     List<Propiedad> listarPropiedadesAceptadas();
     List<Propiedad> listarPropiedadesPendientes();
     List<Propiedad> listarNovedades();
+    List<Propiedad> listarRecomendaciones(Long id);
 }

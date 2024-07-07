@@ -121,4 +121,7 @@ public class ServicioPropiedad {
     }
 
 
+    public List<Propiedad> listarRecomendaciones(Long id) {
+        return repositorioPropiedad.listarRecomendaciones(id);
+    }
 }
