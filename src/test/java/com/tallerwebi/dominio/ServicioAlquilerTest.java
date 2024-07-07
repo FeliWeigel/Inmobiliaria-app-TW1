@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class ServicioAlquilerTests {
+public class ServicioAlquilerTest {
 
     private RepositorioAlquiler repositorioAlquiler;
     private ServicioPropiedad servicioPropiedad;

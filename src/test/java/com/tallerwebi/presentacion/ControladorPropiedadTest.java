@@ -1,13 +1,16 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.dto.DatosLoginDTO;
 import com.tallerwebi.dominio.dto.FiltroPropiedadDTO;
 import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.entidades.Visita;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.servicio.ServicioCalificacion;
 import com.tallerwebi.dominio.servicio.ServicioHistorial;
 import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import com.tallerwebi.dominio.servicio.ServicioUsuario;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -41,6 +45,7 @@ public class ControladorPropiedadTest {
         this.servicioCalificacion = mock(ServicioCalificacion.class);
         this.session = mock(HttpSession.class);
         this.servicioUsuario = mock(ServicioUsuario.class);
+        this.servicioHistorial = mock(ServicioHistorial.class);
         this.usuario = mock(Usuario.class);
         this.controladorPropiedad = new ControladorPropiedad(this.servicioPropiedad, servicioUsuario, servicioCalificacion, servicioHistorial);
     }
@@ -251,81 +256,6 @@ public class ControladorPropiedadTest {
     }
 
 
-   /*
-
-    @Test
-    public void queSeListenLasPropiedadesFiltradasPorPrecio(){
-
-        List<Propiedad> propiedadesFiltradas = crearPropiedades();
-
-        when(this.servicioPropiedad.listarPropiedadesPorPrecio(1000.0, 25000.0)).thenReturn(propiedadesFiltradas);
-        ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorPrecio(1000.0, 25000.0, this.session);
-        List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
-
-        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
-        assertThat(propiedaesDevueltas.size(), equalTo(3));
-    }
-
-
-    @Test
-    public void queMuestreErrorCuandoOcurreCRUDPropiedadExcepcionAlListarPropiedadesPorPrecio() {
-        doThrow(new CRUDPropiedadExcepcion("Error al filtrar propiedades por precio")).when(servicioPropiedad).listarPropiedadesPorPrecio(anyDouble(), anyDouble());
-
-        ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorPrecio(1000.0, 25000.0, this.session);
-
-        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
-        assertThat(mav.getModel().get("message"), equalTo("Error al filtrar propiedades por precio"));
-    }
-
-
-    @Test
-    public void queMuestreErrorCuandoOcurreExcepcionInesperadaAlListarPropiedadesPorPrecio() {
-        doThrow(new RuntimeException("Error inesperado")).when(servicioPropiedad).listarPropiedadesPorPrecio(anyDouble(), anyDouble());
-
-        ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorPrecio(1000.0, 25000.0, this.session);
-
-        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
-        assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
-    }
-
-
-    @Test
-    public void queSeListenLasPropiedadesFiltradasPorUbicacion(){
-
-        List<Propiedad> propiedadesFiltradas = crearPropiedades();
-
-        when(this.servicioPropiedad.listarPropiedadesPorUbicacion("Ubicacion")).thenReturn(propiedadesFiltradas);
-        ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorUbicacion("Ubicacion", this.session);
-        List<Propiedad> propiedaesDevueltas = (List<Propiedad>) mav.getModel().get("propiedades");
-
-        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
-        assertThat(propiedaesDevueltas.size(), equalTo(3));
-    }
-
-
-    @Test
-    public void queMuestreErrorCuandoOcurreCRUDPropiedadExcepcionAlListarPropiedadesPorUbicacion() {
-        doThrow(new CRUDPropiedadExcepcion("Error al filtrar propiedades por ubicación")).when(servicioPropiedad).listarPropiedadesPorUbicacion(anyString());
-
-        ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorUbicacion("Ciudad", this.session);
-
-        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
-        assertThat(mav.getModel().get("message"), equalTo("Error al filtrar propiedades por ubicación"));
-    }
-
-
-    @Test
-    public void queMuestreErrorCuandoOcurreExcepcionInesperadaAlListarPropiedadesPorUbicacion() {
-        doThrow(new RuntimeException("Error inesperado")).when(servicioPropiedad).listarPropiedadesPorUbicacion(anyString());
-
-        ModelAndView mav = this.controladorPropiedad.filtrarPropiedadesPorUbicacion("Ciudad", this.session);
-
-        assertThat(mav.getViewName(), equalTo("lista-propiedades"));
-        assertThat(mav.getModel().get("message"), equalTo("Ha Ocurrido un Error Inesperado"));
-    }
-
-   * */
-
 
     @Test
     public void queRetorneVistaAgregarPropiedadCorrectamente() {
@@ -388,6 +318,37 @@ public class ControladorPropiedadTest {
         propiedades.add(propiedad3);
 
         return propiedades;
+    }
+
+    @Test
+    public void testIrAlHistorialUsuarioNoAutenticado() {
+        when(session.getAttribute("usuario")).thenReturn(null);
+
+        ModelAndView mav = controladorPropiedad.irAlHistorial(session);
+
+        assertThat(mav.getViewName(), Matchers.is("login"));
+
+        DatosLoginDTO datosLogin = (DatosLoginDTO) mav.getModel().get("datosLogin");
+        assertThat(datosLogin, Matchers.instanceOf(DatosLoginDTO.class));
+    }
+
+    @Test
+    public void testIrAlHistorialUsuarioAutenticado() {
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        when(session.getAttribute("usuario")).thenReturn(usuario);
+
+        List<Visita> historialVisitas = new ArrayList<>();
+        historialVisitas.add(new Visita());
+        historialVisitas.add(new Visita());
+        when(servicioHistorial.obtenerHistorial(usuario.getId())).thenReturn(historialVisitas);
+
+        ModelAndView mav = controladorPropiedad.irAlHistorial(session);
+
+        assertThat(mav.getViewName(), Matchers.is("historial"));
+
+        List<Visita> historialEnModelo = (List<Visita>) mav.getModel().get("historial");
+        assertThat(historialEnModelo.size(), Matchers.is(historialVisitas.size()));
     }
 
 }

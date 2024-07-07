@@ -10,6 +10,9 @@ public interface RepositorioPropiedad {
     Propiedad buscarPropiedad(Long id);
     void agregarPropiedad(Propiedad propiedad);
     void eliminarPropiedad(Long propiedadId);
+
+    void eliminarVisitasPorPropiedadId(Long propiedadId);
+
     List<Propiedad> listarPropiedades();
     void editarPropiedad(Propiedad propiedad);
     List<Propiedad> listarPorRangoPrecio(Double min, Double max);

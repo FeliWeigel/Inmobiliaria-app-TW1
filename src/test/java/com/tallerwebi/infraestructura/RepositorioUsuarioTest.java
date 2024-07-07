@@ -1,6 +1,8 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.entidades.AlquilerPropiedad;
 import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.respositorio.RepositorioHistorial;
 import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
@@ -20,15 +22,19 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.util.AssertionErrors.fail;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateTestInfraestructuraConfig.class})
@@ -38,12 +44,14 @@ public class RepositorioUsuarioTest {
     private SessionFactory sessionFactory;
     private RepositorioPropiedad repositorioPropiedad;
     private RepositorioUsuarioImpl repositorioUsuarioImpl;
+    private RepositorioHistorialImpl repositorioHistorial;
     private Usuario usuario;
     private Session session;
 
     @BeforeEach
     public void init() {
         this.repositorioPropiedad = mock(RepositorioPropiedad.class);
+        this.repositorioHistorial = mock(RepositorioHistorialImpl.class);
         this.repositorioUsuarioImpl = new RepositorioUsuarioImpl(this.sessionFactory, this.repositorioPropiedad);
 
         this.usuario = new Usuario();
@@ -117,31 +125,29 @@ public class RepositorioUsuarioTest {
         assertThat(usuarioModificado.getPassword(), is("newPassword.456"));
     }
 
-//    @Test
-//    @Transactional
-//    @Rollback
-//    public void queSePuedaEliminarUnUsuario() throws UsuarioInexistenteExcepcion {
-//        Usuario nuevoUsuario = new Usuario();
-//        nuevoUsuario.setEmail("newuser@example.com");
-//        nuevoUsuario.setPassword("newpassword123");
-//        nuevoUsuario.setId(3L);
-//        this.repositorioUsuarioImpl.guardar(nuevoUsuario);
-//
-//        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-//        CriteriaQuery<Usuario> criteriaQuery = criteriaBuilder.createQuery(Usuario.class);
-//        Root<Usuario> root = criteriaQuery.from(Usuario.class);
-//        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("email"), "newuser@example.com"));
-//
-//        Usuario usuarioAEliminar = session.createQuery(criteriaQuery).uniqueResult();
-//        if(usuarioAEliminar==null){
-//            throw new UsuarioInexistenteExcepcion();
-//        }
-//
-//        repositorioUsuarioImpl.eliminarUsuario(usuarioAEliminar.getId());
-//        Usuario usuarioEliminado = session.createQuery(criteriaQuery).uniqueResult();
-//        assertThat(usuarioEliminado, is(nullValue()));
-//    }
-//
+    @Transactional
+    @Rollback
+    @Test
+    public void queSePuedaEliminarUnUsuario() throws UsuarioInexistenteExcepcion {
+        Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setEmail("newuser@example.com");
+        nuevoUsuario.setPassword("newpassword123");
+        nuevoUsuario.setId(3L);
+        nuevoUsuario.setAlquileres(new ArrayList<>());
+        nuevoUsuario.setVisitas(new ArrayList<>());
+        nuevoUsuario.setFavoritos(new HashSet<>());
+
+        this.repositorioUsuarioImpl.guardar(nuevoUsuario);
+
+        Usuario usuarioAEliminar = this.session.get(Usuario.class, nuevoUsuario.getId());
+        assertThat(usuarioAEliminar, notNullValue());
+
+        this.repositorioUsuarioImpl.eliminarUsuario(usuarioAEliminar.getId());
+
+        Usuario usuarioEliminado = this.session.get(Usuario.class, nuevoUsuario.getId());
+        assertThat(usuarioEliminado, nullValue());
+    }
+
 
     @Test
     @Transactional

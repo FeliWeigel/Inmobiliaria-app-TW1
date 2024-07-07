@@ -15,6 +15,9 @@ public interface RepositorioUsuario {
     Usuario buscarUsuario(String email, String password);
     void guardar(Usuario usuario);
     void eliminarUsuario(Long id);
+
+    void eliminarVisitasPorUsuarioId(Long usuarioId);
+
     Usuario buscarPorEmail(String email);
     Usuario buscarPorId(Long id);
     void agregarFavorito(Usuario usuario, Long propiedadId);

@@ -15,12 +15,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateTestInfraestructuraConfig.class})
@@ -29,9 +31,11 @@ public class RepositorioPropiedadTest {
     @Autowired
     private SessionFactory sessionFactory;
     private RepositorioPropiedad repositorioPropiedad;
+    private RepositorioHistorialImpl repositorioHistorial;
 
     @BeforeEach
     public void init(){
+        this.repositorioHistorial = mock(RepositorioHistorialImpl.class);
         this.repositorioPropiedad = new RepositorioPropiedadImpl(this.sessionFactory);
     }
 
@@ -203,13 +207,14 @@ public class RepositorioPropiedadTest {
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaEliminarUnaPropiedadExistente(){
+    public void queSePuedaEliminarUnaPropiedadExistente() {
         Propiedad propiedad = new Propiedad();
+        propiedad.setAlquileres(new ArrayList<>());
 
         this.sessionFactory.getCurrentSession().save(propiedad);
         this.repositorioPropiedad.eliminarPropiedad(propiedad.getId());
 
-        assertThat(null, equalTo(this.repositorioPropiedad.buscarPropiedad(propiedad.getId())));
+        assertThat(this.repositorioPropiedad.buscarPropiedad(propiedad.getId()), equalTo(null));
     }
 
 

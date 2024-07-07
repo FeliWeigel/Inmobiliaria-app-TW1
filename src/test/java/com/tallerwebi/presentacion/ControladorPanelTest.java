@@ -178,7 +178,7 @@ public class ControladorPanelTest {
 
         ModelAndView modelAndView = controladorPanel.rechazarPropiedad(1L, session);
 
-        assertThat(modelAndView.getViewName(), is("redirect:/panel-admin/propiedades"));
+        assertThat(modelAndView.getViewName(), is("panelAdminPropiedades"));
         assertThat(modelAndView.getModel().get("error"), is("Error"));
     }
 

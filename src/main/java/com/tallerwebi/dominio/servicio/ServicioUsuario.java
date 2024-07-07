@@ -2,11 +2,9 @@ package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.entidades.Usuario;
-import com.tallerwebi.dominio.excepcion.CredencialesInvalidasExcepcion;
-import com.tallerwebi.dominio.excepcion.PasswordInvalidaExcepcion;
-import com.tallerwebi.dominio.excepcion.UsuarioExistenteExcepcion;
-import com.tallerwebi.dominio.excepcion.UsuarioInexistenteExcepcion;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.respositorio.RepositorioUsuario;
+import com.tallerwebi.infraestructura.RepositorioHistorialImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,7 @@ public class ServicioUsuario {
     @Autowired
     private EmailServiceImpl emailService;
 
-    public ServicioUsuario (RepositorioUsuario repositorioUsuario) {
+    public ServicioUsuario (RepositorioUsuario repositorioUsuario ) {
         this.repositorioUsuario = repositorioUsuario;
     }
 
@@ -70,15 +68,21 @@ public class ServicioUsuario {
 
     public void eliminarUsuario(Long usuarioId) {
         Usuario usuario = repositorioUsuario.buscarPorId(usuarioId);
-
         String email = usuario.getEmail();
         String subject = "Cuenta Eliminada";
         String text = "Su cuenta ha sido eliminada." +
                 "\n Comuniquese con un administrador para obtener más detalles al respecto.";
 
+        try {
+
+            repositorioUsuario.eliminarVisitasPorUsuarioId(usuarioId);
+            repositorioUsuario.eliminarUsuario(usuarioId);
+        } catch (AlquilerRegistradoException e) {
+            throw e;
+        }
         emailService.sendSimpleMessage(email, subject, text);
-        repositorioUsuario.eliminarUsuario(usuarioId);
     }
+
 
     public void desbloquearUsuario(Long usuarioId) {
         Usuario usuario = repositorioUsuario.buscarPorId(usuarioId);

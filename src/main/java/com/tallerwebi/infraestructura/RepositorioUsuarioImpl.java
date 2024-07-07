@@ -47,12 +47,26 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public void eliminarUsuario(Long id) {
+    public void eliminarUsuario(Long id) throws AlquilerRegistradoException {
         Usuario usuario = this.buscarPorId(id);
         if(usuario!=null && !usuario.getActivo()){
-          sessionFactory.getCurrentSession().delete(usuario);
+
+            if (!usuario.getAlquileres().isEmpty()) {
+                throw new AlquilerRegistradoException("El usuario no puede eliminarse, tiene alquileres pendientes.");
+            } else {
+                sessionFactory.getCurrentSession().delete(usuario);
+            }
         }
     }
+
+    @Override
+    public void eliminarVisitasPorUsuarioId(Long usuarioId) {
+        String hql = "DELETE FROM Visita WHERE usuarioId = :usuarioId";
+        sessionFactory.getCurrentSession().createQuery(hql)
+                .setParameter("usuarioId", usuarioId)
+                .executeUpdate();
+    }
+
 
     @Override
     public Usuario buscarPorEmail(String email) {
