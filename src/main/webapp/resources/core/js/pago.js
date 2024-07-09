@@ -2,7 +2,7 @@
 //     locale: "es-AR", // The most common are: 'pt-BR', 'es-AR' and 'en-US'
 // });
 document.addEventListener("DOMContentLoaded", async () => {
-
+    // PAGO MP
     const response = await fetch('http://localhost:8080/spring/create_preference' , {
         method: "POST"
     });
@@ -29,6 +29,39 @@ document.addEventListener("DOMContentLoaded", async () => {
         },
     });
 
+    // PAGO EN EFECTIVO
+    const pagarEfectivoBtn = document.getElementById("pagar-efectivo");
+
+    pagarEfectivoBtn.addEventListener("click", async () => {
+        let valorSeniaElement = document.getElementById('valor-senia');
+        const valorSenia = valorSeniaElement ? valorSeniaElement.textContent.replace(/[^\d.-]/g, '') : null;
+
+        try {
+            const response = await fetch(`http://localhost:8080/spring/generate_invoice?precioReserva=${valorSenia}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/pdf'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'factura.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+        }
+    });
+
+    // ALERTAS
     let successMessage = document.getElementById("pago-success")
     let errorMessage = document.getElementById("pago-error")
     if(successMessage){
