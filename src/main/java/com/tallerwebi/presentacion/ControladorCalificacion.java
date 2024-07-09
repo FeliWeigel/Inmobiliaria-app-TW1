@@ -130,6 +130,9 @@ public class ControladorCalificacion {
         }
 
         calificaciones = servicioCalificacion.listarCalificacionesPorPropiedad(propiedadId);
+        if(calificaciones.size() == 0){
+            model.put("listEmpty", "Todavia no se han aportado reseñas de esta propiedad.");
+        }
         model.put("calificaciones", calificaciones);
         return new ModelAndView("listaCalificaciones", model);
     }
