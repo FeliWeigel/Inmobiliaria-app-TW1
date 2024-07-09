@@ -19,6 +19,15 @@ public class CalificacionPropiedad {
     @JoinColumn(name = "propiedadId", nullable = false)
     private Propiedad propiedad;
 
+    @PreRemove
+    private void preRemove() {
+        if (usuario != null) {
+            usuario.getCalificaciones().remove(this);
+        }
+        if (propiedad != null) {
+            propiedad.getCalificaciones().remove(this);
+        }
+    }
     public Long getId() {
         return id;
     }

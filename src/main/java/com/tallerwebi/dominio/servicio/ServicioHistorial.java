@@ -25,8 +25,6 @@ public class ServicioHistorial {
 
     private final RepositorioHistorial repositorioHistorial;
 
-    @Autowired
-    @Lazy
     public ServicioHistorial(RepositorioHistorial repositorioHistorial) {
         this.repositorioHistorial = repositorioHistorial;
     }

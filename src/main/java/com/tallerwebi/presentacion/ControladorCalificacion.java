@@ -10,10 +10,7 @@ import com.tallerwebi.dominio.servicio.ServicioCalificacion;
 import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -67,10 +64,14 @@ public class ControladorCalificacion {
 
     @GetMapping("/propiedad/{id}/calificaciones")
     public ModelAndView listarCalificaciones(
-            @PathVariable("id") Long id
+            @PathVariable("id") Long id, HttpSession session
     ){
         ModelMap model = new ModelMap();
         List<CalificacionPropiedad> calificaciones = new ArrayList<>();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+        if(usuarioAutenticado != null){
+            model.put("usuario", usuarioAutenticado);
+        }
 
         try {
             Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
@@ -104,5 +105,32 @@ public class ControladorCalificacion {
         }
 
         return new ModelAndView("calificacion", model);
+    }
+
+    @PostMapping("/propiedad/calificacion/{propiedadId}/{id}/reportar")
+    public ModelAndView reportarCalificacion(
+            @PathVariable("id") Long id,
+            @PathVariable("propiedadId") Long propiedadId,
+            HttpSession session
+    ){
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+        if(usuarioAutenticado == null){
+            return new ModelAndView("redirect:/login");
+        }
+
+        List<CalificacionPropiedad> calificaciones = new ArrayList<>();
+
+        try {
+            servicioCalificacion.reportarCalificacion(id);
+            model.put("success", "La reseña ha sido reportada correctamente! El usuario ha recibido un email con el aviso correspondiente.");
+        } catch (CalificacionDenegadaExcepcion e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("listaCalificaciones", model);
+        }
+
+        calificaciones = servicioCalificacion.listarCalificacionesPorPropiedad(propiedadId);
+        model.put("calificaciones", calificaciones);
+        return new ModelAndView("listaCalificaciones", model);
     }
 }

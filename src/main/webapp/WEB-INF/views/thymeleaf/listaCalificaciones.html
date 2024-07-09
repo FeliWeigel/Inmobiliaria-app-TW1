@@ -43,6 +43,9 @@
                 <div class="calificaciones-lista">
                     <div th:each="calificacion : ${calificaciones}">
                         <a th:href="@{'/propiedad/calificacion/' + ${id} + '/' + ${calificacion.id}}" style="position: relative" class="calificacion">
+                            <form th:if="${usuario}"  method="post" th:action="@{'/propiedad/calificacion/' + ${id} + '/' + ${calificacion.id} + '/reportar'}">
+                                <button th:if="${#session.getAttribute('ROL') == 'ADMIN'}" style="color: red; border: none; outline: none; cursor: pointer; font-size: 1.2rem; position: absolute; top: .4rem; right: .4rem" type="submit"><i class="fa-solid fa-circle-exclamation"></i></button>
+                            </form>
                             <div class="calificacion-nombre">
                                 <img class="calificacion-img" th:src="@{'/img/usuarios/' + ${calificacion.usuario.id} + '/' + ${calificacion.usuario.fotoPerfil}}" />
                                 <p th:text="${calificacion.usuario.nombre}"></p>
@@ -61,6 +64,9 @@
             </div>
 
         </div>
+
+        <p id="calificacion-error" class="calificacion-error" th:if="${error}" th:text="${error}"></p>
+        <p id="calificacion-success" class="calificacion-success" th:if="${success}" th:text="${success}"></p>
     </main>
 
     <footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">

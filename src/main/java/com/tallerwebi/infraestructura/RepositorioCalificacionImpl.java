@@ -51,4 +51,11 @@ public class RepositorioCalificacionImpl implements RepositorioCalificacion {
         final Session session = sessionFactory.getCurrentSession();
         session.save(calificacion);
     }
+
+    @Override
+    public void eliminarCalificacion(Long idCalificacion) {
+        final Session session = sessionFactory.getCurrentSession();
+        CalificacionPropiedad calificacion = getCalificacionPorId(idCalificacion);
+        session.delete(calificacion);
+    }
 }

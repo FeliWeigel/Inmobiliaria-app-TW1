@@ -9,4 +9,5 @@ public interface RepositorioCalificacion {
     List<CalificacionPropiedad> listarCalificacionesPorUsuario(Long usuarioId);
     CalificacionPropiedad getCalificacionPorId(Long calificacionId);
     void agregarNuevaCalificacion(CalificacionPropiedad calificacion);
+    void eliminarCalificacion(Long idCalificacion);
 }

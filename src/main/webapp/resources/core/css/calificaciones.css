@@ -117,6 +117,7 @@
 .calificacion {
     padding: 1.2rem 1.5rem;
     display: flex;
+    position: relative;
     flex-direction: column;
     row-gap: .3rem;
     width: 350px;
@@ -166,6 +167,7 @@
 .lista-cal-container {
     height: auto;
     width: 100%;
+    position: relative;
     min-height: 95vh;
     display: flex;
     justify-content: center;

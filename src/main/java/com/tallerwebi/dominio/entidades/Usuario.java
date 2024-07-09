@@ -143,4 +143,12 @@ public class Usuario {
 
     public void setVisitas(ArrayList<Object> objects) {
     }
+
+    public List<CalificacionPropiedad> getCalificaciones() {
+        return calificaciones;
+    }
+
+    public void setCalificaciones(List<CalificacionPropiedad> calificaciones) {
+        this.calificaciones = calificaciones;
+    }
 }

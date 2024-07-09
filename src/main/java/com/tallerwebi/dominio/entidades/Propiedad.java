@@ -183,4 +183,11 @@ public class Propiedad {
         this.usuariosFavoritos = usuariosFavoritos;
     }
 
+    public List<CalificacionPropiedad> getCalificaciones() {
+        return calificaciones;
+    }
+
+    public void setCalificaciones(List<CalificacionPropiedad> calificaciones) {
+        this.calificaciones = calificaciones;
+    }
 }
