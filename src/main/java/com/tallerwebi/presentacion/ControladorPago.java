@@ -64,7 +64,7 @@ public class ControladorPago {
 
     @RequestMapping(path = "/create_preference", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Preference> createPreference(@RequestParam("valorReserva") Double valorReserva) {
+    public ResponseEntity<Preference> createPreference() {
 
         try {
             MercadoPagoConfig.setAccessToken("APP_USR-2054445966320899-062320-264f039524895893770ee6d1ea2233ec-1871978866");
@@ -75,7 +75,7 @@ public class ControladorPago {
                             .title("Seña alquiler")
                             .description("Seña alquiler propiedad publicada en Open Doors")
                             .pictureUrl("https://google.com")
-                            .categoryId("Seña alquiler")
+                            .categoryId("Reserva de propiedad")
                             .quantity(1)
                             .currencyId("AR")
                             .unitPrice(BigDecimal.valueOf(12000))
