@@ -70,7 +70,7 @@ public class ControladorPago {
                             .categoryId("Seña alquiler")
                             .quantity(1)
                             .currencyId("AR")
-                            .unitPrice(BigDecimal.valueOf(valorReserva))
+                            .unitPrice(BigDecimal.valueOf(12000))
                             .build();
             List<PreferenceItemRequest> items = new ArrayList<>();
             items.add(itemRequest);
