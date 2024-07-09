@@ -103,11 +103,12 @@ public class ControladorPanel {
 
         try {
             this.servicioPropiedad.modificarPropiedad(propiedad);
+            model.put("success", "La propiedad se ha modificado correctamente.");
         } catch (CRUDPropiedadExcepcion e) {
             model.put("error", e.getMessage());
             return new ModelAndView("redirect:/panel-admin/propiedades", model);
         }
-        return new ModelAndView("redirect:/panel-admin/propiedades");
+        return new ModelAndView("redirect:/panel-admin/propiedades", model);
     }
 
 
