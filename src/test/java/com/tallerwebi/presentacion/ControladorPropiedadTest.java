@@ -103,9 +103,10 @@ public class ControladorPropiedadTest {
     @Test
     public void queLosDatosDeUnaPropiedadExistenteSolicitadaSeMuestrenCorrectamente() {
 
+        Usuario usuarioMock = mock(Usuario.class);
         Long idMock = 1L;
         Propiedad propiedadMock = new Propiedad(idMock, "Casa 1", 2, 3, 4,
-                200.0, 150000.0, "Ubicacion 1");
+                200.0, 150000.0, "Ubicacion 1", usuarioMock);
 
         when(this.servicioPropiedad.buscarPropiedad(idMock)).thenReturn(propiedadMock);
 
@@ -282,7 +283,7 @@ public class ControladorPropiedadTest {
     public void queMuestreErrorCuandoOcurreCRUDPropiedadExcepcionAlAgregarPropiedad() throws CRUDPropiedadExcepcion, IOException {
         Propiedad nuevaPropiedad = new Propiedad();
         MultipartFile imagenMock = mock(MultipartFile.class);
-        doThrow(new CRUDPropiedadExcepcion("Error al agregar la propiedad")).when(servicioPropiedad).agregarPropiedad(any(Propiedad.class), any(MultipartFile.class));
+        doThrow(new CRUDPropiedadExcepcion("Error al agregar la propiedad")).when(servicioPropiedad).agregarPropiedad(any(Propiedad.class), any(MultipartFile.class), any(Usuario.class));
         when(session.getAttribute("usuario")).thenReturn(usuario);
         ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock, session);
 
@@ -295,7 +296,7 @@ public class ControladorPropiedadTest {
     public void queMuestreErrorCuandoOcurreIOExceptionAlAgregarPropiedad() throws CRUDPropiedadExcepcion, IOException {
         Propiedad nuevaPropiedad = new Propiedad();
         MultipartFile imagenMock = mock(MultipartFile.class);
-        doThrow(new IOException("Error de E/S")).when(servicioPropiedad).agregarPropiedad(any(Propiedad.class), any(MultipartFile.class));
+        doThrow(new IOException("Error de E/S")).when(servicioPropiedad).agregarPropiedad(any(Propiedad.class), any(MultipartFile.class), any(Usuario.class));
         when(session.getAttribute("usuario")).thenReturn(usuario);
         ModelAndView mav = this.controladorPropiedad.agregarPropiedad(nuevaPropiedad, imagenMock, session);
 
@@ -304,14 +305,15 @@ public class ControladorPropiedadTest {
     }
 
     private List<Propiedad> crearPropiedades() {
+        Usuario usuarioMock = mock(Usuario.class);
         List<Propiedad> propiedades = new ArrayList<>();
 
         Propiedad propiedad1 = new Propiedad(1L, "Casa 1", 2, 3, 4,
-                200.0, 150000.0, "Ubicacion 1");
+                200.0, 150000.0, "Ubicacion 1", usuarioMock);
         Propiedad propiedad2 = new Propiedad(2L, "Casa 2", 2, 3, 4,
-                200.0, 300000.0, "Ubicacion 2");
+                200.0, 300000.0, "Ubicacion 2", usuarioMock);
         Propiedad propiedad3 = new Propiedad(3L, "Casa 3", 2, 3, 4,
-                200.0, 600000.0, "Ubicacion 3");
+                200.0, 600000.0, "Ubicacion 3", usuarioMock);
 
         propiedades.add(propiedad1);
         propiedades.add(propiedad2);

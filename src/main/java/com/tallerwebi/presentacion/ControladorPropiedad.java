@@ -174,16 +174,17 @@ public class ControladorPropiedad {
             return new ModelAndView("redirect:/login");
         }
 
-        try{
-            servicioPropiedad.agregarPropiedad(propiedad, imagen);
-        }catch(CRUDPropiedadExcepcion | IOException e){
+        try {
+            servicioPropiedad.agregarPropiedad(propiedad, imagen, usuarioAutenticado);
+        } catch (CRUDPropiedadExcepcion | IOException e) {
             model.put("error", e.getMessage());
             return new ModelAndView("nuevaPropiedad", model);
         }
 
-        model.put("success", "La peticion ha sido registrada con exito! La propiedad sera publicada en cuanto verifiquemos los detalles de la venta.");
+        model.put("success", "La petición ha sido registrada con éxito! La propiedad será publicada en cuanto verifiquemos los detalles de la venta.");
         return new ModelAndView("nuevaPropiedad", model);
     }
+
 
 
     @RequestMapping(path = "/historial", method = RequestMethod.GET)

@@ -45,6 +45,7 @@ public class ControladorPago {
         if(usuarioAutenticado.getEmail() == null){
             model.put("error", "No se ha podido efectuar la reserva. Intentelo nuevamente mas tarde.");
         }
+
         emailService.sendSimpleMessage(
                 usuarioAutenticado.getEmail(),
                 "OpenDoor. Peticion de reserva de propiedad",
@@ -54,13 +55,27 @@ public class ControladorPago {
                         "3. Cierra el trato directamente con el vendedor y espera a que active la confirmacion de compra/alquiler \n" +
                         "Eso es todo! En caso de que algo no salga bien, la reserva sera desestimada y el dinero abonado devuelto via transferencia bancaria. \n" +
                         "Atte. Open Doors.");
-        model.put("success", "Peticion de reserva creada correctamente! Se ha enviado un email a su correo detallando los pasos a seguir.");
 
         Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
+        Usuario propietario = propiedad.getPropietario();
+
+        if(propietario != null && propietario.getEmail() != null){
+            emailService.sendSimpleMessage(
+                    propietario.getEmail(),
+                    "OpenDoor. Nueva peticion de reserva para su propiedad",
+                    "Hola " + propietario.getNombre() + "! Ha recibido una nueva peticion de reserva para su propiedad. A continuacion, se detallan los pasos a seguir: \n " +
+                            "1. Espere a que el comprador abone la reserva correspondiente \n" +
+                            "2. Contacte al comprador para definir los detalles contractuales \n " +
+                            "3. Active la confirmacion de compra/alquiler en la plataforma una vez que el trato haya sido cerrado \n" +
+                            "Atte. Open Doors.");
+        }
+
+        model.put("success", "Peticion de reserva creada correctamente! Se ha enviado un email a su correo detallando los pasos a seguir.");
         model.put("propiedad", propiedad);
 
         return new ModelAndView("pago", model);
     }
+
 
     @RequestMapping(path = "/create_preference", method = RequestMethod.POST)
     @ResponseBody
