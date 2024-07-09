@@ -47,7 +47,7 @@
                     Una vez abonado, <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'la propiedad se encontrara reservada en las fechas elegidas y' : ''})"></span> podra comenzar a negociar los detalles contractuales con el propietario.
                     En caso de que no lleguen a un acuerdo, su dinero sera reintegrado y la reserva desestimada.
                 </p>
-                <p class="pago-valor" th:text="'Valor de la reserva: $' + ${precioReserva} + ' ' + ${propiedad.estado.toString() == 'ALQUILER' ? 'ARS' : 'USD'}"></p>
+                <p id="valor-senia" class="pago-valor" th:text="'Valor de la reserva: $' + ${precioReserva} + ' ' + ${propiedad.estado.toString() == 'ALQUILER' ? 'ARS' : 'USD'}"></p>
             </div>
             <div class="pago-modalidades">
                 <p class="modalidades-titulo">Modalidades de pago: </p>
