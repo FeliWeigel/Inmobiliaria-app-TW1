@@ -45,7 +45,7 @@
       <div id="rango-fechas" class="form-control" th:data-propiedad-id="${id}"></div>
       <div class="confirmacion-alquiler">
         <div id="rango-fechas-texto" style="margin-top: 10px"><strong>De:</strong> ____ <strong>hasta:</strong> ____</div>
-        <form id="fecha-form" th:action="@{'/propiedad/' + ${id} + '/nuevo-alquiler'}" method="post">
+        <form id="fecha-form" th:action="@{'/propiedad/' + ${id} + '/nueva-operacion'}" method="post">
           <input type="date" name="fechaInicio" id="start_date">
           <input type="date" name="fechaFin" id="end_date">
           <button type="submit" class="alquilar-btn">Avanzar</button>

@@ -40,14 +40,14 @@
         <img class="pago-bg" th:src="@{/img/home-bg.png}"/>
         <div class="pago-content">
             <div class="pago-info">
-                <h2 class="pago-titulo">Pago de reserva para alquiler de propiedad</h2>
+                <h2 class="pago-titulo">Pago de reserva para <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'alquiler' : 'compra'})"></span> de propiedad</h2>
                 <p class="pago-descripcion">
-                    A continuacion, se detalla monto y modalidades de pago para poder reservar la propiedad que desea alquilar.
-                    Esto, corresponde a un 5% del valor total del alquiler, el cual debe ser abonado previamente a negociar con el vendedor.
-                    Una vez abonado, la propiedad se encontrara reservada en las fechas elegidas y podra comenzar a negociar los detalles contractuales con el vendedor.
+                    A continuacion, se detalla monto y modalidades de pago para poder reservar la propiedad que desea <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'alquilar' : 'comprar'})"></span>.
+                    Esto, corresponde a un 5% del valor total <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'del alquiler' : 'de la propiedad'})"></span>, el cual debe ser abonado previamente a negociar con el propietario.
+                    Una vez abonado, <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'la propiedad se encontrara reservada en las fechas elegidas y' : ''})"></span> podra comenzar a negociar los detalles contractuales con el propietario.
                     En caso de que no lleguen a un acuerdo, su dinero sera reintegrado y la reserva desestimada.
                 </p>
-                <p class="pago-valor" th:text="'Valor de la reserva: $' + ${precioReserva} + '(AR$ por mes)'"></p>
+                <p class="pago-valor" th:text="'Valor de la reserva: $' + ${precioReserva} + ' ' + ${propiedad.estado.toString() == 'ALQUILER' ? 'ARS' : 'USD'}"></p>
             </div>
             <div class="pago-modalidades">
                 <p class="modalidades-titulo">Modalidades de pago: </p>
@@ -55,7 +55,7 @@
                     <i class="fa-regular fa-money-bill-1"></i> Pago en efectivo
                 </a>
                 <div id="wallet_container"></div>
-                <form method="post" th:action="@{/propiedad/nuevo-alquiler/pago}">
+                <form method="post" th:action="@{'/propiedad/' + ${id} + '/nueva-operacion/pago'}">
                     <button class="pago-btn" type="submit">Enviar solicitud</button>
                 </form>
             </div>
