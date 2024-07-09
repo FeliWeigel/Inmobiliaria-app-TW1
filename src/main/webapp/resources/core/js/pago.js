@@ -2,8 +2,15 @@
 //     locale: "es-AR", // The most common are: 'pt-BR', 'es-AR' and 'en-US'
 // });
 document.addEventListener("DOMContentLoaded", async () => {
+
+    let valorSenia = document.getElementById('valor-senia').value
+
     const response = await fetch('http://localhost:8080/spring/create_preference',{
         method:"POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ precioReserva: valorSenia })
         // headers:{"Content-Type":"application/json"},
         // body: JSON.stringify({"some_data": sendData
     })

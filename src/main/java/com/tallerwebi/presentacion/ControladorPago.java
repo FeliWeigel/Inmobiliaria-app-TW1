@@ -37,7 +37,7 @@ public class ControladorPago {
         if(usuarioAutenticado == null){
             return new ModelAndView("redirect:/login");
         }
-        //logica email
+
         if(usuarioAutenticado.getEmail() == null){
             model.put("error", "No se ha podido efectuar la reserva. Intentelo nuevamente mas tarde.");
         }
@@ -56,7 +56,7 @@ public class ControladorPago {
 
     @RequestMapping(path = "/create_preference", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Preference> createPreference() {
+    public ResponseEntity<Preference> createPreference(@RequestParam("valorReserva") Double valorReserva) {
 
         try {
             MercadoPagoConfig.setAccessToken("APP_USR-2054445966320899-062320-264f039524895893770ee6d1ea2233ec-1871978866");
@@ -70,7 +70,7 @@ public class ControladorPago {
                             .categoryId("Seña alquiler")
                             .quantity(1)
                             .currencyId("AR")
-                            .unitPrice(new BigDecimal("4000"))
+                            .unitPrice(BigDecimal.valueOf(valorReserva))
                             .build();
             List<PreferenceItemRequest> items = new ArrayList<>();
             items.add(itemRequest);
