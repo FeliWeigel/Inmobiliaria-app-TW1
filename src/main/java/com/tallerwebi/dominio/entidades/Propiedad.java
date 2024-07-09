@@ -41,12 +41,16 @@ public class Propiedad {
     @Fetch(FetchMode.SUBSELECT)
     private List<CalificacionPropiedad> calificaciones;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usuario_id")
+    private Usuario propietario;
+
+
     public Propiedad() {
         this.aceptada = false;
     }
 
-
-    public Propiedad(Long id, String nombre, EstadoPropiedad estado, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
+    public Propiedad(Long id, String nombre, EstadoPropiedad estado, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion, Usuario propietario) {
         this.id = id;
         this.nombre = nombre;
         this.pisos = pisos;
@@ -57,9 +61,10 @@ public class Propiedad {
         this.estado = estado;
         this.ubicacion = ubicacion;
         this.aceptada = false;
+        this.propietario = propietario;
     }
 
-    public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
+    public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion, Usuario propietario) {
         this.id = id;
         this.nombre = nombre;
         this.pisos = pisos;
@@ -69,6 +74,7 @@ public class Propiedad {
         this.precio = precio;
         this.ubicacion = ubicacion;
         this.aceptada = false;
+        this.propietario = propietario;
     }
 
     @ManyToMany(mappedBy = "favoritos")
@@ -141,6 +147,13 @@ public class Propiedad {
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
     }
+    public Usuario getPropietario() {
+        return this.propietario;
+    }
+    public void setPropietario(Usuario propietario) {
+        this.propietario = propietario;
+    }
+
 
     public boolean isAceptada() {
         return aceptada;

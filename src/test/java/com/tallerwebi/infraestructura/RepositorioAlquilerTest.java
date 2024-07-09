@@ -40,12 +40,13 @@ public class RepositorioAlquilerTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        Usuario usuarioMock = mock(Usuario.class);
 
         when(sessionFactory.getCurrentSession()).thenReturn(session);
 
         alquiler = new AlquilerPropiedad();
         alquiler.setId(1L);
-        alquiler.setPropiedad(new Propiedad(1L, "Casa 1", 3, 2, 4, 200.0, 150000.0, "Ubicacion 1"));
+        alquiler.setPropiedad(new Propiedad(1L, "Casa 1", 3, 2, 4, 200.0, 150000.0, "Ubicacion 1", usuarioMock));
         alquiler.setUsuario(new Usuario(1L, "usuario", "password"));
         alquiler.setFechaInicio(Date.valueOf("2022-01-01"));
         alquiler.setFechaFin(Date.valueOf("2022-01-10"));
