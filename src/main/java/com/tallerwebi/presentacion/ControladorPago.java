@@ -7,8 +7,10 @@ import java.time.OffsetDateTime;
 
 import com.mercadopago.client.preference.*;
 import com.mercadopago.exceptions.MPApiException;
+import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.servicio.EmailServiceImpl;
+import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import com.mercadopago.MercadoPagoConfig;
@@ -24,13 +26,15 @@ import javax.servlet.http.HttpSession;
 public class ControladorPago {
 
     private final EmailServiceImpl emailService;
+    private final ServicioPropiedad servicioPropiedad;
 
-    public ControladorPago(EmailServiceImpl emailService) {
+    public ControladorPago(EmailServiceImpl emailService, ServicioPropiedad servicioPropiedad){
         this.emailService = emailService;
+        this.servicioPropiedad = servicioPropiedad;
     }
 
-    @PostMapping(path = "/propiedad/nuevo-alquiler/pago")
-    public ModelAndView pagoReserva(HttpSession session){
+    @PostMapping(path = "/propiedad/{id}/nueva-operacion/pago")
+    public ModelAndView pagoReserva(@PathVariable Long id, HttpSession session){
         ModelMap model = new ModelMap();
         Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
 
@@ -51,6 +55,10 @@ public class ControladorPago {
                         "Eso es todo! En caso de que algo no salga bien, la reserva sera desestimada y el dinero abonado devuelto via transferencia bancaria. \n" +
                         "Atte. Open Doors.");
         model.put("success", "Peticion de reserva creada correctamente! Se ha enviado un email a su correo detallando los pasos a seguir.");
+
+        Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
+        model.put("propiedad", propiedad);
+
         return new ModelAndView("pago", model);
     }
 

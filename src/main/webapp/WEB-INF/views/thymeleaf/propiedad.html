@@ -42,7 +42,7 @@
             <div class="alquilar-content">
                 <h2 style="margin-bottom: 1rem" th:text="${propiedad.nombre}"></h2>
                 <a th:if="${propiedad.estado.toString() == 'ALQUILER'}" th:href="@{'/propiedad/' + ${propiedad.id} + '/alquiler'}" class="alquilar-btn">Alquilar propiedad</a>
-                <a th:unless="${propiedad.estado.toString() == 'ALQUILER'}" th:href="@{'/propiedad/' + ${propiedad.id} + '/compra'}" class="alquilar-btn">Adquirir propiedad</a>
+                <a th:unless="${propiedad.estado.toString() == 'ALQUILER'}" th:href="@{'/propiedad/' + ${propiedad.id} + '/nueva-operacion'}" class="alquilar-btn">Adquirir propiedad</a>
             </div>
         </div>
 
