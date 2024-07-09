@@ -142,10 +142,6 @@
     opacity: 0;
 }
 
-.novedades, .recomendaciones{
-    margin-bottom: 1rem;
-}
-
 .sectionTitle{
     width: 100%;
     font-family: 'Poppins', sans-serif;
