@@ -37,8 +37,10 @@ public class ControladorPanel {
         try {
             List<Propiedad> propiedadesPendientes = servicioPropiedad.listarPropiedadesPendientes();
             List<Propiedad> propiedadesAceptadas = servicioPropiedad.listarPropiedadesAceptadas();
+            List<Propiedad> propiedadesDestacadas = servicioPropiedad.listarMasVisitadas();
             model.put("propiedadesPendientes", propiedadesPendientes);
             model.put("propiedadesAceptadas", propiedadesAceptadas);
+            model.put("propiedadesDestacadas", propiedadesDestacadas);
         } catch (Exception e) {
             model.put("message", "Ha ocurrido un error inesperado");
         }
@@ -130,8 +132,6 @@ public class ControladorPanel {
             return new ModelAndView("redirect:/panel-admin/propiedades", model);
         }
     }
-
-
 
     @RequestMapping(path = "/panel-admin/usuarios", method = RequestMethod.GET)
     public ModelAndView panelAdminUsuarios(HttpSession session) {

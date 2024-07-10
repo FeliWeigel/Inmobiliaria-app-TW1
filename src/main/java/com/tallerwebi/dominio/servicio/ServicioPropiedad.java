@@ -142,4 +142,8 @@ public class ServicioPropiedad {
     public List<Propiedad> listarRecomendaciones(Long id) {
         return repositorioPropiedad.listarRecomendaciones(id);
     }
+
+    public List<Propiedad> listarMasVisitadas(){
+        return repositorioPropiedad.listarPropiedadesMasVisitadas();
+    }
 }

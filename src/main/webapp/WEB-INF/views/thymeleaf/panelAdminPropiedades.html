@@ -93,7 +93,16 @@
             </div>
         </div>
     </div>
+
 </div>
+    <h2>Propiedades Destacadas</h2>
+    <div style="display: flex; flex-direction: column; align-items: center" th:each="propiedad, iterStat : ${propiedadesDestacadas}">
+        <div class="propiedad-admin prop-destacada">
+            <h3 th:text="${iterStat.index + 1}" ></h3>
+            <h3 th:text="'ID: ' + ${propiedad.id}"></h3>
+            <p th:text="${propiedad.nombre}"></p>
+        </div>
+    </div>
 <script th:src="@{/js/panel-admin.js}"></script>
 </body>
 </html>

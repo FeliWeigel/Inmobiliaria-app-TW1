@@ -223,10 +223,17 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
         return new ArrayList<>(recomendacionesMap.values());
     }
 
-
-
-
-
+    @Override
+    public List<Propiedad> listarPropiedadesMasVisitadas() {
+        final Session session = sessionFactory.getCurrentSession();
+        String query = "SELECT p " +
+                "FROM Propiedad p " +
+                "JOIN p.visitas v " +
+                "WHERE p.aceptada = true " +
+                "GROUP BY p.id " +
+                "ORDER BY COUNT(v.id) DESC";
+        return session.createQuery(query, Propiedad.class).getResultList();
+    }
 
 
 }
