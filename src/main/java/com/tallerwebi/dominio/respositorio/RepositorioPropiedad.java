@@ -13,6 +13,8 @@ public interface RepositorioPropiedad {
 
     void eliminarVisitasPorPropiedadId(Long propiedadId);
 
+    void eliminarCalificacionesPorPropiedadId(Long propiedadId);
+
     List<Propiedad> listarPropiedades();
     void editarPropiedad(Propiedad propiedad);
     List<Propiedad> listarPorRangoPrecio(Double min, Double max);

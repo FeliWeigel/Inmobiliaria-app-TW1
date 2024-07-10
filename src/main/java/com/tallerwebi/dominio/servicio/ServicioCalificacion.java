@@ -77,16 +77,28 @@ public class ServicioCalificacion {
         return repositorioCalificacion.listarCalificacionesPorPropiedad(propiedadId);
     }
 
-    public CalificacionPropiedad getCalificacion(Long calificacionId){
-        if(calificacionId == null){
-            throw new CalificacionDenegadaExcepcion("Error! No se ha encontrado la calificacion, el ID es nulo!");
+    public void responderCalificacion(Long calificacionId, String respuesta) throws CalificacionDenegadaExcepcion {
+        CalificacionPropiedad calificacion = repositorioCalificacion.getCalificacionPorId(calificacionId);
+        if (calificacion == null) {
+            throw new CalificacionDenegadaExcepcion("La calificación no ha sido encontrada");
+        }
+
+        calificacion.setRespuesta(respuesta);
+        repositorioCalificacion.actualizarCalificacion(calificacion);
+    }
+
+    public CalificacionPropiedad getCalificacion(Long calificacionId) {
+        if (calificacionId == null) {
+            throw new CalificacionDenegadaExcepcion("Error! No se ha encontrado la calificación, el ID es nulo!");
         }
         CalificacionPropiedad calificacion = repositorioCalificacion.getCalificacionPorId(calificacionId);
 
-        if(calificacion == null){
-            throw new CalificacionDenegadaExcepcion("La calificacion de id: " + calificacionId + " no ha sido encontrada.");
+        if (calificacion == null) {
+            throw new CalificacionDenegadaExcepcion("La calificación de id: " + calificacionId + " no ha sido encontrada.");
         }
 
         return calificacion;
     }
+
+
 }

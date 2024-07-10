@@ -85,10 +85,17 @@ public class Propiedad {
 
     @PreRemove
     private void quitarPropiedadDeUsuarios() {
-        for (Usuario usuario : usuariosFavoritos) {
-            usuario.getFavoritos().remove(this);
+        Set<Usuario> usuarios = new HashSet<>(usuariosFavoritos);
+        for (Usuario usuario : usuarios) {
+            usuario.removeFavorito(this);
         }
     }
+
+    public void removeUsuarioFavorito(Usuario usuario) {
+        usuariosFavoritos.remove(usuario);
+        usuario.getFavoritos().remove(this);
+    }
+
 
     public Long getId() {
         return id;

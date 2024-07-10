@@ -9,6 +9,7 @@ import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.utilidad.ValidarString;
 import com.tallerwebi.infraestructura.RepositorioHistorialImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -106,10 +107,14 @@ public class ServicioPropiedad {
     }
 
 
+    @Transactional
     public void rechazarPropiedad(Long idPropiedad) {
         if (idPropiedad != null) {
             try {
                 repositorioPropiedad.eliminarVisitasPorPropiedadId(idPropiedad);
+
+                repositorioPropiedad.eliminarCalificacionesPorPropiedadId(idPropiedad);
+
                 repositorioPropiedad.eliminarPropiedad(idPropiedad);
             } catch (AlquilerRegistradoException e) {
                 throw e;
@@ -118,6 +123,7 @@ public class ServicioPropiedad {
             throw new CRUDPropiedadExcepcion("La propiedad no existe.");
         }
     }
+
 
 
     public void modificarPropiedad(Propiedad propiedadEditada) {

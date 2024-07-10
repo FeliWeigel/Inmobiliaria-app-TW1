@@ -136,4 +136,61 @@ public class ControladorCalificacion {
         model.put("calificaciones", calificaciones);
         return new ModelAndView("listaCalificaciones", model);
     }
+
+
+
+    @GetMapping("/propiedad/calificacion/{propiedadId}/{id}/responder")
+    public ModelAndView vistaResponderCalificacion(
+            @PathVariable("id") Long id,
+            @PathVariable("propiedadId") Long propiedadId,
+            HttpSession session
+    ){
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+        if (usuarioAutenticado == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        try {
+            CalificacionPropiedad calificacion = servicioCalificacion.getCalificacion(id);
+            Propiedad propiedad = servicioPropiedad.buscarPropiedad(propiedadId);
+
+            if (!propiedad.getPropietario().getId().equals(usuarioAutenticado.getId())) {
+                model.put("error", "No tienes permiso para responder a esta calificación.");
+                return new ModelAndView("redirect:/propiedad/" + propiedadId, model);
+            }
+
+            model.put("calificacion", calificacion);
+            model.put("propiedad", propiedad);
+        } catch (CalificacionDenegadaExcepcion | CRUDPropiedadExcepcion e) {
+            model.put("messageError", e.getMessage());
+            return new ModelAndView("redirect:/propiedad/" + propiedadId, model);
+        }
+
+        return new ModelAndView("responderCalificacion", model);
+    }
+
+    @PostMapping("/propiedad/calificacion/{propiedadId}/{id}/responder")
+    public ModelAndView responderCalificacion(
+            @PathVariable("id") Long id,
+            @PathVariable("propiedadId") Long propiedadId,
+            @RequestParam("respuesta") String respuesta,
+            HttpSession session
+    ){
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+        if (usuarioAutenticado == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        try {
+            servicioCalificacion.responderCalificacion(id, respuesta);
+            model.put("success", "Respuesta publicada correctamente!");
+        } catch (CalificacionDenegadaExcepcion e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("redirect:/propiedad/" + propiedadId, model);
+        }
+
+        return new ModelAndView("redirect:/propiedad/" + propiedadId, model);
+    }
 }

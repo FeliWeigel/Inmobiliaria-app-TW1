@@ -2,7 +2,6 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.excepcion.AlquilerRegistradoException;
-import com.tallerwebi.dominio.entidades.Visita;
 import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
@@ -137,6 +136,15 @@ public class RepositorioPropiedadImpl implements RepositorioPropiedad {
                 .setParameter("propiedadId", propiedadId)
                 .executeUpdate();
     }
+
+    @Override
+    public void eliminarCalificacionesPorPropiedadId(Long propiedadId) {
+        String hql = "DELETE FROM CalificacionPropiedad WHERE propiedad.id = :propiedadId";
+        sessionFactory.getCurrentSession().createQuery(hql)
+                .setParameter("propiedadId", propiedadId)
+                .executeUpdate();
+    }
+
 
 
     @Override

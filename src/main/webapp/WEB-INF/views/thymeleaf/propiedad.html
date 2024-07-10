@@ -73,14 +73,13 @@
         <h5 class="prop-det-price" th:text="'$' + ${propiedad.precio} + (${propiedad.estado.toString() == 'ALQUILER' ? '(AR$ por mes)' : ' valor total(USD)'})"></h5>
         <div class="calificaciones-container">
             <h3 class="calificaciones-titulo">Reseñas de la propiedad</h3>
-
-            <div th:if="${listEmpty != null}" style="text-align: center; font-size: 2rem">
-                <h3 th:text="${listEmpty}" style="font-size: 1.9rem; margin-bottom: 1rem"></h3>
+            <div th:if="${listEmpty != null}" class="calificaciones-vacio">
+                <h3 th:text="${listEmpty}"></h3>
                 <a class="agregar-calificacion-link" th:href="@{'/propiedad/' + ${id} + '/nueva-calificacion'}">Agregar reseña</a>
             </div>
             <div th:if="${listEmpty == null}">
                 <div class="calificaciones-lista">
-                    <div th:each="calificacion : ${calificaciones}">
+                    <div th:each="calificacion : ${calificaciones}" class="calificacion-item">
                         <div class="calificacion">
                             <div class="calificacion-nombre">
                                 <img class="calificacion-img" th:src="@{'/img/usuarios/' + ${calificacion.usuario.id} + '/' + ${calificacion.usuario.fotoPerfil}}" />
@@ -90,6 +89,14 @@
                             </div>
                             <p class="calificacion-fecha" th:text="${calificacion.fecha}"></p>
                             <p class="calificacion-desc" th:text="${calificacion.descripcion}"></p>
+                            <div class="calificacion-respuesta-container">
+                                <p class="calificacion-respuesta">Respuesta: <span th:text="${calificacion.respuesta != null ? calificacion.respuesta : 'Sin respuesta'}"></span></p>
+                                <div th:if="${usuario != null && propiedad.propietario.id == usuario.id}">
+                                    <a th:href="@{'/propiedad/calificacion/' + ${propiedad.id} + '/' + ${calificacion.id} + '/responder'}">
+                                        <button th:text="${calificacion.respuesta == null ? 'Responder' : 'Modificar Respuesta'}" class="calificacion-responder-btn"></button>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,8 +105,8 @@
                     <a class="agregar-calificacion-link" th:href="@{'/propiedad/' + ${id} + '/calificaciones'}">Ver todas las reseñas</a>
                 </div>
             </div>
-
         </div>
+
     </main>
 
 

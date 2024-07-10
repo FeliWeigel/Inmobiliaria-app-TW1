@@ -18,6 +18,8 @@ public interface RepositorioUsuario {
 
     void eliminarVisitasPorUsuarioId(Long usuarioId);
 
+    void eliminarCalificacionesPorUsuarioId(Long usuarioId);
+
     Usuario buscarPorEmail(String email);
     Usuario buscarPorId(Long id);
     void agregarFavorito(Usuario usuario, Long propiedadId);

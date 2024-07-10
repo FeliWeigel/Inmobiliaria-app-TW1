@@ -76,6 +76,9 @@ public class ServicioUsuario {
         try {
 
             repositorioUsuario.eliminarVisitasPorUsuarioId(usuarioId);
+
+            repositorioUsuario.eliminarCalificacionesPorUsuarioId(usuarioId);
+
             repositorioUsuario.eliminarUsuario(usuarioId);
         } catch (AlquilerRegistradoException e) {
             throw e;
