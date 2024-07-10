@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.dto.FiltroPropiedadDTO;
 import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.servicio.ServicioPropiedad;
@@ -34,15 +35,16 @@ public class ServicioPropiedadTest {
 
     @BeforeEach
     public void init() {
+        Usuario usuarioMock = mock(Usuario.class);
         this.repositorioPropiedad = mock(RepositorioPropiedad.class);
         this.imagenServicio= mock(SubirImagenServicio.class);
         this.repositorioHistorial = mock(RepositorioHistorialImpl.class);
         this.servicioPropiedad = new ServicioPropiedad(this.repositorioPropiedad,imagenServicio);
 
         propiedadesMock = new ArrayList<>();
-        propiedadesMock.add(new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1"));
-        propiedadesMock.add(new Propiedad(2L, "Casa 2", 3, 2, 5, 250.0, 180000.0, "Ubicacion 2"));
-        propiedadesMock.add(new Propiedad(3L, "Casa 3", 1, 1, 2, 120.0, 90000.0, "Ubicacion 3"));
+        propiedadesMock.add(new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0, 150000.0, "Ubicacion 1", usuarioMock));
+        propiedadesMock.add(new Propiedad(2L, "Casa 2", 3, 2, 5, 250.0, 180000.0, "Ubicacion 2", usuarioMock));
+        propiedadesMock.add(new Propiedad(3L, "Casa 3", 1, 1, 2, 120.0, 90000.0, "Ubicacion 3", usuarioMock));
 
     }
 
@@ -113,12 +115,13 @@ public class ServicioPropiedadTest {
     @Test
     public void queSePuedaAgregarUnaPropiedadValida() throws IOException {
 
+        Usuario usuarioMock = mock(Usuario.class);
         MultipartFile imageMock = mock(MultipartFile.class);
         Long id = 2L;
         Propiedad propiedad = new Propiedad(id, "Casa", 2, 3, 4, 200.0,
-                150000.0, "Ubicacion");
+                150000.0, "Ubicacion", usuarioMock);
 
-        this.servicioPropiedad.agregarPropiedad(propiedad, imageMock);
+        this.servicioPropiedad.agregarPropiedad(propiedad, imageMock, usuarioMock);
 
         when(this.repositorioPropiedad.buscarPropiedad(id)).thenReturn(propiedad);
         Propiedad propiedadAgregada = this.servicioPropiedad.buscarPropiedad(id);
@@ -131,13 +134,14 @@ public class ServicioPropiedadTest {
     public void queSeLanceUnaExcepcionAlIntentarAgregarUnaPropiedadInvalida() throws IOException {
         String nombreInvalido = "32131312";
         MultipartFile imageMock = mock(MultipartFile.class);
+        Usuario usuarioMock = mock(Usuario.class);
 
         Propiedad propiedad = new Propiedad(2L, nombreInvalido, 2, 3, 4, 200.0,
-                150000.0, "Ubicacion");
+                150000.0, "Ubicacion", usuarioMock);
 
 
         assertThrows(CRUDPropiedadExcepcion.class, () -> {
-            this.servicioPropiedad.agregarPropiedad(propiedad, imageMock);
+            this.servicioPropiedad.agregarPropiedad(propiedad, imageMock, usuarioMock);
         });
     }
 
@@ -298,6 +302,7 @@ public class ServicioPropiedadTest {
     @Test
     public void queSeDevuelvanLasPropiedadesFiltradasPorTodasLasCondiciones() {
         FiltroPropiedadDTO filtro = new FiltroPropiedadDTO();
+        Usuario usuarioMock = mock(Usuario.class);
         filtro.setMinPrecio(1000.0);
         filtro.setMaxPrecio(25000.0);
         filtro.setEstado(EstadoPropiedad.VENTA);
@@ -305,10 +310,10 @@ public class ServicioPropiedadTest {
         filtro.setUbicacion("Moron");
 
         Propiedad propiedad1 = new Propiedad(1L, "Casa 1", EstadoPropiedad.VENTA, 2,
-                2, 1, 120.0, 20000.0, "Moron");
+                2, 1, 120.0, 20000.0, "Moron", usuarioMock);
 
         Propiedad propiedad2 = new Propiedad(2L, "Casa 2", EstadoPropiedad.ALQUILER, 2,
-                2, 1, 90.0, 18000.0, "Otra Ubicacion");
+                2, 1, 90.0, 18000.0, "Otra Ubicacion", usuarioMock);
 
         when(this.repositorioPropiedad.listarPropiedades()).thenReturn(Arrays.asList(propiedad1, propiedad2));
         when(this.repositorioPropiedad.listarPorRangoPrecio(1000.0, 25000.0)).thenReturn(Arrays.asList(propiedad1, propiedad2));

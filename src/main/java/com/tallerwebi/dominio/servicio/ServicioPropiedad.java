@@ -2,6 +2,7 @@ package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.dto.FiltroPropiedadDTO;
 import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.AlquilerRegistradoException;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
@@ -38,12 +39,15 @@ public class ServicioPropiedad {
 
     }
 
-    public void agregarPropiedad(Propiedad propiedad, MultipartFile imagen) throws IOException {
+    public void agregarPropiedad(Propiedad propiedad, MultipartFile imagen, Usuario usuario) throws IOException {
         ValidarString validarString = new ValidarString();
 
         if(validarString.tieneNumeros(propiedad.getUbicacion()) || validarString.tieneNumeros(propiedad.getNombre())){
-            throw new CRUDPropiedadExcepcion("Error! Debe completar todos los campos con datos validos.");
+            throw new CRUDPropiedadExcepcion("Error! Debe completar todos los campos con datos válidos.");
         }
+
+        propiedad.setPropietario(usuario);
+
         repositorioPropiedad.agregarPropiedad(propiedad);
 
         try {
@@ -53,6 +57,7 @@ public class ServicioPropiedad {
             throw new IOException(e.getMessage());
         }
     }
+
 
 
     public List<Propiedad> listarPropiedades() {

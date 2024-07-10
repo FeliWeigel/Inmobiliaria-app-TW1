@@ -16,66 +16,70 @@
     </style>
 </head>
 <body>
-    <header style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
-        <a class="button-logo" th:href="@{/home}">
-            <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+<header style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
+    <a class="button-logo" th:href="@{/home}">
+        <img class="logo" th:src="@{/img/logo.png}" alt="Logo">
+    </a>
+    <nav>
+        <div th:if="${usuario}">
+            <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
+                <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
+            </a>
+        </div>
+        <a th:href="@{/favoritos}">
+            <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
         </a>
-        <nav>
-            <div th:if="${usuario}">
-                <a th:if="${#session.getAttribute('ROL') == 'ADMIN'}" th:href="@{/panel-admin/propiedades}">
-                    <i class="fa-solid fa-columns fa-lg" style="color: #f8f1f1;"></i>
-                </a>
-            </div>
-            <a th:href="@{/favoritos}">
-                <i class="fa-regular fa-heart" style="color: #f8f1f1;"></i>
-            </a>
-            <a href="#" th:href="@{/perfil}">
-                <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
-            </a>
+        <a href="#" th:href="@{/perfil}">
+            <i class="fa-regular fa-circle-user fa-lg" style="color: #f8f1f1;"></i>
+        </a>
 
-        </nav>
-    </header>
-    <main class="pago-container">
-        <div class="bg-overlay"></div>
-        <img class="pago-bg" th:src="@{/img/home-bg.png}"/>
-        <div class="pago-content">
-            <div class="pago-info">
-                <h2 class="pago-titulo">Pago de reserva para <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'alquiler' : 'compra'})"></span> de propiedad</h2>
-                <p class="pago-descripcion">
-                    A continuacion, se detalla monto y modalidades de pago para poder reservar la propiedad que desea <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'alquilar' : 'comprar'})"></span>.
-                    Esto, corresponde a un 5% del valor total <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'del alquiler' : 'de la propiedad'})"></span>, el cual debe ser abonado previamente a negociar con el propietario.
-                    Una vez abonado, <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'la propiedad se encontrara reservada en las fechas elegidas y' : ''})"></span> podra comenzar a negociar los detalles contractuales con el propietario.
-                    En caso de que no lleguen a un acuerdo, su dinero sera reintegrado y la reserva desestimada.
-                </p>
-                <p id="valor-senia" class="pago-valor" th:text="'Valor de la reserva: $' + ${precioReserva} + ' ' + ${propiedad.estado.toString() == 'ALQUILER' ? 'ARS' : 'USD'}"></p>
-            </div>
-            <div class="pago-modalidades">
-                <p class="modalidades-titulo">Modalidades de pago: </p>
-                <a id="pagar-efectivo" class="modalidad-ftvo">
-                    <i class="fa-regular fa-money-bill-1"></i> Pago en efectivo
-                </a>
-                <div id="wallet_container"></div>
-                <form method="post" th:action="@{'/propiedad/' + ${id} + '/nueva-operacion/pago'}">
-                    <button class="pago-btn" type="submit">Enviar solicitud</button>
-                </form>
-            </div>
+    </nav>
+</header>
+<main class="pago-container">
+    <div class="bg-overlay"></div>
+    <img class="pago-bg" th:src="@{/img/home-bg.png}"/>
+    <div class="pago-content">
+        <div class="pago-info">
+            <h2 class="pago-titulo">Pago de reserva para <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'alquiler' : 'compra'})"></span> de propiedad</h2>
+            <p class="pago-descripcion">
+                A continuacion, se detalla monto y modalidades de pago para poder reservar la propiedad que desea <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'alquilar' : 'comprar'})"></span>.
+                Esto, corresponde a un 5% del valor total <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'del alquiler' : 'de la propiedad'})"></span>, el cual debe ser abonado previamente a negociar con el propietario.
+                Una vez abonado, <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'la propiedad se encontrara reservada en las fechas elegidas y' : ''})"></span> podra comenzar a negociar los detalles contractuales con el propietario.
+                En caso de que no lleguen a un acuerdo, su dinero sera reintegrado y la reserva desestimada.
+            </p>
+            <p id="valor-senia" class="pago-valor" th:text="'Valor de la reserva: $' + ${precioReserva} + ' ' + ${propiedad.estado.toString() == 'ALQUILER' ? 'ARS' : 'USD'}"></p>
         </div>
-
-        <p id="pago-error" class="pago-error" th:if="${error}" th:text="${error}"></p>
-        <p id="pago-success" class="pago-success" th:if="${success}" th:text="${success}"></p>
-    </main>
-
-    <footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
-        <div class="social">
-            <a href="https://www.instagram.com">
-                <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>
+        <div class="pago-modalidades">
+            <p class="modalidades-titulo">Modalidades de pago: </p>
+            <a id="pagar-efectivo" class="modalidad-ftvo" onclick="submitForm()">
+                <i class="fa-regular fa-money-bill-1"></i> Pago en efectivo
             </a>
-            <a href="https://www.whatsapp.com">
-                <i class="fa-brands fa-whatsapp" style="color: #f8f1f1;"></i>
-            </a>
+            <div id="wallet_container" onclick="submitForm()"></div>
+            <form id="paymentForm" method="post" th:action="@{'/propiedad/' + ${id} + '/nueva-operacion/pago'}" style="display: none;">
+                <button class="pago-btn" type="submit">Enviar solicitud</button>
+            </form>
         </div>
-    </footer>
-    <script th:src="@{/js/pago.js}"></script>
+    </div>
 
+    <p id="pago-error" class="pago-error" th:if="${error}" th:text="${error}"></p>
+    <p id="pago-success" class="pago-success" th:if="${success}" th:text="${success}"></p>
+</main>
+
+<footer style="background: #011d33; box-shadow: 0px 0px 3px 0px #1484b1">
+    <div class="social">
+        <a href="https://www.instagram.com">
+            <i class="fa-brands fa-instagram" style="color: #f8f1f1;"></i>
+        </a>
+        <a href="https://www.whatsapp.com">
+            <i class="fa-brands fa-whatsapp" style="color: #f8f1f1;"></i>
+        </a>
+    </div>
+</footer>
+<script th:src="@{/js/pago.js}"></script>
+<script>
+    function submitForm() {
+        document.getElementById('paymentForm').submit();
+    }
+</script>
 </body>
 </html>

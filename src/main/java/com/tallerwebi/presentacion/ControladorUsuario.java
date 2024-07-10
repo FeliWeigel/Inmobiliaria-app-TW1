@@ -82,7 +82,11 @@ public class ControladorUsuario {
             model.put("error", e.getMessage());
         }
 
+        List<Propiedad> novedades = servicioPropiedad.listarNovedades();
+        List<Propiedad> recomendaciones = servicioPropiedad.listarRecomendaciones(usuarioAutenticado.getId());
         model.put("propiedades", propiedades);
+        model.put("novedades", novedades);
+        model.put("recomendaciones", recomendaciones);
         return new ModelAndView("lista-propiedades", model);
     }
 
@@ -111,7 +115,11 @@ public class ControladorUsuario {
             model.put("error", e.getMessage());
         }
 
+        List<Propiedad> novedades = servicioPropiedad.listarNovedades();
+        List<Propiedad> recomendaciones = servicioPropiedad.listarRecomendaciones(usuarioAutenticado.getId());
         model.put("propiedades", propiedades);
+        model.put("novedades", novedades);
+        model.put("recomendaciones", recomendaciones);
         return new ModelAndView("lista-propiedades", model);
     }
 

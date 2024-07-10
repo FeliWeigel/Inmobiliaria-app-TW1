@@ -44,7 +44,7 @@
             <h3>Modifica los datos de tu propiedad</h3>
             <p>Actualiza los datos de la propiedad y guarda los cambios para que se reflejen en la publicación.</p>
         </div>
-        <form style="z-index: 1000" th:action="@{/panel-admin/modificar-propiedad}" method="POST" th:object="${propiedad}">
+        <form style="z-index: 1000" th:action="@{/panel-admin/modificar-propiedad}" method="POST" th:object="${propiedad}" accept-charset="UTF-8">
             <h3>Datos de la propiedad</h3>
 
             <input type="hidden" th:field="*{id}"/>
@@ -94,19 +94,8 @@
                 </div>
             </div>
 
-            <p
-                    class="alert"
-                    th:if="${error != null}"
-                    th:text="${error}"
-            >
-            </p>
-
-            <p
-                    class="success"
-                    th:if="${success != null}"
-                    th:text="${success}"
-            >
-            </p>
+            <p class="alert" th:if="${error != null}" th:text="${error}"></p>
+            <p class="success" th:if="${success != null}" th:text="${success}"></p>
             <button type="submit">Guardar cambios</button>
         </form>
     </div>
