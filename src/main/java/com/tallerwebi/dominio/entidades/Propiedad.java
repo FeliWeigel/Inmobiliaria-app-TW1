@@ -34,6 +34,9 @@ public class Propiedad {
     @Fetch(FetchMode.SUBSELECT)
     private List<AlquilerPropiedad> alquileres;
 
+    @OneToMany(mappedBy = "propiedad", fetch = FetchType.LAZY)
+    private List<Visita> visitas;
+
     @OneToMany(
             mappedBy = "propiedad", cascade = CascadeType.ALL,
             orphanRemoval = true, fetch = FetchType.EAGER
