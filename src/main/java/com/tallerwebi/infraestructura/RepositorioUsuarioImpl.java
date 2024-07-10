@@ -67,6 +67,15 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .executeUpdate();
     }
 
+    @Override
+    public void eliminarCalificacionesPorUsuarioId(Long usuarioId) {
+        String hql = "DELETE FROM CalificacionPropiedad WHERE usuario.id = :usuarioId";
+        sessionFactory.getCurrentSession().createQuery(hql)
+                .setParameter("usuarioId", usuarioId)
+                .executeUpdate();
+    }
+
+
 
     @Override
     public Usuario buscarPorEmail(String email) {

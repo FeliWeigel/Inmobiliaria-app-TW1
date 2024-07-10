@@ -58,4 +58,10 @@ public class RepositorioCalificacionImpl implements RepositorioCalificacion {
         CalificacionPropiedad calificacion = getCalificacionPorId(idCalificacion);
         session.delete(calificacion);
     }
+
+    @Override
+    public void actualizarCalificacion(CalificacionPropiedad calificacion) {
+        final Session session = sessionFactory.getCurrentSession();
+        session.update(calificacion);
+    }
 }

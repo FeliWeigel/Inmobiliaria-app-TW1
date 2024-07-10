@@ -48,10 +48,12 @@ public class Usuario {
 
     @PreRemove
     private void quitarUsuarioDePropiedadFav() {
-        for (Propiedad propiedad : favoritos) {
-            propiedad.getUsuariosFavoritos().remove(this);
+        List<Propiedad> propiedades = new ArrayList<>(favoritos);
+        for (Propiedad propiedad : propiedades) {
+            propiedad.removeUsuarioFavorito(this);
         }
     }
+
 
     public Usuario() {
     }
@@ -61,6 +63,12 @@ public class Usuario {
         this. nombre = nombre;
         this.password = password;
     }
+
+    public void removeFavorito(Propiedad propiedad) {
+        favoritos.remove(propiedad);
+        propiedad.getUsuariosFavoritos().remove(this);
+    }
+
 
     public Long getId() {
         return id;

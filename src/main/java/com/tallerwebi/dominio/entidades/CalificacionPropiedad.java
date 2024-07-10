@@ -18,6 +18,8 @@ public class CalificacionPropiedad {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "propiedadId", nullable = false)
     private Propiedad propiedad;
+    private String respuesta;
+
 
     @PreRemove
     private void preRemove() {
@@ -67,4 +69,11 @@ public class CalificacionPropiedad {
         this.propiedad = propiedad;
     }
 
+    public void setRespuesta(String respuesta) {
+        this.respuesta = respuesta;
+    }
+
+    public String getRespuesta() {
+        return this.respuesta;
+    }
 }
