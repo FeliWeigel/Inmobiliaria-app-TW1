@@ -5,6 +5,7 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class Usuario {
     @Fetch(FetchMode.SUBSELECT)
     private List<AlquilerPropiedad> alquileres;
 
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
             name = "usuario_favoritos",
             joinColumns = @JoinColumn(name = "usuario_id"),
@@ -47,10 +48,12 @@ public class Usuario {
 
     @PreRemove
     private void quitarUsuarioDePropiedadFav() {
-        for (Propiedad propiedad : favoritos) {
-            propiedad.getUsuariosFavoritos().remove(this);
+        List<Propiedad> propiedades = new ArrayList<>(favoritos);
+        for (Propiedad propiedad : propiedades) {
+            propiedad.removeUsuarioFavorito(this);
         }
     }
+
 
     public Usuario() {
     }
@@ -60,6 +63,12 @@ public class Usuario {
         this. nombre = nombre;
         this.password = password;
     }
+
+    public void removeFavorito(Propiedad propiedad) {
+        favoritos.remove(propiedad);
+        propiedad.getUsuariosFavoritos().remove(this);
+    }
+
 
     public Long getId() {
         return id;
@@ -138,5 +147,16 @@ public class Usuario {
 
     public void setAlquileres(List<AlquilerPropiedad> alquileres) {
         this.alquileres = alquileres;
+    }
+
+    public void setVisitas(ArrayList<Object> objects) {
+    }
+
+    public List<CalificacionPropiedad> getCalificaciones() {
+        return calificaciones;
+    }
+
+    public void setCalificaciones(List<CalificacionPropiedad> calificaciones) {
+        this.calificaciones = calificaciones;
     }
 }

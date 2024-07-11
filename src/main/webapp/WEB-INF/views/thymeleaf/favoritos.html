@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -82,7 +82,7 @@
                             <p th:text="':' + ${propiedad.habitaciones}"></p>
                         </div>
                     </div>
-                    <h4 th:text="'$' + ${propiedad.precio} + ' (por noche)'" class="prop-precio"></h4>
+                    <h4 th:text="'$' + ${propiedad.precio} + ' (por día)'" class="prop-precio"></h4>
                 </a>
             </div>
         </div>

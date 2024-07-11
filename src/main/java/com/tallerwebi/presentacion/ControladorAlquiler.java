@@ -9,6 +9,8 @@ import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
 import com.tallerwebi.dominio.servicio.ServicioPropiedad;
+import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
+import org.dom4j.rule.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -30,24 +32,8 @@ public class ControladorAlquiler {
         this.servicioPropiedad = servicioPropiedad;
     }
 
-//    @RequestMapping(path = "/propiedad/{id}/nuevo-alquiler", method = RequestMethod.GET)
-//    public ModelAndView vistaNuevoAlquiler(@PathVariable Long id, HttpSession session) {
-//        ModelMap model = new ModelMap();
-//        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
-//        if(usuarioAutenticado == null){
-//            return new ModelAndView("redirect:/login");
-//        }
-//        if(id == null){
-//            return new ModelAndView("redirect:/home");
-//        }
-//        model.put("usuario", usuarioAutenticado);
-//        model.put("propiedadId", id);
-//        return new ModelAndView("pago", model);
-//
-//    }
-
-    @RequestMapping(path = "/propiedad/{id}/nuevo-alquiler", method = RequestMethod.POST)
-    public ModelAndView nuevoAlquiler(
+    @RequestMapping(path = "/propiedad/{id}/nueva-operacion", method = RequestMethod.POST)
+    public ModelAndView nuevaOperacion(
             @PathVariable Long id, HttpSession session,
             @RequestParam Date fechaInicio, @RequestParam Date fechaFin
     ){
@@ -69,7 +55,37 @@ public class ControladorAlquiler {
         }
 
         Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
-        model.put("precioReserva", propiedad.getPrecio() * 0.05);
+        model.put("propiedad", propiedad);
+        if(propiedad.getEstado().name().equals("ALQUILER")){
+            model.put("precioReserva", propiedad.getPrecio());
+            System.out.println("Precio Reserva: por día" + propiedad.getPrecio());
+        } else{
+            model.put("precioReserva", propiedad.getPrecio() * 0.05);
+            System.out.println("Precio Reserva: 5%" + propiedad.getPrecio() * 0.05);
+        }
+        return new ModelAndView("pago", model);
+    }
+
+    @RequestMapping(path = "/propiedad/{id}/nueva-operacion", method = RequestMethod.GET)
+    public ModelAndView nuevaOperacion(@PathVariable Long id, HttpSession session){
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+        if(usuarioAutenticado == null){
+            return new ModelAndView("redirect:/login");
+        }
+        if(id == null){
+            return new ModelAndView("redirect:/home");
+        }
+
+        Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
+        model.put("propiedad", propiedad);
+        if(propiedad.getEstado().name().equals("ALQUILER")){
+            model.put("precioReserva", propiedad.getPrecio());
+            System.out.println("Precio Reserva: por día" + propiedad.getPrecio());
+        } else{
+            model.put("precioReserva", propiedad.getPrecio() * 0.05);
+            System.out.println("Precio Reserva: 5%" + propiedad.getPrecio() * 0.05);
+        }
         return new ModelAndView("pago", model);
     }
 

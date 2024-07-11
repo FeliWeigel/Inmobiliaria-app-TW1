@@ -34,33 +34,161 @@
 
     <main style="padding: 1.5rem 2rem">
 
-        <div class="filtros">
 
-            <form class="filtros-form" method="POST" th:action="@{/lista-propiedades/filtro}" th:object="${filtroPropiedad}">
-                <div>
-                    <input id="input-minimo" class="filtro-precio" type="number" name="minPrecio" placeholder="Min" min="0.0" max="2000000" >
-                    <input id="input-maximo" class="filtro-precio" type="number" name="maxPrecio" placeholder="Max" min="0.0" max="2000000" >
-                </div>
-                <div>
-                    <input class="filtro-ubicacion" type="text" name="ubicacion" placeholder="Ubicacion" >
-                </div>
-                <div>
-                    <input class="filtro-superficie" type="number" name="superficie" placeholder="Superficie minima(m2)" >
-                </div>
-                <select class="filtro-estado" name="estado">
-                    <option selected disabled>Estado</option>
-                    <option value="ALQUILER">En alquiler</option>
-                    <option value="VENTA">En venta</option>
-                </select>
+        <div th:if="${novedades}">
+            <h3 class="sectionTitle">Novedades</h3>
+            <div class="novedades" th:if="${novedades}">
+                <div class="propNueva" th:each="propNueva : ${novedades}">
+                    <a class="item" th:href="@{'/propiedad/' + ${propNueva.id}}" >
+                        <p class="prop-estado">EN <span th:text="${propNueva.estado}"></span></p>
+                        <img class="prop-img" th:src="@{'/img/propiedades/' + ${propNueva.id} + '/' + ${propNueva.rutaImagen}}" alt="propiedad">
+                        <div style="display: flex; gap: .5rem; align-items: center; justify-content: space-between; padding-top: 7px">
+                            <h5 class="prop-nombre" th:text="${propNueva.nombre}"></h5>
+                                                    <form
+                                                            th:if="${favoritos}"
+                                                            th:action="@{'/favoritos/' + (${favoritos.contains(propNueva) ? 'eliminar/' : 'agregar/'}) + ${propNueva.id}}"
+                                                            th:method="POST"
+                                                    >
+                                                        <button type="submit" style="background: none; border: none;">
+                                                            <i
+                                                                    th:unless="${favoritos.contains(propNueva)}"
+                                                                    class="fa-regular fa-heart"
+                                                                    style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"
+                                                            ></i>
+                                                            <i
+                                                                    th:if="${favoritos.contains(propNueva)}"
+                                                                    class="fa-solid fa-heart"
+                                                                    style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"
+                                                            ></i>
+                                                        </button>
+                                                    </form>
+                                                    <form th:unless="${favoritos}" th:action="@{'/login/'}">
+                                                        <button type="submit" style="background: none; border: none;">
+                                                            <i class="fa-regular fa-heart" style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"></i>
+                                                        </button>
+                                                    </form>
 
-                <button class="filtro-btn" type="submit">Aplicar filtros</button>
-            </form>
-            <a style="color: #011d33; font-size: 1rem" th:href="@{/lista-propiedades}">
-                (Deshacer filtros)
-            </a>
+                        </div>
+                        <div class="prop-desc-item">
+                            <i style="margin-right: .5rem" class="fa-solid fa-location-dot"></i>
+                            <h5 class="prop-ubicacion" th:text="${propNueva.ubicacion}"></h5>
+                        </div>
+                        <div class="prop-desc">
+                            <div class="prop-desc-item">
+                                <i style="margin-right: .5rem" class="fa-brands fa-codepen"></i>
+                                <p th:text="${propNueva.superficie} + '(mt2)'"></p>
+                            </div>
+                            <div class="prop-desc-item">
+                                <i style="margin-right: .5rem" class="fa-solid fa-layer-group"></i>
+                                <p th:text="':' + ${propNueva.pisos}"></p>
+                            </div>
+                            <div class="prop-desc-item">
+                                <i style="margin-right: .5rem" class="fa-solid fa-bath"></i>
+                                <p th:text="':' + ${propNueva.banios}"></p>
+                            </div>
+                            <div class="prop-desc-item">
+                                <i style="margin-right: .5rem" class="fa-solid fa-person-shelter"></i>
+                                <p th:text="':' + ${propNueva.habitaciones}"></p>
+                            </div>
+                        </div>
+                        <h4 th:text="'$' + ${propNueva.precio} + (${propNueva.estado.toString() == 'ALQUILER' ? '(AR$ por día)' : ' valor total(USD)'})" class="prop-precio"></h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${recomendaciones}">
+
+            <h3 th:if="${recomendaciones.size()>0}" class="sectionTitle">Recomendaciones</h3>
+            <div class="recomendaciones">
+                <div class="propNueva" th:each="recomendacion : ${recomendaciones}">
+                    <a class="item" th:href="@{'/propiedad/' + ${recomendacion.id}}" >
+                        <p class="prop-estado">EN <span th:text="${recomendacion.estado}"></span></p>
+                        <img class="prop-img" th:src="@{'/img/propiedades/' + ${recomendacion.id} + '/' + ${recomendacion.rutaImagen}}" alt="propiedad">
+                        <div style="display: flex; gap: .5rem; align-items: center; justify-content: space-between; padding-top: 7px">
+                            <h5 class="prop-nombre" th:text="${recomendacion.nombre}"></h5>
+                                                    <form
+                                                            th:if="${favoritos}"
+                                                            th:action="@{'/favoritos/' + (${favoritos.contains(recomendacion) ? 'eliminar/' : 'agregar/'}) + ${recomendacion.id}}"
+                                                            th:method="POST"
+                                                    >
+                                                        <button type="submit" style="background: none; border: none;">
+                                                            <i
+                                                                    th:unless="${favoritos.contains(recomendacion)}"
+                                                                    class="fa-regular fa-heart"
+                                                                    style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"
+                                                            ></i>
+                                                            <i
+                                                                    th:if="${favoritos.contains(recomendacion)}"
+                                                                    class="fa-solid fa-heart"
+                                                                    style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"
+                                                            ></i>
+                                                        </button>
+                                                    </form>
+                                                    <form th:unless="${favoritos}" th:action="@{'/login/'}">
+                                                        <button type="submit" style="background: none; border: none;">
+                                                            <i class="fa-regular fa-heart" style="color: #022d4f; font-size: 1.2rem; cursor: pointer;"></i>
+                                                        </button>
+                                                    </form>
+
+                        </div>
+                        <div class="prop-desc-item">
+                            <i style="margin-right: .5rem" class="fa-solid fa-location-dot"></i>
+                            <h5 class="prop-ubicacion" th:text="${recomendacion.ubicacion}"></h5>
+                        </div>
+                        <div class="prop-desc">
+                            <div class="prop-desc-item">
+                                <i style="margin-right: .5rem" class="fa-brands fa-codepen"></i>
+                                <p th:text="${recomendacion.superficie} + '(mt2)'"></p>
+                            </div>
+                            <div class="prop-desc-item">
+                                <i style="margin-right: .5rem" class="fa-solid fa-layer-group"></i>
+                                <p th:text="':' + ${recomendacion.pisos}"></p>
+                            </div>
+                            <div class="prop-desc-item">
+                                <i style="margin-right: .5rem" class="fa-solid fa-bath"></i>
+                                <p th:text="':' + ${recomendacion.banios}"></p>
+                            </div>
+                            <div class="prop-desc-item">
+                                <i style="margin-right: .5rem" class="fa-solid fa-person-shelter"></i>
+                                <p th:text="':' + ${recomendacion.habitaciones}"></p>
+                            </div>
+                        </div>
+                        <h4 th:text="'$' + ${recomendacion.precio} + (${recomendacion.estado.toString() == 'ALQUILER' ? '(AR$ por día)' : ' valor total(USD)'})" class="prop-precio"></h4>
+                    </a>
+                </div>
+            </div>
         </div>
 
         <div>
+            <h3 class="sectionTitle">Todas las propiedades</h3>
+
+            <div class="filtros">
+
+                <form class="filtros-form" method="POST" th:action="@{/lista-propiedades/filtro}" th:object="${filtroPropiedad}">
+                    <div>
+                        <input id="input-minimo" class="filtro-precio" type="number" name="minPrecio" placeholder="Min" min="0.0" max="2000000" >
+                        <input id="input-maximo" class="filtro-precio" type="number" name="maxPrecio" placeholder="Max" min="0.0" max="2000000" >
+                    </div>
+                    <div>
+                        <input class="filtro-ubicacion" type="text" name="ubicacion" placeholder="Ubicacion" >
+                    </div>
+                    <div>
+                        <input class="filtro-superficie" type="number" name="superficie" placeholder="Superficie minima(m2)" >
+                    </div>
+                    <select class="filtro-estado" name="estado">
+                        <option selected disabled>Estado</option>
+                        <option value="ALQUILER">En alquiler</option>
+                        <option value="VENTA">En venta</option>
+                    </select>
+
+                    <button class="filtro-btn" type="submit">Aplicar filtros</button>
+                </form>
+                <a style="color: #011d33; font-size: 1rem" th:href="@{/lista-propiedades}">
+                    (Deshacer filtros)
+                </a>
+            </div>
+
             <div class="container" th:if="${propiedades}">
                 <div th:each="propiedad : ${propiedades}">
                     <div th:if="${propiedad.aceptada}">
@@ -118,7 +246,7 @@
                                     <p th:text="':' + ${propiedad.habitaciones}"></p>
                                 </div>
                             </div>
-                            <h4 th:text="'$' + ${propiedad.precio} + (${propiedad.estado.toString() == 'ALQUILER' ? '(AR$ por mes)' : ' valor total(USD)'})" class="prop-precio"></h4>
+                            <h4 th:text="'$' + ${propiedad.precio} + (${propiedad.estado.toString() == 'ALQUILER' ? '(AR$ por día)' : ' valor total(USD)'})" class="prop-precio"></h4>
                         </a>
                     </div>
                 </div>

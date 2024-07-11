@@ -6,11 +6,23 @@ body{
     flex-direction: column;
 }
 
+.link-historial {
+    color: #fff;
+    background-color: #012e50;
+    font-size: 1.2rem;
+    position: absolute;
+    top: 1.5rem;
+    left: 2rem;
+    padding: 5px 15px;
+    border-radius: 10px;
+}
+
 .perfil {
     display: flex;
     align-items: center;
     padding: 1.3rem 3rem;
     justify-content: center;
+    position: relative;
 }
 
 .perfil-img-container {

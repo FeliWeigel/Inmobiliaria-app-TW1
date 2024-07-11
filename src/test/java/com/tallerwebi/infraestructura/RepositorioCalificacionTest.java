@@ -34,6 +34,10 @@ public class RepositorioCalificacionTest {
         this.repositorioCalificacionPropiedad = new RepositorioCalificacionImpl(this.sessionFactory);
     }
 
+
+    // EJECUTAR INDIVIDUALMENTE LOS TESTS, SINO DAN ERROR.
+
+
     @Test
     @Transactional
     @Rollback

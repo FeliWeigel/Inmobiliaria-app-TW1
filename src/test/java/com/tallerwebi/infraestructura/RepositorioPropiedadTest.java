@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
@@ -15,12 +16,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateTestInfraestructuraConfig.class})
@@ -29,9 +32,11 @@ public class RepositorioPropiedadTest {
     @Autowired
     private SessionFactory sessionFactory;
     private RepositorioPropiedad repositorioPropiedad;
+    private RepositorioHistorialImpl repositorioHistorial;
 
     @BeforeEach
     public void init(){
+        this.repositorioHistorial = mock(RepositorioHistorialImpl.class);
         this.repositorioPropiedad = new RepositorioPropiedadImpl(this.sessionFactory);
     }
 
@@ -41,8 +46,10 @@ public class RepositorioPropiedadTest {
     @Rollback
     public void queSePuedanBuscarPropiedadesExistentes(){
         Long id = 1L;
+        Usuario usuarioMock = mock(Usuario.class);
+
         Propiedad propiedad = new Propiedad(id, "Casa 1", 2, 3, 4, 200.0,
-                150000.0, "Ubicacion 1");
+                150000.0, "Ubicacion 1", usuarioMock);
 
         this.sessionFactory.getCurrentSession().save(propiedad);
 
@@ -57,8 +64,10 @@ public class RepositorioPropiedadTest {
     @Rollback
     public void queSePuedaAgregarUnaPropiedadValida(){
 
+        Usuario usuarioMock = mock(Usuario.class);
+
         Propiedad propiedad = new Propiedad(1L, "Casa 1", 2, 3, 4, 200.0,
-                150000.0, "Ubicacion 1");
+                150000.0, "Ubicacion 1", usuarioMock);
 
         this.repositorioPropiedad.agregarPropiedad(propiedad);
 
@@ -73,13 +82,15 @@ public class RepositorioPropiedadTest {
     @Rollback
     public void queSePuedaEditarUnaPropiedadExistente(){
         Long id = 1L;
+        Usuario usuarioMock = mock(Usuario.class);
+
         Propiedad propiedad = new Propiedad(id, "Casa 1", 2, 3, 4, 200.0,
-                150000.0, "Ubicacion 1");
+                150000.0, "Ubicacion 1", usuarioMock);
         this.repositorioPropiedad.agregarPropiedad(propiedad);
 
         Double precioEditado = 1000.0;
         Propiedad propiedadEditada = new Propiedad(propiedad.getId(), "Casa 1", 2, 3, 4, 200.0,
-                precioEditado, "Ubicacion 1");
+                precioEditado, "Ubicacion 1", usuarioMock);
 
         this.repositorioPropiedad.editarPropiedad(propiedadEditada);
         Propiedad propiedadGuardada = this.repositorioPropiedad.buscarPropiedad(propiedad.getId());
@@ -95,7 +106,9 @@ public class RepositorioPropiedadTest {
     @Rollback
     public void queLanceExcepcionCuandoLaPropiedadAEditarNoExiste() {
         Long idInexistente = 999L;
-        Propiedad propiedadEditada = new Propiedad(idInexistente, "Casa 2", 2, 3, 4, 200.0, 1000.0, "Ubicacion 2");
+        Usuario usuarioMock = mock(Usuario.class);
+
+        Propiedad propiedadEditada = new Propiedad(idInexistente, "Casa 2", 2, 3, 4, 200.0, 1000.0, "Ubicacion 2", usuarioMock);
 
         assertThrows(CRUDPropiedadExcepcion.class, () -> {
             this.repositorioPropiedad.editarPropiedad(propiedadEditada);
@@ -107,7 +120,9 @@ public class RepositorioPropiedadTest {
     @Transactional
     @Rollback
     public void queLanceExcepcionCuandoLaPropiedadAEditarNoTieneID() {
-        Propiedad propiedadSinID = new Propiedad(null, "Casa 3", 2, 3, 4, 200.0, 1000.0, "Ubicacion 3");
+        Usuario usuarioMock = mock(Usuario.class);
+
+        Propiedad propiedadSinID = new Propiedad(null, "Casa 3", 2, 3, 4, 200.0, 1000.0, "Ubicacion 3", usuarioMock);
 
         assertThrows(CRUDPropiedadExcepcion.class, () -> {
             this.repositorioPropiedad.editarPropiedad(propiedadSinID);
@@ -203,13 +218,14 @@ public class RepositorioPropiedadTest {
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaEliminarUnaPropiedadExistente(){
+    public void queSePuedaEliminarUnaPropiedadExistente() {
         Propiedad propiedad = new Propiedad();
+        propiedad.setAlquileres(new ArrayList<>());
 
         this.sessionFactory.getCurrentSession().save(propiedad);
         this.repositorioPropiedad.eliminarPropiedad(propiedad.getId());
 
-        assertThat(null, equalTo(this.repositorioPropiedad.buscarPropiedad(propiedad.getId())));
+        assertThat(this.repositorioPropiedad.buscarPropiedad(propiedad.getId()), equalTo(null));
     }
 
 

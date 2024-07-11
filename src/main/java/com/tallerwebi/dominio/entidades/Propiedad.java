@@ -34,6 +34,9 @@ public class Propiedad {
     @Fetch(FetchMode.SUBSELECT)
     private List<AlquilerPropiedad> alquileres;
 
+    @OneToMany(mappedBy = "propiedad", fetch = FetchType.LAZY)
+    private List<Visita> visitas;
+
     @OneToMany(
             mappedBy = "propiedad", cascade = CascadeType.ALL,
             orphanRemoval = true, fetch = FetchType.EAGER
@@ -41,12 +44,16 @@ public class Propiedad {
     @Fetch(FetchMode.SUBSELECT)
     private List<CalificacionPropiedad> calificaciones;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usuario_id")
+    private Usuario propietario;
+
+
     public Propiedad() {
         this.aceptada = false;
     }
 
-
-    public Propiedad(Long id, String nombre, EstadoPropiedad estado, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
+    public Propiedad(Long id, String nombre, EstadoPropiedad estado, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion, Usuario propietario) {
         this.id = id;
         this.nombre = nombre;
         this.pisos = pisos;
@@ -57,9 +64,10 @@ public class Propiedad {
         this.estado = estado;
         this.ubicacion = ubicacion;
         this.aceptada = false;
+        this.propietario = propietario;
     }
 
-    public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion) {
+    public Propiedad(Long id, String nombre, Integer pisos, Integer banios, Integer habitaciones, Double superficie, Double precio, String ubicacion, Usuario propietario) {
         this.id = id;
         this.nombre = nombre;
         this.pisos = pisos;
@@ -69,6 +77,7 @@ public class Propiedad {
         this.precio = precio;
         this.ubicacion = ubicacion;
         this.aceptada = false;
+        this.propietario = propietario;
     }
 
     @ManyToMany(mappedBy = "favoritos")
@@ -76,10 +85,17 @@ public class Propiedad {
 
     @PreRemove
     private void quitarPropiedadDeUsuarios() {
-        for (Usuario usuario : usuariosFavoritos) {
-            usuario.getFavoritos().remove(this);
+        Set<Usuario> usuarios = new HashSet<>(usuariosFavoritos);
+        for (Usuario usuario : usuarios) {
+            usuario.removeFavorito(this);
         }
     }
+
+    public void removeUsuarioFavorito(Usuario usuario) {
+        usuariosFavoritos.remove(usuario);
+        usuario.getFavoritos().remove(this);
+    }
+
 
     public Long getId() {
         return id;
@@ -141,6 +157,13 @@ public class Propiedad {
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
     }
+    public Usuario getPropietario() {
+        return this.propietario;
+    }
+    public void setPropietario(Usuario propietario) {
+        this.propietario = propietario;
+    }
+
 
     public boolean isAceptada() {
         return aceptada;
@@ -181,5 +204,13 @@ public class Propiedad {
 
     public void setUsuariosFavoritos(Set<Usuario> usuariosFavoritos) {
         this.usuariosFavoritos = usuariosFavoritos;
+    }
+
+    public List<CalificacionPropiedad> getCalificaciones() {
+        return calificaciones;
+    }
+
+    public void setCalificaciones(List<CalificacionPropiedad> calificaciones) {
+        this.calificaciones = calificaciones;
     }
 }

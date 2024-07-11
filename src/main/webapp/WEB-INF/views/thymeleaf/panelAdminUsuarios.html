@@ -35,6 +35,8 @@
 </div>
 
 <h1>Panel de Administrador - Usuarios</h1>
+<p  th:if="${error != null}" th:text="${error}" id="errorMessage" class="fav-alert-error"></p>
+
 
 <div class="container-usuarios">
     <div class="container">
@@ -78,5 +80,6 @@
         </div>
     </div>
 </div>
+<script th:src="@{/js/panel-admin.js}"></script>
 </body>
 </html>

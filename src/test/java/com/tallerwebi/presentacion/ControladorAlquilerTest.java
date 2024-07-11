@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.dto.FechasAlquilerDTO;
+import com.tallerwebi.dominio.entidades.Propiedad;
 import com.tallerwebi.dominio.servicio.ServicioAlquiler;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
@@ -53,22 +54,30 @@ public class ControladorAlquilerTest {
 
 
     @Test
-    public void queAgregueNuevoAlquilerCorrectamente() throws Exception {
+    public void queAgregueNuevaOperacionCorrectamente() throws Exception {
         when(session.getAttribute("usuario")).thenReturn(usuario);
 
-        ModelAndView mav = controladorAlquiler.nuevoAlquiler(1L, session, fechaInicio, fechaFin);
+        Propiedad propiedad = new Propiedad();
+        propiedad.setId(1L);
+        propiedad.setPrecio(100.0);
+
+        when(servicioPropiedad.buscarPropiedad(anyLong())).thenReturn(propiedad);
+
+        ModelAndView mav = controladorAlquiler.nuevaOperacion(1L, session, fechaInicio, fechaFin);
 
         verify(servicioAlquiler, times(1)).agregarNuevoAlquiler(any(Usuario.class), anyLong(), any(Date.class), any(Date.class));
         assertThat(mav.getViewName(), equalTo("pago"));
-        assertThat(mav.getModel().get("success"), equalTo("Alquiler efectuado correctamente! Sera contactado por el propietario en las proximas 72hs."));
+        assertThat(mav.getModel().get("precioReserva"), equalTo(propiedad.getPrecio() * 0.05));
     }
+
+
 
 
     @Test
     public void queRedirijaAlLoginCuandoUsuarioNoAutenticado() {
         when(session.getAttribute("usuario")).thenReturn(null);
 
-        ModelAndView mav = controladorAlquiler.nuevoAlquiler(1L, session, fechaInicio, fechaFin);
+        ModelAndView mav = controladorAlquiler.nuevaOperacion(1L, session, fechaInicio, fechaFin);
 
         assertThat(mav.getViewName(), equalTo("redirect:/login"));
     }
@@ -79,7 +88,7 @@ public class ControladorAlquilerTest {
         when(session.getAttribute("usuario")).thenReturn(usuario);
         doThrow(new UsuarioNoIdentificadoExcepcion()).when(servicioAlquiler).agregarNuevoAlquiler(any(Usuario.class), anyLong(), any(Date.class), any(Date.class));
 
-        ModelAndView mav = controladorAlquiler.nuevoAlquiler(1L, session, fechaInicio, fechaFin);
+        ModelAndView mav = controladorAlquiler.nuevaOperacion(1L, session, fechaInicio, fechaFin);
 
         assertThat(mav.getModel().get("error"), equalTo("Ha ocurrido un error inesperado, vuelva a intentarlo en unos minutos."));
     }
@@ -89,7 +98,7 @@ public class ControladorAlquilerTest {
         when(session.getAttribute("usuario")).thenReturn(usuario);
         doThrow(new CRUDPropiedadExcepcion("Error al agregar alquiler")).when(servicioAlquiler).agregarNuevoAlquiler(any(Usuario.class), anyLong(), any(Date.class), any(Date.class));
 
-        ModelAndView mav = controladorAlquiler.nuevoAlquiler(1L, session, fechaInicio, fechaFin);
+        ModelAndView mav = controladorAlquiler.nuevaOperacion(1L, session, fechaInicio, fechaFin);
 
         assertThat(mav.getModel().get("error"), equalTo("Ha ocurrido un error inesperado, vuelva a intentarlo en unos minutos."));
     }
@@ -99,7 +108,7 @@ public class ControladorAlquilerTest {
         when(session.getAttribute("usuario")).thenReturn(usuario);
         doThrow(new AlquilerDenegadoExcepcion("Las fechas seleccionadas ya estan reservadas.")).when(servicioAlquiler).agregarNuevoAlquiler(any(Usuario.class), anyLong(), any(Date.class), any(Date.class));
 
-        ModelAndView mav = controladorAlquiler.nuevoAlquiler(1L, session, fechaInicio, fechaFin);
+        ModelAndView mav = controladorAlquiler.nuevaOperacion(1L, session, fechaInicio, fechaFin);
 
         assertThat(mav.getModel().get("error"), equalTo("Las fechas seleccionadas ya estan reservadas."));
     }

@@ -10,10 +10,7 @@ import com.tallerwebi.dominio.servicio.ServicioCalificacion;
 import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -62,15 +59,19 @@ public class ControladorCalificacion {
             model.put("error", "Error inesperado al agregar la calificación.");
         }
 
-        return new ModelAndView("agregarCalificacion", model);
+        return new ModelAndView("redirect:/propiedad/" + id);
     }
 
     @GetMapping("/propiedad/{id}/calificaciones")
     public ModelAndView listarCalificaciones(
-            @PathVariable("id") Long id
+            @PathVariable("id") Long id, HttpSession session
     ){
         ModelMap model = new ModelMap();
         List<CalificacionPropiedad> calificaciones = new ArrayList<>();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+        if(usuarioAutenticado != null){
+            model.put("usuario", usuarioAutenticado);
+        }
 
         try {
             Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
@@ -104,5 +105,92 @@ public class ControladorCalificacion {
         }
 
         return new ModelAndView("calificacion", model);
+    }
+
+    @PostMapping("/propiedad/calificacion/{propiedadId}/{id}/reportar")
+    public ModelAndView reportarCalificacion(
+            @PathVariable("id") Long id,
+            @PathVariable("propiedadId") Long propiedadId,
+            HttpSession session
+    ){
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+        if(usuarioAutenticado == null){
+            return new ModelAndView("redirect:/login");
+        }
+
+        List<CalificacionPropiedad> calificaciones = new ArrayList<>();
+
+        try {
+            servicioCalificacion.reportarCalificacion(id);
+            model.put("success", "La reseña ha sido reportada correctamente! El usuario ha recibido un email con el aviso correspondiente.");
+        } catch (CalificacionDenegadaExcepcion e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("listaCalificaciones", model);
+        }
+
+        calificaciones = servicioCalificacion.listarCalificacionesPorPropiedad(propiedadId);
+        if(calificaciones.size() == 0){
+            model.put("listEmpty", "Todavia no se han aportado reseñas de esta propiedad.");
+        }
+        model.put("calificaciones", calificaciones);
+        return new ModelAndView("listaCalificaciones", model);
+    }
+
+
+
+    @GetMapping("/propiedad/calificacion/{propiedadId}/{id}/responder")
+    public ModelAndView vistaResponderCalificacion(
+            @PathVariable("id") Long id,
+            @PathVariable("propiedadId") Long propiedadId,
+            HttpSession session
+    ){
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+        if (usuarioAutenticado == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        try {
+            CalificacionPropiedad calificacion = servicioCalificacion.getCalificacion(id);
+            Propiedad propiedad = servicioPropiedad.buscarPropiedad(propiedadId);
+
+            if (!propiedad.getPropietario().getId().equals(usuarioAutenticado.getId())) {
+                model.put("error", "No tienes permiso para responder a esta calificación.");
+                return new ModelAndView("redirect:/propiedad/" + propiedadId, model);
+            }
+
+            model.put("calificacion", calificacion);
+            model.put("propiedad", propiedad);
+        } catch (CalificacionDenegadaExcepcion | CRUDPropiedadExcepcion e) {
+            model.put("messageError", e.getMessage());
+            return new ModelAndView("redirect:/propiedad/" + propiedadId, model);
+        }
+
+        return new ModelAndView("responderCalificacion", model);
+    }
+
+    @PostMapping("/propiedad/calificacion/{propiedadId}/{id}/responder")
+    public ModelAndView responderCalificacion(
+            @PathVariable("id") Long id,
+            @PathVariable("propiedadId") Long propiedadId,
+            @RequestParam("respuesta") String respuesta,
+            HttpSession session
+    ){
+        ModelMap model = new ModelMap();
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuario");
+        if (usuarioAutenticado == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        try {
+            servicioCalificacion.responderCalificacion(id, respuesta);
+            model.put("success", "Respuesta publicada correctamente!");
+        } catch (CalificacionDenegadaExcepcion e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("redirect:/propiedad/" + propiedadId, model);
+        }
+
+        return new ModelAndView("redirect:/propiedad/" + propiedadId, model);
     }
 }

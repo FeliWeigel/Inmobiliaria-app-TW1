@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.CalificacionDenegadaExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
+import com.tallerwebi.dominio.servicio.EmailServiceImpl;
 import com.tallerwebi.dominio.servicio.ServicioCalificacion;
 import com.tallerwebi.dominio.servicio.ServicioPropiedad;
 import com.tallerwebi.infraestructura.RepositorioCalificacionImpl;
@@ -31,13 +32,14 @@ public class ServicioCalificacionTest {
 
     private ServicioPropiedad servicioPropiedad;
     private ServicioCalificacion servicioCalificacion;
+    private EmailServiceImpl emailService;
 
     @BeforeEach
     public void init() {
         this.repositorioCalificacion =  mock(RepositorioCalificacionImpl.class);
         this.servicioPropiedad = mock(ServicioPropiedad.class);
-
-        servicioCalificacion = new ServicioCalificacion(repositorioCalificacion, servicioPropiedad);
+        this.emailService = mock(EmailServiceImpl.class);
+        servicioCalificacion = new ServicioCalificacion(repositorioCalificacion, servicioPropiedad, emailService);
     }
 
     @Test

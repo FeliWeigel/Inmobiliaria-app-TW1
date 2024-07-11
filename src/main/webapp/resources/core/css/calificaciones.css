@@ -89,6 +89,11 @@
     margin-bottom: .7rem;
 }
 
+.calificaciones-vacio {
+    text-align: center;
+    font-size: 2rem;
+}
+
 .agregar-calificacion-link {
     font-size: 1.1rem;
     background-color: #011423;
@@ -97,6 +102,8 @@
     padding: .5rem 1rem;
     border-radius: 20px;
     transition: .4s;
+    display: inline-block;
+    margin: 0.5rem 0;
 }
 
 .agregar-calificacion-link:hover {
@@ -114,15 +121,20 @@
     margin-bottom: 1rem;
 }
 
+.calificacion-item {
+    width: 100%;
+    max-width: 350px;
+}
+
 .calificacion {
     padding: 1.2rem 1.5rem;
     display: flex;
+    position: relative;
     flex-direction: column;
     row-gap: .3rem;
-    width: 350px;
-    height: 165px;
     box-shadow: 0px 0px 4px 0px #011d33;
-    justify-self: flex-start;
+    background-color: #fff;
+    border-radius: 5px;
 }
 
 .calificacion-nombre {
@@ -152,6 +164,33 @@
     color: rgba(1, 14, 24, 0.84);
 }
 
+.calificacion-respuesta-container {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+}
+
+.calificacion-respuesta {
+    font-size: 0.9rem;
+    color: rgba(1, 14, 24, 0.84);
+}
+
+.calificacion-responder-btn {
+    padding: 0.3rem 0.5rem;
+    background-color: #011d33;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.calificacion-responder-btn:hover {
+    background-color: rgba(1, 29, 51, 0.85);
+}
+
 .calificaciones-links {
     display: flex;
     justify-content: space-between;
@@ -166,6 +205,7 @@
 .lista-cal-container {
     height: auto;
     width: 100%;
+    position: relative;
     min-height: 95vh;
     display: flex;
     justify-content: center;

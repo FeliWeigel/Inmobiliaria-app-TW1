@@ -16,9 +16,32 @@ import java.util.List;
 public class ServicioCalificacion {
     private final RepositorioCalificacion repositorioCalificacion;
     private final ServicioPropiedad servicioPropiedad;
-    public ServicioCalificacion(RepositorioCalificacion repositorioCalificacion, ServicioPropiedad servicioPropiedad) {
+    private final EmailServiceImpl emailService;
+    public ServicioCalificacion(RepositorioCalificacion repositorioCalificacion, ServicioPropiedad servicioPropiedad, EmailServiceImpl emailService) {
         this.repositorioCalificacion = repositorioCalificacion;
         this.servicioPropiedad = servicioPropiedad;
+        this.emailService = emailService;
+    }
+
+    public void reportarCalificacion(Long calificacionId){
+        CalificacionPropiedad calificacion = repositorioCalificacion.getCalificacionPorId(calificacionId);
+        if(calificacion == null){
+            throw new CalificacionDenegadaExcepcion("La calificacion no ha sido encontrada");
+        }
+
+        Usuario usuarioCalificacion = calificacion.getUsuario();
+        Propiedad propiedadCalificacion = calificacion.getPropiedad();
+        usuarioCalificacion.getCalificaciones().remove(calificacion);
+        propiedadCalificacion.getCalificaciones().remove(calificacion);
+        repositorioCalificacion.eliminarCalificacion(calificacionId);
+        emailService.sendSimpleMessage(
+                usuarioCalificacion.getEmail(),
+                "OpenDoors. Aviso de reporte a su reciente reseña",
+                "Hola! Hemos detectado que recientemente dejaste una reseña que incumple nuestras normas de convivencia en la web debido al lenguaje/terminos utilizados para expresarte. Por esta razon, el comentario fue eliminado de la lista de reseñas. \n " +
+                        "Comentario eliminado: " + calificacion.getDescripcion() + "\n"
+                        + "Atte. OpenDoors"
+        );
+
     }
 
     public void agregarNuevaCalificacion(Long propiedadId, Usuario usuario, String descripcion, Double puntaje) throws UsuarioNoIdentificadoExcepcion {
@@ -54,16 +77,28 @@ public class ServicioCalificacion {
         return repositorioCalificacion.listarCalificacionesPorPropiedad(propiedadId);
     }
 
-    public CalificacionPropiedad getCalificacion(Long calificacionId){
-        if(calificacionId == null){
-            throw new CalificacionDenegadaExcepcion("Error! No se ha encontrado la calificacion, el ID es nulo!");
+    public void responderCalificacion(Long calificacionId, String respuesta) throws CalificacionDenegadaExcepcion {
+        CalificacionPropiedad calificacion = repositorioCalificacion.getCalificacionPorId(calificacionId);
+        if (calificacion == null) {
+            throw new CalificacionDenegadaExcepcion("La calificación no ha sido encontrada");
+        }
+
+        calificacion.setRespuesta(respuesta);
+        repositorioCalificacion.actualizarCalificacion(calificacion);
+    }
+
+    public CalificacionPropiedad getCalificacion(Long calificacionId) {
+        if (calificacionId == null) {
+            throw new CalificacionDenegadaExcepcion("Error! No se ha encontrado la calificación, el ID es nulo!");
         }
         CalificacionPropiedad calificacion = repositorioCalificacion.getCalificacionPorId(calificacionId);
 
-        if(calificacion == null){
-            throw new CalificacionDenegadaExcepcion("La calificacion de id: " + calificacionId + " no ha sido encontrada.");
+        if (calificacion == null) {
+            throw new CalificacionDenegadaExcepcion("La calificación de id: " + calificacionId + " no ha sido encontrada.");
         }
 
         return calificacion;
     }
+
+
 }

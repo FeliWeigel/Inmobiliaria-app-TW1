@@ -2,10 +2,14 @@ package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.dto.FiltroPropiedadDTO;
 import com.tallerwebi.dominio.entidades.Propiedad;
+import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.excepcion.AlquilerRegistradoException;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.respositorio.RepositorioPropiedad;
 import com.tallerwebi.dominio.utilidad.ValidarString;
+import com.tallerwebi.infraestructura.RepositorioHistorialImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -36,12 +40,15 @@ public class ServicioPropiedad {
 
     }
 
-    public void agregarPropiedad(Propiedad propiedad, MultipartFile imagen) throws IOException {
+    public void agregarPropiedad(Propiedad propiedad, MultipartFile imagen, Usuario usuario) throws IOException {
         ValidarString validarString = new ValidarString();
 
         if(validarString.tieneNumeros(propiedad.getUbicacion()) || validarString.tieneNumeros(propiedad.getNombre())){
-            throw new CRUDPropiedadExcepcion("Error! Debe completar todos los campos con datos validos.");
+            throw new CRUDPropiedadExcepcion("Error! Debe completar todos los campos con datos válidos.");
         }
+
+        propiedad.setPropietario(usuario);
+
         repositorioPropiedad.agregarPropiedad(propiedad);
 
         try {
@@ -51,6 +58,7 @@ public class ServicioPropiedad {
             throw new IOException(e.getMessage());
         }
     }
+
 
 
     public List<Propiedad> listarPropiedades() {
@@ -99,13 +107,23 @@ public class ServicioPropiedad {
     }
 
 
+    @Transactional
     public void rechazarPropiedad(Long idPropiedad) {
         if (idPropiedad != null) {
-            repositorioPropiedad.eliminarPropiedad(idPropiedad);
+            try {
+                repositorioPropiedad.eliminarVisitasPorPropiedadId(idPropiedad);
+
+                repositorioPropiedad.eliminarCalificacionesPorPropiedadId(idPropiedad);
+
+                repositorioPropiedad.eliminarPropiedad(idPropiedad);
+            } catch (AlquilerRegistradoException e) {
+                throw e;
+            }
         } else {
             throw new CRUDPropiedadExcepcion("La propiedad no existe.");
         }
     }
+
 
 
     public void modificarPropiedad(Propiedad propiedadEditada) {
@@ -116,5 +134,16 @@ public class ServicioPropiedad {
         }
     }
 
+    public List<Propiedad> listarNovedades(){
+        return repositorioPropiedad.listarNovedades();
+    }
 
+
+    public List<Propiedad> listarRecomendaciones(Long id) {
+        return repositorioPropiedad.listarRecomendaciones(id);
+    }
+
+    public List<Propiedad> listarMasVisitadas(){
+        return repositorioPropiedad.listarPropiedadesMasVisitadas();
+    }
 }
