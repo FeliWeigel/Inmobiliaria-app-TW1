@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Favoritos</title>
+    <title>Historial</title>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
     <link rel="stylesheet" th:href="@{/css/lista-propiedades.css}"/>
@@ -30,7 +30,7 @@
     </nav>
 </header>
 <main style="height: auto; min-height: 97vh; padding: 1.5rem 2rem">
-    <h1 style="margin-bottom: 1.5rem; text-align: center">Historial de Visitas</h1>
+    <h1 style="margin-bottom: 1.5rem; text-align: center">Visto recientemente</h1>
     <div class="container">
         <div th:each="visita : ${historial}">
             <a class="item" th:href="@{'/propiedad/' + ${visita.propiedad.id}}" >
@@ -63,7 +63,6 @@
                 </div>
                 <h4 th:text="'$' + ${visita.propiedad.precio} + ' (por noche)'" class="prop-precio"></h4>
             </a>
-            <p>- Fecha: <span th:text="${#dates.format(visita.fechaVisita, 'dd/MM/yyyy HH:mm')}"></span></p>
         </div>
     </div>
 </main>

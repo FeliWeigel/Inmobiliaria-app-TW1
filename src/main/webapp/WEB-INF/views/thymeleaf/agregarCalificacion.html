@@ -39,6 +39,7 @@
     </header>
     <main class="nueva-calificacion-container">
         <h2>Calificacion de la propiedad</h2>
+        <a th:href="@{'/propiedad/' + ${id}}" style="position: absolute; top: 2rem; left: 2rem; font-size: 1.3rem">Atras</a>
         <form class="calificacion-form" method="POST" th:action="@{'/propiedad/' + ${id} + '/nueva-calificacion'}">
             <div>
                 <label for="input-puntaje">Elija un puntaje comprendido del 1 al 5</label>

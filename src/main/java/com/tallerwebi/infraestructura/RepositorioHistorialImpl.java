@@ -27,9 +27,10 @@ public class RepositorioHistorialImpl implements RepositorioHistorial {
     @Override
     public List<Visita> buscarPorUsuarioId(Long id) {
         final Session session = sessionFactory.getCurrentSession();
-        String query = "FROM Visita WHERE usuarioId = :id ORDER BY fechaVisita DESC";
+        String query = "FROM Visita WHERE usuario.id = :id ORDER BY fechaVisita DESC";
         return session.createQuery(query, Visita.class)
                 .setParameter("id", id)
+                .setMaxResults(9)
                 .getResultList();
     }
 

@@ -72,6 +72,13 @@ public class ControladorPago {
 
         model.put("success", "Peticion de reserva creada correctamente! Se ha enviado un email a su correo detallando los pasos a seguir.");
         model.put("propiedad", propiedad);
+        if(propiedad.getEstado().name().equals("ALQUILER")){
+            model.put("precioReserva", propiedad.getPrecio());
+            System.out.println("Precio Reserva: por día" + propiedad.getPrecio());
+        } else{
+            model.put("precioReserva", propiedad.getPrecio() * 0.05);
+            System.out.println("Precio Reserva: 5%" + propiedad.getPrecio() * 0.05);
+        }
 
         return new ModelAndView("pago", model);
     }
@@ -93,7 +100,7 @@ public class ControladorPago {
                             .categoryId("Reserva de propiedad")
                             .quantity(1)
                             .currencyId("AR")
-                            .unitPrice(BigDecimal.valueOf(12000))
+                            .unitPrice(BigDecimal.valueOf(17000))
                             .build();
             List<PreferenceItemRequest> items = new ArrayList<>();
             items.add(itemRequest);

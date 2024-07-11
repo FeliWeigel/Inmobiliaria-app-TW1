@@ -59,7 +59,7 @@ public class ControladorCalificacion {
             model.put("error", "Error inesperado al agregar la calificación.");
         }
 
-        return new ModelAndView("agregarCalificacion", model);
+        return new ModelAndView("redirect:/propiedad/" + id);
     }
 
     @GetMapping("/propiedad/{id}/calificaciones")

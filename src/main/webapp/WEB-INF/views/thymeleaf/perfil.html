@@ -36,6 +36,8 @@
     </header>
 
     <main class="perfil">
+
+        <a class="link-historial" th:href="@{/historial}">Historial</a>
         <div class="perfil-img-container">
             <img th:if="${usuario.fotoPerfil != null}" class="perfil-img" th:src="@{'/img/usuarios/' + ${usuario.id} + '/' + ${usuario.fotoPerfil}}"/>
             <img th:unless="${usuario.fotoPerfil != null}" class="perfil-img" th:src="@{/img/usuarios/default.webp}"/>
