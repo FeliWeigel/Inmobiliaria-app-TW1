@@ -91,7 +91,7 @@
                                 <p th:text="':' + ${propNueva.habitaciones}"></p>
                             </div>
                         </div>
-                        <h4 th:text="'$' + ${propNueva.precio} + (${propNueva.estado.toString() == 'ALQUILER' ? '(AR$ por mes)' : ' valor total(USD)'})" class="prop-precio"></h4>
+                        <h4 th:text="'$' + ${propNueva.precio} + (${propNueva.estado.toString() == 'ALQUILER' ? '(AR$ por día)' : ' valor total(USD)'})" class="prop-precio"></h4>
                     </a>
                 </div>
             </div>
@@ -154,7 +154,7 @@
                                 <p th:text="':' + ${recomendacion.habitaciones}"></p>
                             </div>
                         </div>
-                        <h4 th:text="'$' + ${recomendacion.precio} + (${recomendacion.estado.toString() == 'ALQUILER' ? '(AR$ por mes)' : ' valor total(USD)'})" class="prop-precio"></h4>
+                        <h4 th:text="'$' + ${recomendacion.precio} + (${recomendacion.estado.toString() == 'ALQUILER' ? '(AR$ por día)' : ' valor total(USD)'})" class="prop-precio"></h4>
                     </a>
                 </div>
             </div>
@@ -246,7 +246,7 @@
                                     <p th:text="':' + ${propiedad.habitaciones}"></p>
                                 </div>
                             </div>
-                            <h4 th:text="'$' + ${propiedad.precio} + (${propiedad.estado.toString() == 'ALQUILER' ? '(AR$ por mes)' : ' valor total(USD)'})" class="prop-precio"></h4>
+                            <h4 th:text="'$' + ${propiedad.precio} + (${propiedad.estado.toString() == 'ALQUILER' ? '(AR$ por día)' : ' valor total(USD)'})" class="prop-precio"></h4>
                         </a>
                     </div>
                 </div>

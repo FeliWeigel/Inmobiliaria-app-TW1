@@ -70,7 +70,7 @@
                 </div>
             </div>
         </div>
-        <h5 class="prop-det-price" th:text="'$' + ${propiedad.precio} + (${propiedad.estado.toString() == 'ALQUILER' ? '(AR$ por mes)' : ' valor total(USD)'})"></h5>
+        <h5 class="prop-det-price" th:text="'$' + ${propiedad.precio} + (${propiedad.estado.toString() == 'ALQUILER' ? '(AR$ por día)' : ' valor total(USD)'})"></h5>
         <div class="calificaciones-container">
             <h3 class="calificaciones-titulo">Reseñas de la propiedad</h3>
             <div th:if="${listEmpty != null}" class="calificaciones-vacio">

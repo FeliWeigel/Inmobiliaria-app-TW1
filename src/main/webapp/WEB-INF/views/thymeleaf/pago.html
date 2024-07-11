@@ -43,7 +43,7 @@
             <h2 class="pago-titulo">Pago de reserva para <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'alquiler' : 'compra'})"></span> de propiedad</h2>
             <p class="pago-descripcion">
                 A continuacion, se detalla monto y modalidades de pago para poder reservar la propiedad que desea <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'alquilar' : 'comprar'})"></span>.
-                Esto, corresponde a un 5% del valor total <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'del alquiler' : 'de la propiedad'})"></span>, el cual debe ser abonado previamente a negociar con el propietario.
+                Esto, corresponde <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'al precio de un día de alquiler' : 'a un 5% del valor total de la propiedad'})"></span>, el cual debe ser abonado previamente a negociar con el propietario.
                 Una vez abonado, <span th:text="(${propiedad.estado.toString() == 'ALQUILER' ? 'la propiedad se encontrara reservada en las fechas elegidas y' : ''})"></span> podra comenzar a negociar los detalles contractuales con el propietario.
                 En caso de que no lleguen a un acuerdo, su dinero sera reintegrado y la reserva desestimada.
             </p>

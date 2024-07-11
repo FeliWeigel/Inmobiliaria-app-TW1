@@ -9,6 +9,7 @@ import com.tallerwebi.dominio.excepcion.AlquilerDenegadoExcepcion;
 import com.tallerwebi.dominio.excepcion.CRUDPropiedadExcepcion;
 import com.tallerwebi.dominio.excepcion.UsuarioNoIdentificadoExcepcion;
 import com.tallerwebi.dominio.servicio.ServicioPropiedad;
+import com.tallerwebi.dominio.utilidad.EstadoPropiedad;
 import org.dom4j.rule.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -55,7 +56,13 @@ public class ControladorAlquiler {
 
         Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
         model.put("propiedad", propiedad);
-        model.put("precioReserva", propiedad.getPrecio() * 0.05);
+        if(propiedad.getEstado().name().equals("ALQUILER")){
+            model.put("precioReserva", propiedad.getPrecio());
+            System.out.println("Precio Reserva: por día" + propiedad.getPrecio());
+        } else{
+            model.put("precioReserva", propiedad.getPrecio() * 0.05);
+            System.out.println("Precio Reserva: 5%" + propiedad.getPrecio() * 0.05);
+        }
         return new ModelAndView("pago", model);
     }
 
@@ -72,7 +79,13 @@ public class ControladorAlquiler {
 
         Propiedad propiedad = servicioPropiedad.buscarPropiedad(id);
         model.put("propiedad", propiedad);
-        model.put("precioReserva", propiedad.getPrecio() * 0.05);
+        if(propiedad.getEstado().name().equals("ALQUILER")){
+            model.put("precioReserva", propiedad.getPrecio());
+            System.out.println("Precio Reserva: por día" + propiedad.getPrecio());
+        } else{
+            model.put("precioReserva", propiedad.getPrecio() * 0.05);
+            System.out.println("Precio Reserva: 5%" + propiedad.getPrecio() * 0.05);
+        }
         return new ModelAndView("pago", model);
     }
 
